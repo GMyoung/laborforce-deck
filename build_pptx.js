@@ -548,11 +548,12 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     T(s, h, x + 0.3, sy + 0.76, sw - 0.6, 0.35, { fontSize: 16, bold: true, color: "FFFFFF", charSpacing: -0.3 });
     T(s, p, x + 0.3, sy + 1.14, sw - 0.6, 0.6, { fontSize: 11, color: N_BODY, lineSpacingMultiple: 1.25 });
   });
-  const ly = 5.35, lh = 1.35, lw = 2.2;
-  rrect(s, M, ly, lw, lh, "FFFFFF", 0.05);
-  s.addImage({ path: LOGO, x: M + 0.3, y: ly + 0.15, w: 1.6, h: 1.053 });
-  T(s, "Thank you", W - M - 4.4, ly + 0.45, 4.4, 0.3, { fontSize: 14, bold: true, color: "FFFFFF", align: "right" });
-  T(s, "We look forward to discussing the pilot with your leadership team.", W - M - 4.4, ly + 0.78, 4.4, 0.5, { fontSize: 10.5, color: N_BODY, align: "right", lineSpacingMultiple: 1.25 });
+  // small logo tile bottom-left (HTML: 58 px tall tile, 8x14 px padding, on a 1440 px canvas), thank-you bottom-right
+  const lh = 0.54, lw = 0.85, ly = FOOT_Y - 0.12 - lh, imgH = lh - 0.15, imgW = imgH * 1150 / 757;
+  rrect(s, M, ly, lw, lh, "FFFFFF", 0.04);
+  s.addImage({ path: LOGO, x: M + (lw - imgW) / 2, y: ly + 0.075, w: imgW, h: imgH });
+  T(s, "Thank you", W - M - 4.4, ly - 0.05, 4.4, 0.28, { fontSize: 14, bold: true, color: "FFFFFF", align: "right" });
+  T(s, "We look forward to discussing the pilot with your leadership team.", W - M - 4.4, ly + 0.25, 4.4, 0.3, { fontSize: 10.5, color: N_BODY, align: "right" });
   pageNo(s, 10, true);
 }
 
