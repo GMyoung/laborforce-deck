@@ -132,23 +132,56 @@ replace_section('challenge', '''<section class="report-section" id="challenge" d
 # 6. Slide 4: LaborForce drawn as a layer between the existing revenue cycle
 #    and the recovered outcome.
 # ---------------------------------------------------------------------------
+def build_cake():
+    """Five isometric slabs stacked top-to-bottom, with flow lines in the gaps."""
+    cx, w, h, t = 260, 200, 38, 18
+    ys = [52, 170, 288, 406, 524]
+    colors = [  # top, left face, right face
+        ('#BFEFE0', '#7ADBC0', '#3DB48F'),
+        ('#8FE0C9', '#4CC9A6', '#1D9E75'),
+        ('#9CC8F0', '#5AA2E6', '#2F7FCB'),
+        ('#6FB0EE', '#3A8FDB', '#1F67AE'),
+        ('#4A97E2', '#2B74BE', '#1A5590'),
+    ]
+    out = []
+    for i, y in enumerate(ys, start=1):
+        top_c, left_c, right_c = colors[i - 1]
+        out.append(
+            f'<g class="slab" data-i="{i}" tabindex="0" role="button" aria-label="Layer {i}">'
+            f'<polygon class="face-l" points="{cx-w},{y} {cx},{y+h} {cx},{y+h+t} {cx-w},{y+t}" fill="{left_c}"/>'
+            f'<polygon class="face-r" points="{cx+w},{y} {cx},{y+h} {cx},{y+h+t} {cx+w},{y+t}" fill="{right_c}"/>'
+            f'<polygon class="face-t" points="{cx-w},{y} {cx},{y-h} {cx+w},{y} {cx},{y+h}" fill="{top_c}"/>'
+            f'<text class="slab-num" x="{cx}" y="{y+5}" text-anchor="middle">{i:02d}</text></g>')
+        if i < 5:
+            y1, y2 = y + h + t, ys[i] - h + 6
+            out.append(
+                f'<g class="gap" data-gap="{i}" aria-hidden="true">'
+                f'<line class="flow-line" x1="{cx}" y1="{y1}" x2="{cx}" y2="{y2}"/>'
+                f'<circle class="drop" cx="{cx}" cy="{y1}" r="3.2"/><circle class="drop d2" cx="{cx}" cy="{y1}" r="3.2"/></g>')
+    return ('<svg class="cake" viewBox="0 0 520 610" role="img" aria-label="Five layers, from identification at the top to recovery at the bottom">'
+            '<title>Five-layer waterfall</title>' + ''.join(out) + '</svg>')
+
+
+FUNCTIONS = [
+    ('Proactive Revenue Identification', 'Review injury-related encounters, identify potentially responsible payers, and prioritize accounts for investigation.'),
+    ('Dedicated Patient Engagement', 'Outreach to verify injury circumstances and collect missing claim, employer, insurer, or attorney information.'),
+    ('Payer Verification &amp; RCM Coordination', 'Coordinate findings with registration, billing, and revenue cycle teams for payer determination and follow-up.'),
+    ('Revenue Auditing &amp; Reconciliation', 'Monitor unresolved cases, flag missing or inconsistent information, and track case status and reimbursement.'),
+    ('Lien Administration &amp; Recovery', 'Support approved lien documentation, follow-up, and reimbursement tracking within the legal and contractual framework.'),
+]
+rows = ''.join(
+    f'<li class="fn-row" data-i="{i}" tabindex="0"><span class="fn-num">{i:02d}</span><div><strong>{name}</strong><p>{desc}</p></div></li>'
+    for i, (name, desc) in enumerate(FUNCTIONS, start=1))
+
 replace_section('solution', '''<section class="report-section solution-section" id="solution" data-label="Our approach" aria-labelledby="solution-title">
         <div class="section-kicker"><span>04</span> The LaborForce solution</div>
         <div class="section-heading"><h2 id="solution-title">A specialized operational layer.<br><span class="title-muted">Five critical functions.</span></h2></div>
-        <div class="layer-stack" aria-label="LaborForce as a layer on top of the existing revenue cycle">
-          <div class="layer layer-top"><span class="layer-tag">Outcome</span><div class="layer-body"><strong>Correct payer identified · lien documented · reimbursement recovered</strong><span>Verified findings flow back into the hospital's own billing and collections.</span></div></div>
-          <div class="layer-join" aria-hidden="true"></div>
-          <div class="layer layer-mid"><span class="layer-tag">The LaborForce layer</span>
-            <ol class="layer-functions">
-              <li><span>01</span><strong>Proactive Revenue Identification</strong><p>Review injury-related encounters, identify potentially responsible payers, and prioritize accounts for investigation.</p></li>
-              <li><span>02</span><strong>Dedicated Patient Engagement</strong><p>Outreach to verify injury circumstances and collect missing claim, employer, insurer, or attorney information.</p></li>
-              <li><span>03</span><strong>Payer Verification &amp; RCM Coordination</strong><p>Coordinate findings with registration, billing, and revenue cycle teams for payer determination and follow-up.</p></li>
-              <li><span>04</span><strong>Revenue Auditing &amp; Reconciliation</strong><p>Monitor unresolved cases, flag missing or inconsistent information, and track case status and reimbursement.</p></li>
-              <li><span>05</span><strong>Lien Administration &amp; Recovery</strong><p>Support approved lien documentation, follow-up, and reimbursement tracking within the legal and contractual framework.</p></li>
-            </ol>
+        <div class="layer-demo" id="layer-demo">
+          ''' + build_cake() + '''
+          <div class="fn-col">
+            <ol class="fn-list">''' + rows + '''</ol>
+            <p class="layer-note">LaborForce works alongside your billing and collections teams.</p>
           </div>
-          <div class="layer-join" aria-hidden="true"></div>
-          <div class="layer layer-base"><span class="layer-tag">Existing hospital revenue cycle</span><div class="layer-body"><strong>Registration · Billing · Collections · Revenue cycle teams</strong><span>Unchanged. LaborForce works alongside these teams — uncovering and advancing opportunities they may not have the specialized resources to fully investigate.</span></div></div>
         </div>
         <div class="section-foot"><span>LaborForce Medical Management</span><span>04 / 10</span></div>
       </section>''')
@@ -338,12 +371,41 @@ html = replace_once('''  update();
     requestAnimationFrame(frame);
   }
 
+  const demo = document.getElementById('layer-demo');
+  const slabs = demo ? [...demo.querySelectorAll('.slab')] : [];
+  const gaps = demo ? [...demo.querySelectorAll('.gap')] : [];
+  const fnRows = demo ? [...demo.querySelectorAll('.fn-row')] : [];
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let demoStep = 0, demoTimer = null, demoHeld = false;
+  function setLayer(k) {
+    slabs.forEach((el, i) => { const n = i + 1; el.classList.toggle('active', n === k); el.classList.toggle('passed', k > 0 && n < k); el.classList.toggle('dim', k > 0 && n > k); });
+    gaps.forEach((el, i) => el.classList.toggle('on', k > 0 && i + 1 < k));
+    fnRows.forEach((el, i) => { const n = i + 1; el.classList.toggle('active', n === k); el.classList.toggle('dim', k > 0 && n > k); });
+  }
+  function stopLayerDemo() { clearInterval(demoTimer); demoTimer = null; }
+  function startLayerDemo() {
+    if (!demo || reduceMotion || demoHeld || demoTimer) return;
+    setLayer(demoStep = 1);
+    demoTimer = setInterval(() => { demoStep = demoStep % 5 + 1; setLayer(demoStep); }, 2300);
+  }
+  if (demo) {
+    const hold = el => { const k = Number(el.dataset.i); demoHeld = true; stopLayerDemo(); setLayer(demoStep = k); };
+    [...slabs, ...fnRows].forEach(el => {
+      el.addEventListener('mouseenter', () => hold(el));
+      el.addEventListener('focus', () => hold(el));
+      el.addEventListener('click', () => hold(el));
+    });
+    demo.addEventListener('mouseleave', () => { demoHeld = false; if (document.getElementById('solution').classList.contains('is-active')) startLayerDemo(); });
+    demo.addEventListener('focusout', event => { if (!demo.contains(event.relatedTarget)) { demoHeld = false; if (document.getElementById('solution').classList.contains('is-active')) startLayerDemo(); } });
+  }
+
   const toggle = document.getElementById('toc-toggle');''', 'model intro')
 html = replace_once('''    closeContents();
     fitDeck();
   }''', '''    closeContents();
     fitDeck();
     if (sections[current].id === 'financial') animateModel();
+    if (sections[current].id === 'solution') startLayerDemo(); else { stopLayerDemo(); if (!demoHeld) setLayer(0); }
   }''', 'hook intro into showSlide')
 
 # ---------------------------------------------------------------------------
@@ -370,6 +432,12 @@ html = replace_once('''        slide.querySelectorAll('lfm-blender-scene').forEa
           node.replaceWith(poster);
         });
 ''', '', 'print scene hook')
+html = replace_once('    body.deck-mode .print-sheet .chart-toolbar { min-height:20px; }',
+                    """    body.deck-mode .print-sheet .chart-toolbar { min-height:20px; }
+    .print-sheet .slab { opacity:1!important; transform:none!important; }
+    .print-sheet .gap .drop { display:none!important; }
+    .print-sheet .gap .flow-line { opacity:.9!important; }
+    .print-sheet .fn-row { opacity:1!important; }""", 'print slab reset')
 html = replace_once('lfm-people-chart,lfm-revenue-chart,lfm-blender-figure{display:block}', 'lfm-people-chart,lfm-revenue-chart{display:block}', 'css display')
 html = replace_once('.hero-art lfm-blender-figure{width:100%;height:100%}lfm-blender-figure img{display:block;object-fit:contain;width:100%;height:auto}.hero-art lfm-blender-figure img{height:100%;max-height:550px}', '', 'css blender figure')
 html = replace_once('.deck-mode .hero-art lfm-blender-scene{height:100%;width:100%}', '', 'css blender scene')
@@ -580,6 +648,36 @@ body.deck-mode .closing-section{padding-top:44px}
 .closing-logo{display:block;height:96px;width:auto;background:#ffffff;padding:12px 20px;border-radius:6px}
 .closing-tag{font-size:14px;line-height:1.5;color:#c3d2e3;text-align:right;max-width:420px}
 .closing-tag strong{display:block;color:#ffffff;font-size:18px;margin-bottom:4px}
+/* Slide 4 — interactive five-layer waterfall */
+body.deck-mode #solution .section-heading{margin-bottom:14px}
+.layer-demo{display:grid;grid-template-columns:470px minmax(0,1fr);gap:56px;align-items:center;flex:1;min-height:0}
+.cake{display:block;width:470px;height:auto;max-height:100%;overflow:visible}
+.slab{cursor:pointer;outline:none;transition:transform .35s var(--ease-out),opacity .35s ease}
+.slab polygon{stroke:transparent;stroke-width:2;stroke-linejoin:round;transition:stroke .25s ease,filter .25s ease}
+.slab-num{font:700 17px "Segoe UI",Arial,sans-serif;fill:#0c3c75;pointer-events:none}
+.slab.active{transform:translateY(-8px)}
+.slab.active .face-t{stroke:#ffffff}
+.slab.passed{opacity:1}
+.slab.dim{opacity:.38}
+.slab:focus-visible .face-t{stroke:#ffffff}
+.flow-line{stroke:#7fd3e3;stroke-width:3;stroke-linecap:round;stroke-dasharray:4 6;opacity:.22}
+.drop{fill:#bff0f8;opacity:0}
+.gap.on .flow-line{opacity:.95;animation:flowdash .7s linear infinite}
+.gap.on .drop{animation:dropfall 1s linear infinite}
+.gap.on .drop.d2{animation-delay:.5s}
+@keyframes flowdash{to{stroke-dashoffset:-20}}
+@keyframes dropfall{0%{transform:translateY(0);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translateY(30px);opacity:0}}
+.fn-col{min-width:0}
+.fn-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+.fn-row{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;padding:12px 18px;border-radius:6px;border:1px solid #ffffff22;background:#ffffff0c;outline:none;transition:background .3s ease,border-color .3s ease,opacity .3s ease}
+.fn-num{width:34px;height:34px;border-radius:50%;background:#ffffff22;color:#ffffff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:background .3s ease,color .3s ease}
+.fn-row strong{display:block;font-size:20px;line-height:1.25;color:#ffffff;font-weight:600;letter-spacing:-.01em}
+.fn-row p{font-size:15px;line-height:1.45;color:#c5d6e8;margin-top:3px}
+.fn-row.active{background:#ffffff22;border-color:#7fd3e3}
+.fn-row.active .fn-num{background:#7fd3e3;color:#0c3c75}
+.fn-row.dim{opacity:.5}
+.layer-note{margin-top:14px;font-size:14px;line-height:1.5;color:#9fc0dc}
+@media(prefers-reduced-motion:reduce){.gap.on .flow-line,.gap.on .drop{animation:none}.gap.on .drop{opacity:0}.slab{transition:none}}
 /* Contents panel */
 .deck-mode .toc-list a{font-size:12px;padding:11px 9px}
 /* Portrait canvas */
@@ -595,8 +693,8 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
 .deck-mode[data-orientation="portrait"] .method-steps{grid-template-columns:1fr 1fr;gap:14px 24px}
 .deck-mode[data-orientation="portrait"] .challenge-grid{grid-template-columns:1fr;gap:24px;flex:none}
 .deck-mode[data-orientation="portrait"] .question-cards{grid-template-rows:auto}
-.deck-mode[data-orientation="portrait"] .layer-stack{flex:none}
-.deck-mode[data-orientation="portrait"] .layer-functions{grid-template-columns:1fr 1fr}
+.deck-mode[data-orientation="portrait"] .layer-demo{grid-template-columns:1fr;gap:20px;flex:none}
+.deck-mode[data-orientation="portrait"] .cake{width:420px;margin:0 auto}
 .deck-mode[data-orientation="portrait"] .partner-cards{grid-template-columns:1fr;gap:14px}
 .deck-mode[data-orientation="portrait"] .partner-card{min-height:0;padding:22px 26px 18px}
 .deck-mode[data-orientation="portrait"] .results-grid{grid-template-columns:1fr 1fr;gap:18px 24px}
