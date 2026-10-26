@@ -229,6 +229,24 @@ html = replace_once("""for (let rate = 2; rate <= 10; rate += 2) grid += '<text 
                     """for (let rate = 2; rate <= 10; rate += 2) grid += '<text x="' + x(rate) + '" y="244" text-anchor="middle">'""", 'x labels y')
 
 # ---------------------------------------------------------------------------
+# 9b. Model ranges (user, 2026-10-26): ED charge $3,000–$15,000 (default $10,000),
+#     net collection fixed $500–$5,000 in $500 steps (no longer tied to the charge).
+#     Tagline: "You Deliver Care, We Optimize Revenue."
+# ---------------------------------------------------------------------------
+html = replace_once('<input id="collection" type="range" min="1063" max="8062" step="1" value="4000"><div class="range-ends"><span id="collection-min">$1,063</span><span id="collection-max">$8,062</span></div>',
+                    '<input id="collection" type="range" min="500" max="5000" step="500" value="4000"><div class="range-ends"><span id="collection-min">$500</span><span id="collection-max">$5,000</span></div>', 'collection range')
+html = replace_once('<output for="charge" id="charge-output">$17,000</output></div><input id="charge" type="range" min="4000" max="20000" step="250" value="17000"><div class="range-ends"><span>$4,000</span><span>$20,000</span></div>',
+                    '<output for="charge" id="charge-output">$10,000</output></div><input id="charge" type="range" min="3000" max="15000" step="250" value="10000"><div class="range-ends"><span>$3,000</span><span>$15,000</span></div>', 'charge range')
+html = replace_once('<strong id="charges-result">$153M</strong>', '<strong id="charges-result">$90M</strong>', 'charges default')
+html = replace_once('  const defaults = {volume:150000, coverage:6, collection:4000, charge:17000};', '  const defaults = {volume:150000, coverage:6, collection:4000, charge:10000};', 'js defaults')
+html = replace_once('  const config = {minimumCollectionRate:0.0625, minimumCollectionFixed:null, lowCharge:4000, highCharge:20000, lowCollectionCap:4000, highCollectionCap:9000};',
+                    '  const config = {collectionMin:500, collectionMax:5000};', 'js config')
+bounds = re.compile(r'  function collectionBounds\(charge\) \{.*?\n  \}\n', re.S)
+assert len(bounds.findall(html)) == 1, 'collectionBounds'
+html = bounds.sub('  function collectionBounds() {\n    return {min:config.collectionMin, max:config.collectionMax};\n  }\n', html)
+html = replace_once('You deliver care. We recover revenue.', 'You Deliver Care, We Optimize Revenue.', 'tagline')
+
+# ---------------------------------------------------------------------------
 # 10. Slide 8: phase cards + a matching row of three info cards.
 # ---------------------------------------------------------------------------
 replace_section('pilot', '''<section class="report-section" id="pilot" data-label="The 90-day pilot" aria-labelledby="pilot-title">
@@ -304,8 +322,8 @@ html = replace_once('''  update();
     if (modelIntroDone) return;
     modelIntroDone = true;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const starts = {volume:25000, coverage:2, collection:1063, charge:4000};
-    const steps = {volume:5000, coverage:0.5, collection:1, charge:250};
+    const starts = {volume:25000, coverage:2, collection:500, charge:3000};
+    const steps = {volume:5000, coverage:0.5, collection:500, charge:250};
     const duration = 1800, started = performance.now();
     const ease = t => 1 - Math.pow(1 - t, 3);
     Object.entries(starts).forEach(([id, value]) => { inputs[id].value = value; });

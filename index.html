@@ -421,7 +421,7 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
       <section class="report-section report-cover is-active" id="cover" data-label="Introduction" aria-labelledby="cover-title">
         <div class="cover-left">
           <div class="cover-body">
-            <p class="cover-pretitle">You deliver care. We recover revenue.</p>
+            <p class="cover-pretitle">You Deliver Care, We Optimize Revenue.</p>
             <h1 id="cover-title">Uncovering revenue.<br><span>Strengthening hospital performance.</span></h1>
             <p class="cover-deck">A strategic revenue identification and recovery partnership — extending Cook County Health's revenue cycle, not replacing it.</p>
           </div>
@@ -555,8 +555,8 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
   <div class="assumption-grid" aria-label="Financial model assumptions">
     <div class="assumption"><div class="assumption-top"><label for="volume"><span class="control-number">01</span> Annual ED encounters</label><output for="volume" id="volume-output">150,000</output></div><input id="volume" type="range" min="25000" max="200000" step="5000" value="150000"><div class="range-ends"><span>25,000</span><span>200,000</span></div></div>
     <div class="assumption"><div class="assumption-top"><label for="coverage"><span class="control-number">02</span> Additional coverage identified</label><output for="coverage" id="coverage-output">6%</output></div><input id="coverage" type="range" min="2" max="10" step="0.5" value="6"><div class="range-ends"><span>2%</span><span>10%</span></div></div>
-    <div class="assumption"><div class="assumption-top"><label for="collection"><span class="control-number">03</span> Average incremental net collection</label><output for="collection" id="collection-output">$4,000</output></div><input id="collection" type="range" min="1063" max="8062" step="1" value="4000"><div class="range-ends"><span id="collection-min">$1,063</span><span id="collection-max">$8,062</span></div></div>
-    <div class="assumption"><div class="assumption-top"><label for="charge"><span class="control-number">04</span> Average ED charge</label><output for="charge" id="charge-output">$17,000</output></div><input id="charge" type="range" min="4000" max="20000" step="250" value="17000"><div class="range-ends"><span>$4,000</span><span>$20,000</span></div></div>
+    <div class="assumption"><div class="assumption-top"><label for="collection"><span class="control-number">03</span> Average incremental net collection</label><output for="collection" id="collection-output">$4,000</output></div><input id="collection" type="range" min="500" max="5000" step="500" value="4000"><div class="range-ends"><span id="collection-min">$500</span><span id="collection-max">$5,000</span></div></div>
+    <div class="assumption"><div class="assumption-top"><label for="charge"><span class="control-number">04</span> Average ED charge</label><output for="charge" id="charge-output">$10,000</output></div><input id="charge" type="range" min="3000" max="15000" step="250" value="10000"><div class="range-ends"><span>$3,000</span><span>$15,000</span></div></div>
   </div>
 
     </div>
@@ -564,7 +564,7 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
   <div class="result-strip">
     <div class="main-result"><span class="result-label">Annual incremental net collections</span><strong id="annual-result">$36M</strong></div>
     <div class="supporting-result"><span class="result-label">Identified encounters / year</span><strong id="encounters-result">9,000</strong></div>
-    <div class="supporting-result"><span class="result-label">Associated gross charges / year</span><strong id="charges-result">$153M</strong></div>
+    <div class="supporting-result"><span class="result-label">Associated gross charges / year</span><strong id="charges-result">$90M</strong></div>
   </div>
   <div class="financial-viz-grid">
     <div class="viz-panel population-panel"><div class="viz-heading"><div><p class="eyebrow">Volume &amp; coverage</p><h3>A visible share of every visit.</h3></div></div><lfm-people-chart></lfm-people-chart><div class="population-key"><span><i class="key-covered"></i> Additional coverage identified</span><span><i class="key-other"></i> Other encounters</span></div></div>
@@ -737,9 +737,9 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
 (() => {
   'use strict';
   const inputs = Object.fromEntries(['volume', 'coverage', 'collection', 'charge'].map(id => [id, document.getElementById(id)]));
-  const defaults = {volume:150000, coverage:6, collection:4000, charge:17000};
+  const defaults = {volume:150000, coverage:6, collection:4000, charge:10000};
   const baseline = defaults.volume * defaults.coverage / 100 * defaults.collection;
-  const config = {minimumCollectionRate:0.0625, minimumCollectionFixed:null, lowCharge:4000, highCharge:20000, lowCollectionCap:4000, highCollectionCap:9000};
+  const config = {collectionMin:500, collectionMax:5000};
   const number = new Intl.NumberFormat('en-US', {maximumFractionDigits:0});
   const money = value => '$' + number.format(value);
   const compactMoney = value => value >= 1e6 ? '$' + (value / 1e6).toLocaleString('en-US', {maximumFractionDigits:2}) + 'M' : value >= 1e3 ? '$' + (value / 1e3).toLocaleString('en-US', {maximumFractionDigits:2}) + 'K' : money(value);
@@ -747,12 +747,8 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
   const people = document.querySelector('lfm-people-chart');
   const revenue = document.querySelector('lfm-revenue-chart');
   let noticeTimer;
-  function collectionBounds(charge) {
-    const t = (charge - config.lowCharge) / (config.highCharge - config.lowCharge);
-    return {
-      min:config.minimumCollectionFixed ?? Math.round(charge * config.minimumCollectionRate),
-      max:Math.floor(config.lowCollectionCap + t * (config.highCollectionCap - config.lowCollectionCap))
-    };
+  function collectionBounds() {
+    return {min:config.collectionMin, max:config.collectionMax};
   }
   function update() {
     const state = Object.fromEntries(Object.entries(inputs).map(([id, input]) => [id, Number(input.value)]));
@@ -809,8 +805,8 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
     if (modelIntroDone) return;
     modelIntroDone = true;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const starts = {volume:25000, coverage:2, collection:1063, charge:4000};
-    const steps = {volume:5000, coverage:0.5, collection:1, charge:250};
+    const starts = {volume:25000, coverage:2, collection:500, charge:3000};
+    const steps = {volume:5000, coverage:0.5, collection:500, charge:250};
     const duration = 1800, started = performance.now();
     const ease = t => 1 - Math.pow(1 - t, 3);
     Object.entries(starts).forEach(([id, value]) => { inputs[id].value = value; });
