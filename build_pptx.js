@@ -116,7 +116,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 {
   const s = pres.addSlide({ masterName: "COVER" });
   const LW = 7.3;
-  T(s, "You deliver care. We recover revenue.", M, 1.45, 6.0, 0.3, { fontSize: 12, color: TEAL, bold: true });
+  T(s, "You Deliver Care, We Optimize Revenue.", M, 1.45, 6.0, 0.3, { fontSize: 12, color: TEAL, bold: true });
   s.addText([
     { text: "Uncovering revenue.", options: { color: NAVY, breakLine: true } },
     { text: "Strengthening hospital performance.", options: { color: TEAL } },
@@ -361,8 +361,8 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   const assumptions = [
     ["01", "Annual ED encounters", "150,000", "25,000", "200,000", (150000 - 25000) / 175000],
     ["02", "Additional coverage identified", "6%", "2%", "10%", 0.5],
-    ["03", "Average incremental net collection", "$4,000", "$1,063", "$8,062", (4000 - 1063) / (8062 - 1063)],
-    ["04", "Average ED charge", "$17,000", "$4,000", "$20,000", (17000 - 4000) / 16000],
+    ["03", "Average incremental net collection", "$4,000", "$500", "$5,000", (4000 - 500) / (5000 - 500)],
+    ["04", "Average ED charge", "$10,000", "$3,000", "$15,000", (10000 - 3000) / (15000 - 3000)],
   ];
   const arH = 1.0;
   assumptions.forEach(([n, lab, val, lo, hi, f], i) => {
@@ -392,7 +392,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   T(s, "9,000", rx + c1 + 0.25, ry + 0.52, c2 - 0.4, 0.55, { fontSize: 28, color: "FFFFFF", charSpacing: -1 });
   vline(s, rx + c1 + c2, ry + 0.25, rh - 0.5, N_LINE);
   T(s, "ASSOCIATED GROSS CHARGES / YEAR", rx + c1 + c2 + 0.25, ry + 0.22, c3 - 0.4, 0.2, labO);
-  T(s, "$153M", rx + c1 + c2 + 0.25, ry + 0.52, c3 - 0.4, 0.55, { fontSize: 28, color: "FFFFFF", charSpacing: -1 });
+  T(s, "$90M", rx + c1 + c2 + 0.25, ry + 0.52, c3 - 0.4, 0.55, { fontSize: 28, color: "FFFFFF", charSpacing: -1 });
 
   // viz grid: people chart (left) + sensitivity chart (right)
   const vy = ry + rh + 0.25, vgap = 0.4, vw = (rw - vgap) / 2;
@@ -441,7 +441,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     if (i < 3) T(s, syms[i], x + boxW, chy, symW, chh, { fontSize: 16, color: MUTED, align: "center", valign: "middle" });
   });
   pageNo(s, 7, false);
-  s.addNotes("Static version of the interactive planning model at its starting scenario: 150,000 ED encounters × 6% additional coverage × $4,000 net per encounter = $36M per year; 9,000 identified encounters; $153M associated gross charges at a $17,000 average ED charge. Each figure in the grid = 1,000 ED encounters. Illustrative planning model, not a forecast.");
+  s.addNotes("Static version of the interactive planning model at its starting scenario: 150,000 ED encounters × 6% additional coverage × $4,000 net per encounter = $36M per year; 9,000 identified encounters; $90M associated gross charges at a $10,000 average ED charge. Each figure in the grid = 1,000 ED encounters. Illustrative planning model, not a forecast.");
 }
 
 // =====================================================================
