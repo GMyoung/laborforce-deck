@@ -68,11 +68,6 @@ replace_section('cover', '''<section class="report-section report-cover is-activ
             <h1 id="cover-title">Uncovering revenue.<br><span>Strengthening hospital performance.</span></h1>
             <p class="cover-deck">A strategic revenue identification and recovery partnership — extending Cook County Health's revenue cycle, not replacing it.</p>
           </div>
-          <dl class="cover-facts">
-            <div><dt>Prepared for</dt><dd>Cook County Health<br>Executive Leadership — CEO · CFO · COO</dd></div>
-            <div><dt>Prepared by</dt><dd class="facts-logo">''' + (LOGO_FULL % 'cover-logo') + '''</dd></div>
-            <div><dt>Briefing</dt><dd>Executive proposal<br>October 2026</dd></div>
-          </dl>
           <div class="section-foot"><span>Confidential — for discussion purposes</span><span>01 / 10</span></div>
         </div>
         <aside class="cover-panel" aria-label="At a glance">
@@ -395,7 +390,7 @@ body.deck-mode .section-heading{margin-bottom:24px}
 body.deck-mode .report-cover{display:grid;grid-template-columns:minmax(0,1fr) 420px;padding:0;background:#ffffff}
 body.deck-mode .report-cover.is-active{display:grid}
 .cover-left{display:flex;flex-direction:column;min-width:0;padding:48px 56px 22px 60px}
-.cover-body{margin:auto 0 0;padding:0 0 40px}
+.cover-body{margin:auto 0;padding:0 0 20px}
 .cover-pretitle{font-size:16px;font-weight:600;letter-spacing:.01em;color:var(--teal);margin-bottom:18px}
 .cover-body h1{font-size:64px;line-height:1.04;letter-spacing:-.045em;max-width:800px;color:var(--navy);font-weight:500}
 .cover-body h1>span{color:var(--teal)}
