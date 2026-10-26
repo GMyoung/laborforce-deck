@@ -122,7 +122,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     { text: "Uncovering revenue.", options: { color: NAVY, breakLine: true } },
     { text: "Strengthening hospital performance.", options: { color: TEAL } },
   ], { x: M, y: 2.3, w: LW, h: 1.95, fontFace: FONT, fontSize: 36, margin: 0, valign: "top", isTextBox: true, charSpacing: -1.5, lineSpacingMultiple: 0.98 });
-  T(s, "A strategic revenue identification and recovery partnership — extending Cook County Health's revenue cycle, not replacing it.", M, 4.35, 5.6, 0.95, { fontSize: 13, color: INK2, lineSpacingMultiple: 1.3 });
+  T(s, "A revenue identification and recovery partnership for Cook County Health's emergency and trauma care.", M, 4.35, 5.6, 0.95, { fontSize: 13, color: INK2, lineSpacingMultiple: 1.3 });
   hline(s, M, FOOT_Y, LW, LINE);
   T(s, "CONFIDENTIAL — FOR DISCUSSION PURPOSES", M, FOOT_Y + 0.08, 5, 0.25, { fontSize: 8, color: MUTED, charSpacing: 1.5 });
   T(s, "01 / 10", M + LW - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: MUTED, align: "right", charSpacing: 1.5 });
@@ -153,7 +153,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 {
   const s = pres.addSlide({ masterName: "LIGHT" });
   kicker(s, "02", "Executive summary", false);
-  title(s, [{ text: "Extending your revenue cycle" }, { text: " — not replacing it.", muted: true }], 0.85, 0.7, 30, false);
+  title(s, [{ text: "We work inside the revenue cycle" }, { text: " you already run.", muted: true }], 0.85, 0.7, 30, false);
   const items = [
     ["01 / Context", "The pressure", "Hospitals face reimbursement challenges, rising operational costs, complex payer requirements, and growing uncompensated care obligations.", false],
     ["02 / Opportunity", "The gap", "In ED, trauma and other encounters, Workers' Compensation, Third-Party Liability, auto and other responsible-party coverage can go unidentified or unpursued by traditional workflows.", false],
@@ -193,14 +193,14 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   const s = pres.addSlide({ masterName: "LIGHT" });
   kicker(s, "03", "The challenge", false);
   title(s, [{ text: "Revenue that traditional workflows may overlook." }], 0.85, 0.6, 30, false);
-  T(s, "Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:", M, 1.5, 10.5, 0.6, { fontSize: 12, color: INK2, lineSpacingMultiple: 1.25 });
+  T(s, "Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently answer:", M, 1.5, 10.5, 0.6, { fontSize: 12, color: INK2, lineSpacingMultiple: 1.25 });
   const qs = [
-    "Whether the injury occurred while the patient was working",
-    "Whether a motor vehicle or other third party may be responsible",
-    "Whether another insurer or payer should be investigated",
-    "Whether the hospital has the right claim, attorney, or payer information",
-    "Whether a hospital lien is available, documented, and followed up",
-    "Whether unresolved cases need investigation after discharge",
+    "Was the injury work-related?",
+    "Is a motor vehicle or other third party responsible?",
+    "Should another insurer or payer be investigated?",
+    "Does the hospital have the right claim, attorney, and payer information?",
+    "Is a hospital lien available, documented, and followed up?",
+    "Are unresolved cases investigated after discharge?",
   ];
   const qy = 2.3, flowW = 3.9, leftW = CW - flowW - 0.4, cgap = 0.12, cardW = (leftW - cgap) / 2, cardH = 0.98;
   qs.forEach((q, i) => {
@@ -237,25 +237,38 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 }
 
 // =====================================================================
-// SLIDE 4 — The LaborForce solution (navy, layer stack)
+// SLIDE 4 — The LaborForce solution (navy, isometric five-layer waterfall)
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "NAVY" });
   kicker(s, "04", "The LaborForce solution", true);
   title(s, [{ text: "A specialized operational layer.", breakLine: true }, { text: "Five critical functions.", muted: true }], 0.85, 1.1, 28, true);
 
-  const wedge = (y) => s.addShape(pres.ShapeType.triangle, { x: W / 2 - 0.3, y, w: 0.6, h: 0.2, fill: { color: TEAL }, line: { color: TEAL, width: 0 }, flipV: true });
-  // top band — outcome
-  const ty = 2.0, th = 0.8;
-  s.addShape(pres.ShapeType.roundRect, { x: M, y: ty, w: CW, h: th, fill: { color: N_TOP }, line: { color: N_TOP_LINE, width: 0.75 }, rectRadius: 0.04 });
-  T(s, "OUTCOME", M + 0.25, ty + 0.14, 3, 0.2, { fontSize: 8, bold: true, color: N_TEAL, charSpacing: 1.5 });
-  T(s, "Correct payer identified · lien documented · reimbursement recovered", M + 0.25, ty + 0.34, CW - 0.5, 0.26, { fontSize: 13, bold: true, color: "FFFFFF" });
-  T(s, "Verified findings flow back into the hospital's own billing and collections.", M + 0.25, ty + 0.58, CW - 0.5, 0.2, { fontSize: 9.5, color: N_BODY });
-  wedge(ty + th + 0.04);
-  // middle band — the LaborForce layer
-  const my = ty + th + 0.28, mh = 2.55;
-  rrect(s, M, my, CW, mh, N_MID, 0.04);
-  T(s, "THE LABORFORCE LAYER", M + 0.25, my + 0.15, 4, 0.2, { fontSize: 8, bold: true, color: "FFFFFF", charSpacing: 1.5 });
+  // --- left: slabs, geometry taken from the HTML's SVG (viewBox 520 x 610) ---
+  const SX = M, SY = 1.98, K = 4.82 / 610; // scale: px -> inches
+  const P = (x, y) => ({ x: SX + x * K, y: SY + y * K });
+  const poly = (pts, fill, name) => {
+    const xs = pts.map(p => p.x), ys = pts.map(p => p.y);
+    const x0 = Math.min(...xs), y0 = Math.min(...ys), w = Math.max(...xs) - x0, h = Math.max(...ys) - y0;
+    s.addShape(pres.ShapeType.custGeom, { x: x0, y: y0, w, h, fill: { color: fill }, line: { color: fill, width: 0.5 }, objectName: name,
+      points: pts.map(p => ({ x: p.x - x0, y: p.y - y0 })).concat([{ close: true }]) });
+  };
+  const slabColors = [["BFEFE0", "7ADBC0", "3DB48F"], ["8FE0C9", "4CC9A6", "1D9E75"], ["9CC8F0", "5AA2E6", "2F7FCB"], ["6FB0EE", "3A8FDB", "1F67AE"], ["4A97E2", "2B74BE", "1A5590"]];
+  slabColors.forEach(([top, left, right], i) => {
+    const o = 118 * i, n = i + 1;
+    poly([P(60, 52 + o), P(260, 90 + o), P(260, 108 + o), P(60, 70 + o)], left, `slab-${n}-left`);
+    poly([P(460, 52 + o), P(260, 90 + o), P(260, 108 + o), P(460, 70 + o)], right, `slab-${n}-right`);
+    poly([P(60, 52 + o), P(260, 14 + o), P(460, 52 + o), P(260, 90 + o)], top, `slab-${n}-top`);
+    const c = P(260, 52 + o);
+    T(s, String(n).padStart(2, "0"), c.x - 0.5, c.y - 0.15, 1.0, 0.3, { fontSize: 11, bold: true, color: NAVY, align: "center", valign: "middle", objectName: `slab-${n}-num` });
+    if (i < 4) {
+      const a = P(260, 108 + o), b = P(260, 138 + o);
+      s.addShape(pres.ShapeType.line, { x: a.x, y: a.y, w: 0, h: b.y - a.y, line: { color: N_TEAL, width: 1.25, dashType: "sysDash" }, objectName: `slab-${n}-link` });
+      s.addShape(pres.ShapeType.ellipse, { x: a.x - 0.03, y: a.y - 0.03, w: 0.06, h: 0.06, fill: { color: N_TEAL }, line: { color: N_TEAL, width: 0 }, objectName: `slab-${n}-drop` });
+    }
+  });
+
+  // --- right: five function rows ---
   const fns = [
     ["Proactive Revenue Identification", "Review injury-related encounters, identify potentially responsible payers, and prioritize accounts for investigation."],
     ["Dedicated Patient Engagement", "Outreach to verify injury circumstances and collect missing claim, employer, insurer, or attorney information."],
@@ -263,22 +276,18 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     ["Revenue Auditing & Reconciliation", "Monitor unresolved cases, flag missing or inconsistent information, and track case status and reimbursement."],
     ["Lien Administration & Recovery", "Support approved lien documentation, follow-up, and reimbursement tracking within the legal and contractual framework."],
   ];
-  const cgap = 0.15, cw = (CW - 0.5 - 4 * cgap) / 5, cy = my + 0.45, ch = mh - 0.65;
+  const rx = SX + 520 * K + 0.45, rw = W - M - rx, ry0 = 1.98, rh = 0.82, rgap = 0.1;
   fns.forEach(([h, p], i) => {
-    const x = M + 0.25 + i * (cw + cgap);
-    rrect(s, x, cy, cw, ch, "FFFFFF", 0.03);
-    T(s, String(i + 1).padStart(2, "0"), x + 0.16, cy + 0.15, 0.5, 0.2, { fontSize: 9, bold: true, color: TEAL });
-    T(s, h, x + 0.16, cy + 0.38, cw - 0.3, 0.45, { fontSize: 11, bold: true, color: NAVY, charSpacing: -0.2, lineSpacingMultiple: 1.1 });
-    T(s, p, x + 0.16, cy + 0.86, cw - 0.3, ch - 0.95, { fontSize: 9, color: INK2, lineSpacingMultiple: 1.2 });
+    const y = ry0 + i * (rh + rgap), n = i + 1;
+    s.addShape(pres.ShapeType.roundRect, { x: rx, y, w: rw, h: rh, fill: { color: "174579" }, line: { color: N_CARD_LINE, width: 0.75 }, rectRadius: 0.05, objectName: `fn-${n}-card` });
+    s.addShape(pres.ShapeType.ellipse, { x: rx + 0.2, y: y + 0.24, w: 0.34, h: 0.34, fill: { color: N_CARD_LINE }, line: { color: N_CARD_LINE, width: 0 }, objectName: `fn-${n}-badge` });
+    T(s, String(n).padStart(2, "0"), rx + 0.2, y + 0.24, 0.34, 0.34, { fontSize: 8.5, bold: true, color: "FFFFFF", align: "center", valign: "middle", objectName: `fn-${n}-badgenum` });
+    T(s, h, rx + 0.72, y + 0.12, rw - 0.9, 0.28, { fontSize: 13, bold: true, color: "FFFFFF", charSpacing: -0.2, objectName: `fn-${n}-title` });
+    T(s, p, rx + 0.72, y + 0.42, rw - 0.9, 0.38, { fontSize: 9.5, color: N_SPAN, lineSpacingMultiple: 1.15, objectName: `fn-${n}-desc` });
   });
-  wedge(my + mh + 0.04);
-  // base band — existing revenue cycle
-  const by = my + mh + 0.28, bh = 6.78 - by;
-  s.addShape(pres.ShapeType.roundRect, { x: M, y: by, w: CW, h: bh, fill: { color: N_BASE }, line: { color: N_BASE_LINE, width: 0.75 }, rectRadius: 0.04 });
-  T(s, "EXISTING HOSPITAL REVENUE CYCLE", M + 0.25, by + 0.13, 4, 0.2, { fontSize: 8, bold: true, color: N_TITLE_MUTED, charSpacing: 1.5 });
-  T(s, "Registration · Billing · Collections · Revenue cycle teams", M + 0.25, by + 0.33, CW - 0.5, 0.26, { fontSize: 13, bold: true, color: "FFFFFF" });
-  T(s, "Unchanged. LaborForce works alongside these teams — uncovering and advancing opportunities they may not have the specialized resources to fully investigate.", M + 0.25, by + 0.57, CW - 0.5, 0.22, { fontSize: 9.5, color: N_BASE_SPAN });
+  T(s, "LaborForce works alongside your billing and collections teams.", rx, ry0 + 5 * rh + 4 * rgap + 0.12, rw, 0.25, { fontSize: 9.5, color: N_BODY, italic: true });
   pageNo(s, 4, true);
+  s.addNotes("Five-layer waterfall: findings flow from identification (01) down to lien administration and recovery (05). LaborForce works alongside the hospital's billing and collections teams.");
 }
 
 // =====================================================================
