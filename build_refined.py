@@ -48,7 +48,7 @@ full_uri = data_uri('logo_full.png', 'image/png')
 nm_uri = data_uri('nm_logo.svg', 'image/svg+xml')
 hph_uri = data_uri('hph_logo.png', 'image/png')
 LOGO_FULL = '<img class="%s" src="' + full_uri + '" alt="LaborForce Medical Management" width="640" height="421" decoding="async">'
-ARROW_DOWN = '<div class="flow-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5"/></svg></div>'
+ARROW_DOWN = '<div class="flow-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5"/></svg><i></i><i></i></div>'
 
 # ---------------------------------------------------------------------------
 # 2. Header: logo mark replaces the typed "LF"; drop "Prepared for Cook County Health".
@@ -214,15 +214,26 @@ replace_section('experience', '''<section class="report-section" id="experience"
 replace_section('opportunity', '''<section class="report-section opportunity-section" id="opportunity" data-label="The CCH opportunity" aria-labelledby="opportunity-title">
         <div class="section-kicker"><span>06</span> Opportunity at Cook County Health</div>
         <div class="section-heading"><h2 id="opportunity-title">A focused TPL/WC program for a high-volume safety-net system.</h2></div>
-        <div class="outcome-grid">
-          <article><h3>Find coverage</h3><p>Evaluate whether additional responsible-party coverage exists for selected encounters.</p></article>
-          <article><h3>Document claims</h3><p>Improve identification and documentation of injury-related claims.</p></article>
-          <article><h3>Bill accurately</h3><p>Strengthen billing accuracy and reimbursement follow-up.</p></article>
-          <article><h3>Stop leakage</h3><p>Reduce avoidable revenue leakage.</p></article>
-          <article><h3>Gain visibility</h3><p>Establish clearer visibility into potentially recoverable accounts.</p></article>
-          <article><h3>Protect the mission</h3><p>Support financial sustainability without compromising access to care.</p></article>
+        <div class="opp-grid">
+          <div class="funnel" aria-label="Illustrative sizing: 150,000 ED encounters a year, about 9,000 with additional coverage, about $36M in net collections">
+            <div class="fn-band band-1"><b data-count="150000" data-final="150,000">150,000</b><span>ED encounters per year</span></div>
+            <div class="fn-band band-2"><b data-count="9000" data-final="9,000">9,000</b><span>with additional coverage (6%)</span></div>
+            <div class="fn-band band-3"><b data-count="36" data-prefix="$" data-suffix="M" data-final="$36M">$36M</b><span>per year at $4,000 net each</span></div>
+          </div>
+          <div class="opp-groups">
+            <div class="opp-group"><span class="eyebrow">What we do</span><div class="opp-cards">
+              <article><h3>Find coverage</h3><p>Evaluate whether additional responsible-party coverage exists for selected encounters.</p></article>
+              <article><h3>Document claims</h3><p>Improve identification and documentation of injury-related claims.</p></article>
+              <article><h3>Bill accurately</h3><p>Strengthen billing accuracy and reimbursement follow-up.</p></article>
+            </div></div>
+            <div class="opp-group"><span class="eyebrow">What changes</span><div class="opp-cards">
+              <article><h3>Stop leakage</h3><p>Reduce avoidable revenue leakage.</p></article>
+              <article><h3>Gain visibility</h3><p>Establish clearer visibility into potentially recoverable accounts.</p></article>
+              <article><h3>Protect the mission</h3><p>Support financial sustainability without compromising access to care.</p></article>
+            </div></div>
+          </div>
         </div>
-        <p class="sizing-line">Illustrative sizing: 150,000 ED encounters × 6% with additional coverage × $4,000 net per encounter ≈ $36M per year — a planning model, not a forecast.</p>
+        <p class="sizing-line">Illustrative sizing from the planning model on the next page — not a forecast. Replace with Cook County Health data during discovery.</p>
         <div class="section-foot"><span>LaborForce Medical Management</span><span>06 / 10</span></div>
       </section>''')
 
@@ -283,11 +294,16 @@ html = replace_once('You deliver care. We recover revenue.', 'You Deliver Care, 
 replace_section('pilot', '''<section class="report-section" id="pilot" data-label="The 90-day pilot" aria-labelledby="pilot-title">
         <div class="section-kicker"><span>08</span> Proposed partnership</div>
         <div class="section-heading"><h2 id="pilot-title">90-day pilot.<br><span class="title-muted">John H. Stroger, Jr. Hospital.</span></h2></div>
-        <ol class="phase-cards" aria-label="Pilot phases: 15 days discovery, 45 days investigation, 30 days review">
-          <li class="phase-card phase-a"><header><span>Phase 01</span><span>Days 1 – 15</span></header><div class="phase-meter"><i style="--share:16.7%"></i><span>15 of 90 days</span></div><h3>Discovery &amp; Baseline</h3><p>Review current injury-related registration, payer identification, billing, and follow-up. Agree on pilot scope, eligibility criteria, compliance requirements, and baseline measures.</p></li>
-          <li class="phase-card phase-b"><header><span>Phase 02</span><span>Days 16 – 60</span></header><div class="phase-meter"><i style="--share:50%"></i><span>45 of 90 days</span></div><h3>Identification &amp; Investigation</h3><p>Evaluate designated encounters, conduct authorized patient outreach, identify alternative payer sources, and coordinate verified findings with existing hospital teams.</p></li>
-          <li class="phase-card phase-c"><header><span>Phase 03</span><span>Days 61 – 90</span></header><div class="phase-meter"><i style="--share:33.3%"></i><span>30 of 90 days</span></div><h3>Validation &amp; Review</h3><p>Reconcile outcomes, review billing corrections and collections, assess operational impact, and recommend continued monitoring and potential expansion.</p></li>
-        </ol>
+        <div class="tl" id="pilot-tl">
+          <div class="tl-track" id="tl-track" aria-label="Pilot timeline: 15 days discovery, 45 days investigation, 30 days review">
+            <div class="tl-seg seg-a" data-phase="0" style="flex:15"><span>Phase 01</span><b>Discovery</b></div>
+            <div class="tl-seg seg-b" data-phase="1" style="flex:45"><span>Phase 02</span><b>Identification &amp; investigation</b></div>
+            <div class="tl-seg seg-c" data-phase="2" style="flex:30"><span>Phase 03</span><b>Validation &amp; review</b></div>
+            <div class="tl-cursor" id="tl-cursor" aria-hidden="true"><span id="tl-day">Day 0</span></div>
+          </div>
+          <div class="tl-ticks"><span class="tl-tick" data-day="0" style="left:0.0000%"><i></i>Day 0</span><span class="tl-tick" data-day="15" style="left:16.6667%"><i></i>Day 15</span><span class="tl-tick review" data-day="30" style="left:33.3333%"><i></i>Day 30<em>Joint review</em></span><span class="tl-tick review" data-day="60" style="left:66.6667%"><i></i>Day 60<em>Joint review</em></span><span class="tl-tick review" data-day="90" style="left:100.0000%"><i></i>Day 90<em>Joint review</em></span></div>
+        </div>
+        <ol class="phase-cards" id="phase-cards"><li class="phase-card phase-a" data-phase="0"><header><span>Phase 01</span><span>Days 1 – 15</span></header><h3>Discovery &amp; Baseline</h3><p>Review current injury-related registration, payer identification, billing, and follow-up. Agree on pilot scope, eligibility criteria, compliance requirements, and baseline measures.</p></li><li class="phase-card phase-b" data-phase="1"><header><span>Phase 02</span><span>Days 16 – 60</span></header><h3>Identification &amp; Investigation</h3><p>Evaluate designated encounters, conduct authorized patient outreach, identify alternative payer sources, and coordinate verified findings with existing hospital teams.</p></li><li class="phase-card phase-c" data-phase="2"><header><span>Phase 03</span><span>Days 61 – 90</span></header><h3>Validation &amp; Review</h3><p>Reconcile outcomes, review billing corrections and collections, assess operational impact, and recommend continued monitoring and potential expansion.</p></li></ol>
         <div class="info-cards">
           <div class="info-card"><span class="eyebrow">How to read the pilot</span><p>Many claims take longer than 90 days to resolve. The pilot measures <strong>leading indicators</strong> and any collections realized; final financial performance is reviewed as the identified account cohort matures.</p></div>
           <div class="info-card"><span class="eyebrow">Cook County Health provides</span><ul><li>Executive sponsor and agreed pilot scope</li><li>ED volume, payer mix, and current TPL/WC workflow data</li><li>Compliance requirements and data-access terms</li></ul></div>
@@ -302,19 +318,20 @@ replace_section('pilot', '''<section class="report-section" id="pilot" data-labe
 replace_section('metrics', '''<section class="report-section" id="metrics" data-label="Success metrics" aria-labelledby="metrics-title">
         <div class="section-kicker"><span>09</span> Proposed success metrics</div>
         <div class="section-heading"><h2 id="metrics-title">Transparent. Measurable.<br><span class="title-muted">Jointly reviewed.</span></h2></div>
-        <div class="metric-cards">
-          <article class="metric-card" style="--accent:#0a8fa6"><h3>Leading</h3><p class="metric-desc">Early signals that cases are being found and verified</p><ul><li>Encounters screened and flagged</li><li>Number and % with verified additional responsible-party coverage</li><li>Accounts accepted for billing correction or recovery action</li></ul></article>
-          <article class="metric-card" style="--accent:#0c3c75"><h3>Financial</h3><p class="metric-desc">What the program returns, net of adjustments</p><ul><li>Additional collections attributable to the program, net of reversals and adjustments</li><li>Incremental net revenue after program costs</li></ul></article>
-          <article class="metric-card" style="--accent:#2f6fb5"><h3>Operational</h3><p class="metric-desc">Effect on hospital teams and account flow</p><ul><li>Staff workload</li><li>Turnaround time</li><li>Unresolved account aging</li></ul></article>
-          <article class="metric-card" style="--accent:#7a95ad"><h3>Quality</h3><p class="metric-desc">Safeguards that stay in place throughout</p><ul><li>Compliance</li><li>Patient experience</li><li>Documentation quality</li></ul></article>
+        <div class="metric-cards" id="metric-cards">
+          <article class="metric-card" data-from="30" style="--accent:#0a8fa6"><span class="mc-from">From day 30</span><h3>Leading</h3><p class="metric-desc">Early signals that cases are being found and verified</p><ul><li>Encounters screened and flagged</li><li>Number and % with verified additional responsible-party coverage</li><li>Accounts accepted for billing correction or recovery action</li></ul></article>
+          <article class="metric-card" data-from="90" style="--accent:#0c3c75"><span class="mc-from">From day 90</span><h3>Financial</h3><p class="metric-desc">What the program returns, net of adjustments</p><ul><li>Additional collections attributable to the program, net of reversals and adjustments</li><li>Incremental net revenue after program costs</li></ul></article>
+          <article class="metric-card" data-from="60" style="--accent:#2f6fb5"><span class="mc-from">From day 60</span><h3>Operational</h3><p class="metric-desc">Effect on hospital teams and account flow</p><ul><li>Staff workload</li><li>Turnaround time</li><li>Unresolved account aging</li></ul></article>
+          <article class="metric-card" data-from="30" style="--accent:#7a95ad"><span class="mc-from">From day 30</span><h3>Quality</h3><p class="metric-desc">Safeguards that stay in place throughout</p><ul><li>Compliance</li><li>Patient experience</li><li>Documentation quality</li></ul></article>
         </div>
-        <div class="cadence" aria-label="Joint review cadence">
-          <span class="callout-label">Joint review cadence</span>
+        <div class="cadence" id="cadence" aria-label="Joint review cadence">
+          <span class="callout-label">Joint review cadence · what is reported when</span>
           <div class="cadence-track">
-            <div class="cadence-stop launch"><i></i><strong>Launch</strong><p>Scope, eligibility criteria, and baseline agreed</p></div>
-            <div class="cadence-stop"><i></i><strong>Day 30</strong><p>Baseline confirmed; screening volumes and first flagged cohort</p></div>
-            <div class="cadence-stop"><i></i><strong>Day 60</strong><p>Verification rate, accounts accepted for correction, staff workload impact</p></div>
-            <div class="cadence-stop"><i></i><strong>Day 90</strong><p>Collections to date, cohort maturity, and a joint decision on continuation</p></div>
+            <div class="cadence-fill" aria-hidden="true"></div>
+            <div class="cadence-stop launch" data-day="0" tabindex="0" role="button"><i></i><strong>Launch</strong><p>Scope, eligibility criteria, and baselines agreed for all four areas</p></div>
+            <div class="cadence-stop" data-day="30" tabindex="0" role="button"><i></i><strong>Day 30</strong><p>Screening volumes, first flagged cohort, compliance check</p></div>
+            <div class="cadence-stop" data-day="60" tabindex="0" role="button"><i></i><strong>Day 60</strong><p>Verification rate, accounts accepted for correction, staff workload impact</p></div>
+            <div class="cadence-stop" data-day="90" tabindex="0" role="button"><i></i><strong>Day 90</strong><p>Collections to date, cohort maturity, and a joint decision on continuation</p></div>
           </div>
         </div>
         <div class="section-foot"><span>LaborForce Medical Management</span><span>09 / 10</span></div>
@@ -331,6 +348,13 @@ replace_section('next-steps', '''<section class="report-section closing-section"
           <li><span>01</span><h3>Confirm sponsor &amp; scope</h3><p>Executive sponsor and pilot scope at Stroger Hospital</p></li>
           <li><span>02</span><h3>Share baseline data</h3><p>ED volume, payer mix, and the current TPL/WC workflow</p></li>
           <li><span>03</span><h3>Agree &amp; launch</h3><p>Compliance requirements and success metrics; launch Phase 1</p></li>
+        </ol>
+        <ol class="roadmap" id="roadmap" aria-label="Path from today to the day-90 decision">
+          <li data-step="0"><i></i><span>Today</span></li>
+          <li data-step="1"><i></i><span>Sponsor &amp; scope</span></li>
+          <li data-step="2"><i></i><span>Baseline data</span></li>
+          <li data-step="3"><i></i><span>Agree &amp; launch</span></li>
+          <li data-step="4" class="rm-goal"><i></i><span>Day 90 joint decision</span></li>
         </ol>
         <div class="closing-bottom">
           <div class="closing-signature">''' + (LOGO_FULL % 'closing-logo') + '''</div>
@@ -399,6 +423,102 @@ html = replace_once('''  update();
     demo.addEventListener('focusout', event => { if (!demo.contains(event.relatedTarget)) { demoHeld = false; if (document.getElementById('solution').classList.contains('is-active')) startLayerDemo(); } });
   }
 
+  function countUp(root) {
+    root.querySelectorAll('[data-count]').forEach(el => {
+      const target = Number(el.dataset.count), pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+      if (reduceMotion) { el.textContent = el.dataset.final; return; }
+      const t0 = performance.now(), dur = 1300;
+      const tick = now => {
+        const t = Math.min(1, (now - t0) / dur), k = 1 - Math.pow(1 - t, 3);
+        el.textContent = t >= 1 ? el.dataset.final : pre + Math.round(target * k).toLocaleString('en-US') + suf;
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+
+  const tlTrack = document.getElementById('tl-track');
+  const tlCursor = document.getElementById('tl-cursor');
+  const tlSegs = tlTrack ? [...tlTrack.querySelectorAll('.tl-seg')] : [];
+  const tlTicks = [...document.querySelectorAll('#pilot-tl .tl-tick')];
+  const phaseWrap = document.getElementById('phase-cards');
+  const phaseCards = phaseWrap ? [...phaseWrap.querySelectorAll('.phase-card')] : [];
+  let tlRaf = 0, tlHeld = false;
+  function setDay(day) {
+    const d = Math.max(0, Math.min(90, day)), phase = d <= 15 ? 0 : d <= 60 ? 1 : 2;
+    tlCursor.style.left = (d / 90 * 100) + '%';
+    tlCursor.classList.add('show');
+    put('tl-day', d < 0.5 ? 'Start' : 'Day ' + Math.round(d));
+    tlTrack.classList.add('live'); phaseWrap.classList.add('live');
+    tlSegs.forEach((el, i) => el.classList.toggle('on', i === phase));
+    phaseCards.forEach((el, i) => el.classList.toggle('on', i === phase));
+    tlTicks.forEach(el => el.classList.toggle('hit', Number(el.dataset.day) <= d + 0.01));
+  }
+  function clearDay() {
+    if (!tlTrack) return;
+    tlTrack.classList.remove('live'); phaseWrap.classList.remove('live'); tlCursor.classList.remove('show');
+    [...tlSegs, ...phaseCards].forEach(el => el.classList.remove('on'));
+    tlTicks.forEach(el => el.classList.remove('hit'));
+  }
+  function tlStop() { cancelAnimationFrame(tlRaf); tlRaf = 0; }
+  function tlStart() {
+    if (!tlTrack || reduceMotion || tlHeld || tlRaf) return;
+    const t0 = performance.now();
+    const step = now => { const e = (now - t0) % 11000; setDay(Math.min(90, e / 9000 * 90)); tlRaf = requestAnimationFrame(step); };
+    tlRaf = requestAnimationFrame(step);
+  }
+  if (tlTrack) {
+    const fromPointer = event => { const r = tlTrack.getBoundingClientRect(); return (event.clientX - r.left) / r.width * 90; };
+    tlTrack.addEventListener('mousemove', event => { tlHeld = true; tlStop(); setDay(fromPointer(event)); });
+    tlTrack.addEventListener('click', event => { tlHeld = true; tlStop(); setDay(fromPointer(event)); });
+    phaseCards.forEach((el, i) => el.addEventListener('mouseenter', () => { tlHeld = true; tlStop(); setDay([8, 38, 75][i]); }));
+    document.getElementById('pilot-tl').parentElement.addEventListener('mouseleave', () => { tlHeld = false; if (document.getElementById('pilot').classList.contains('is-active')) tlStart(); });
+  }
+
+  const cadence = document.getElementById('cadence');
+  const cadStops = cadence ? [...cadence.querySelectorAll('.cadence-stop')] : [];
+  const metricWrap = document.getElementById('metric-cards');
+  const metricCards = metricWrap ? [...metricWrap.querySelectorAll('.metric-card')] : [];
+  let cadTimer = null, cadHeld = false, cadIndex = 0;
+  function setStop(i) {
+    const day = Number(cadStops[i].dataset.day);
+    cadStops.forEach((el, j) => { el.classList.toggle('on', j <= i); el.classList.toggle('sel', j === i); });
+    cadence.style.setProperty('--fill', (i * 25) + '%');
+    metricWrap.classList.add('live');
+    metricCards.forEach(el => { el.classList.toggle('on', day > 0 && Number(el.dataset.from) <= day); el.classList.toggle('base', day === 0); });
+  }
+  function clearStops() {
+    if (!cadence) return;
+    cadStops.forEach(el => el.classList.remove('on', 'sel'));
+    cadence.style.removeProperty('--fill'); metricWrap.classList.remove('live');
+    metricCards.forEach(el => el.classList.remove('on', 'base'));
+  }
+  function cadStop() { clearInterval(cadTimer); cadTimer = null; }
+  function cadStart() {
+    if (!cadence || reduceMotion || cadHeld || cadTimer) return;
+    setStop(cadIndex = 0);
+    cadTimer = setInterval(() => { cadIndex = (cadIndex + 1) % cadStops.length; setStop(cadIndex); }, 2400);
+  }
+  if (cadence) {
+    cadStops.forEach((el, i) => {
+      const hold = () => { cadHeld = true; cadStop(); setStop(cadIndex = i); };
+      el.addEventListener('mouseenter', hold); el.addEventListener('focus', hold); el.addEventListener('click', hold);
+    });
+    cadence.addEventListener('mouseleave', () => { cadHeld = false; if (document.getElementById('metrics').classList.contains('is-active')) cadStart(); });
+  }
+
+  const roadmapStops = [...document.querySelectorAll('#roadmap li')];
+  document.querySelectorAll('#next-steps .step-cards li').forEach((el, i) => {
+    el.addEventListener('mouseenter', () => roadmapStops.forEach((stop, j) => stop.classList.toggle('hl', j === i + 1)));
+    el.addEventListener('mouseleave', () => roadmapStops.forEach(stop => stop.classList.remove('hl')));
+  });
+
+  function runSlideFx(id) {
+    if (id === 'opportunity') countUp(document.getElementById('opportunity'));
+    if (id === 'pilot') tlStart(); else { tlStop(); tlHeld = false; clearDay(); }
+    if (id === 'metrics') cadStart(); else { cadStop(); cadHeld = false; clearStops(); }
+  }
+
   const toggle = document.getElementById('toc-toggle');''', 'model intro')
 html = replace_once('''    closeContents();
     fitDeck();
@@ -406,6 +526,7 @@ html = replace_once('''    closeContents();
     fitDeck();
     if (sections[current].id === 'financial') animateModel();
     if (sections[current].id === 'solution') startLayerDemo(); else { stopLayerDemo(); if (!demoHeld) setLayer(0); }
+    runSlideFx(sections[current].id);
   }''', 'hook intro into showSlide')
 
 # ---------------------------------------------------------------------------
@@ -432,12 +553,16 @@ html = replace_once('''        slide.querySelectorAll('lfm-blender-scene').forEa
           node.replaceWith(poster);
         });
 ''', '', 'print scene hook')
+html = replace_once("        slide.querySelectorAll('dialog').forEach(node => node.remove());",
+                    "        slide.querySelectorAll('dialog').forEach(node => node.remove());\n        slide.querySelectorAll('[data-final]').forEach(node => { node.textContent = node.dataset.final; });", 'print final numbers')
 html = replace_once('    body.deck-mode .print-sheet .chart-toolbar { min-height:20px; }',
                     """    body.deck-mode .print-sheet .chart-toolbar { min-height:20px; }
     .print-sheet .slab { opacity:1!important; transform:none!important; }
     .print-sheet .gap .drop { display:none!important; }
     .print-sheet .gap .flow-line { opacity:.9!important; }
-    .print-sheet .fn-row { opacity:1!important; }""", 'print slab reset')
+    .print-sheet .fn-row { opacity:1!important; }
+    .print-sheet .tl-cursor, .print-sheet .flow-arrow i { display:none!important; }
+    .print-sheet .tl-seg, .print-sheet .phase-card, .print-sheet .metric-card { opacity:1!important; transform:none!important; box-shadow:none!important; }""", 'print slab reset')
 html = replace_once('lfm-people-chart,lfm-revenue-chart,lfm-blender-figure{display:block}', 'lfm-people-chart,lfm-revenue-chart{display:block}', 'css display')
 html = replace_once('.hero-art lfm-blender-figure{width:100%;height:100%}lfm-blender-figure img{display:block;object-fit:contain;width:100%;height:auto}.hero-art lfm-blender-figure img{height:100%;max-height:550px}', '', 'css blender figure')
 html = replace_once('.deck-mode .hero-art lfm-blender-scene{height:100%;width:100%}', '', 'css blender scene')
@@ -551,7 +676,7 @@ body.deck-mode .summary-grid{flex:none;gap:16px}
 .results-grid span{font-size:15px;line-height:1.5;color:#c5d6e8}
 /* Slide 6 */
 body.deck-mode .opportunity-section .section-heading{margin-bottom:30px}
-.deck-mode .outcome-grid{gap:20px;flex:1;grid-template-rows:1fr 1fr;min-height:0}
+.deck-mode .outcome-grid{gap:20px}
 .deck-mode .outcome-grid article{background:#ffffff;border-top:0;border-radius:6px;padding:26px 28px;border-left:4px solid var(--teal);display:flex;flex-direction:column;justify-content:center}
 .deck-mode .outcome-grid h3{font-size:27px;margin:0 0 10px}
 .deck-mode .outcome-grid p{font-size:19px;line-height:1.5}
@@ -679,6 +804,96 @@ body.deck-mode #solution .section-heading{margin-bottom:14px}
 .fn-row.dim{opacity:.5}
 .layer-note{margin-top:14px;font-size:14px;line-height:1.5;color:#9fc0dc}
 @media(prefers-reduced-motion:reduce){.gap.on .flow-line,.gap.on .drop{animation:none}.gap.on .drop{opacity:0}.slab{transition:none}}
+/* Slide 3 — drip */
+.flow-arrow{position:relative}
+.flow-arrow i{position:absolute;left:50%;top:2px;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#0a8fa6;opacity:0}
+#challenge.is-active .flow-arrow i{animation:drip 1.3s ease-in infinite}
+#challenge.is-active .flow-arrow i+i{animation-delay:.65s}
+@keyframes drip{0%{transform:translateY(0);opacity:0}25%{opacity:1}100%{transform:translateY(24px);opacity:0}}
+/* Slide 6 — funnel */
+.opp-grid{display:grid;grid-template-columns:440px minmax(0,1fr);gap:46px;align-items:center;flex:1;min-height:0}
+.funnel{display:flex;flex-direction:column;align-items:center;gap:10px}
+.fn-band{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;height:118px;padding:0 34px;clip-path:polygon(0 0,100% 0,calc(100% - 28px) 100%,28px 100%)}
+.fn-band b{font-size:40px;line-height:1;font-weight:600;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.fn-band span{font-size:14px;line-height:1.35;margin-top:7px}
+.band-1{width:100%;background:#dbe8f7;color:#0c3c75}
+.band-2{width:76%;background:#5aa2e6;color:#ffffff}
+.band-3{width:54%;background:#0c3c75;color:#ffffff}
+.band-3 b{color:#7fd3e3}
+#opportunity.is-active .fn-band{animation:bandIn .6s var(--ease-out) both}
+#opportunity.is-active .band-2{animation-delay:.25s}
+#opportunity.is-active .band-3{animation-delay:.5s}
+@keyframes bandIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+.opp-groups{display:flex;flex-direction:column;gap:20px;min-width:0}
+.opp-group .eyebrow{display:block;margin-bottom:9px}
+.opp-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.opp-cards article{background:#ffffff;border-radius:6px;border-left:4px solid var(--teal);padding:16px 18px 18px}
+.opp-group+.opp-group .opp-cards article{border-left-color:var(--navy)}
+.opp-cards h3{font-size:21px;margin:0 0 6px;color:var(--navy)}
+.opp-cards p{font-size:15px;line-height:1.45;color:var(--ink-2)}
+#opportunity.is-active .opp-cards article{animation:bandIn .5s var(--ease-out) both}
+#opportunity.is-active .opp-group+.opp-group .opp-cards article{animation-delay:.3s}
+/* Slide 8 — 90-day timeline */
+.tl{margin:30px 0 20px}
+.tl-track{position:relative;display:flex;gap:4px;height:62px;cursor:ew-resize}
+.tl-seg{display:flex;flex-direction:column;justify-content:center;padding:0 16px;border-radius:5px;color:#ffffff;min-width:0;transition:opacity .25s ease,filter .25s ease}
+.tl-seg span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;opacity:.85}
+.tl-seg b{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg-a{background:#5b8fd6}
+.seg-b{background:var(--teal)}
+.seg-c{background:var(--navy)}
+.tl-track.live .tl-seg{opacity:.5}
+.tl-track.live .tl-seg.on{opacity:1}
+.tl-cursor{position:absolute;top:-8px;bottom:-8px;left:0;width:3px;margin-left:-1.5px;background:#15283d;box-shadow:0 0 0 2px #ffffff;border-radius:2px;opacity:0;pointer-events:none;transition:opacity .2s ease}
+.tl-cursor.show{opacity:1}
+.tl-cursor span{position:absolute;bottom:100%;left:50%;transform:translate(-50%,-6px);background:#15283d;color:#ffffff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:4px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tl-ticks{position:relative;height:40px;margin-top:10px}
+.tl-tick{position:absolute;top:0;transform:translateX(-50%);font-size:12px;font-weight:600;color:var(--muted);text-align:center;white-space:nowrap}
+.tl-tick:first-child{transform:none}
+.tl-tick:last-child{transform:translateX(-100%)}
+.tl-tick i{display:block;width:9px;height:9px;margin:0 auto 4px;background:var(--line);transform:rotate(45deg);transition:background .2s ease}
+.tl-tick:first-child i{margin-left:0}
+.tl-tick:last-child i{margin-right:0}
+.tl-tick em{display:block;font-style:normal;font-weight:500;font-size:11px;color:var(--teal)}
+.tl-tick.review i{background:#9fc0dc}
+.tl-tick.hit i{background:var(--teal)}
+.phase-card{transition:opacity .25s ease,box-shadow .25s ease}
+.phase-cards.live .phase-card{opacity:.5}
+.phase-cards.live .phase-card.on{opacity:1;box-shadow:0 0 0 2px var(--teal)}
+/* Slide 9 — what is reported when */
+.metric-card{position:relative;transition:opacity .3s ease,transform .3s var(--ease-out)}
+.mc-from{position:absolute;top:12px;right:14px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.metric-cards.live .metric-card{opacity:.4}
+.metric-cards.live .metric-card.base{opacity:.75}
+.metric-cards.live .metric-card.on{opacity:1;transform:translateY(-4px)}
+.metric-card.on .mc-from{color:var(--accent,#0a8fa6)}
+.cadence-fill{position:absolute;left:10px;top:9px;height:2px;width:var(--fill,0);background:var(--teal);transition:width .5s var(--ease-out);z-index:0}
+.cadence-stop{cursor:pointer;outline:none}
+.cadence-stop i{transition:background .3s ease,box-shadow .3s ease}
+.cadence-stop.on i{background:var(--teal)}
+.cadence-stop.sel i{box-shadow:0 0 0 6px #0a8fa633}
+.cadence-stop:focus-visible strong{text-decoration:underline}
+/* Slide 10 — roadmap */
+.roadmap{list-style:none;position:relative;display:flex;justify-content:space-between;margin-top:34px;padding:0 4px}
+.roadmap:before,.roadmap:after{content:"";position:absolute;left:14px;right:14px;top:9px;height:2px;background:#ffffff33}
+.roadmap:after{background:#7fd3e3;right:auto;width:calc(100% - 28px)}
+#next-steps.is-active .roadmap:after{animation:roadfill 2.2s var(--ease-out) both}
+@keyframes roadfill{from{width:0}}
+.roadmap li{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:9px;width:120px;text-align:center}
+.roadmap li:first-child{align-items:flex-start;text-align:left}
+.roadmap li:last-child{align-items:flex-end;text-align:right}
+.roadmap i{display:block;width:20px;height:20px;border-radius:50%;background:#0c3c75;border:3px solid #7fd3e3;transition:transform .25s ease,background .25s ease}
+.roadmap span{font-size:14px;line-height:1.3;color:#c3d2e3;font-weight:600}
+.roadmap .rm-goal i{background:#7fd3e3;width:24px;height:24px;margin-top:-2px}
+.roadmap .rm-goal span{color:#ffffff}
+.roadmap li.hl i{transform:scale(1.3);background:#7fd3e3}
+.roadmap li.hl span{color:#ffffff}
+#next-steps.is-active .roadmap li{animation:bandIn .45s var(--ease-out) both}
+#next-steps.is-active .roadmap li:nth-child(2){animation-delay:.45s}
+#next-steps.is-active .roadmap li:nth-child(3){animation-delay:.9s}
+#next-steps.is-active .roadmap li:nth-child(4){animation-delay:1.35s}
+#next-steps.is-active .roadmap li:nth-child(5){animation-delay:1.8s}
+@media(prefers-reduced-motion:reduce){#challenge .flow-arrow i{display:none}#opportunity .fn-band,#opportunity .opp-cards article,#next-steps .roadmap li,#next-steps .roadmap:after{animation:none!important}}
 /* Contents panel */
 .deck-mode .toc-list a{font-size:12px;padding:11px 9px}
 /* Portrait canvas */
@@ -695,6 +910,14 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
 .deck-mode[data-orientation="portrait"] .challenge-grid{grid-template-columns:1fr;gap:24px;flex:none}
 .deck-mode[data-orientation="portrait"] .question-cards{grid-template-rows:auto}
 .deck-mode[data-orientation="portrait"] .layer-demo{grid-template-columns:1fr;gap:20px;flex:none}
+.deck-mode[data-orientation="portrait"] .opp-grid{grid-template-columns:1fr;gap:26px;flex:none}
+.deck-mode[data-orientation="portrait"] .funnel{width:440px;margin:0 auto}
+.deck-mode[data-orientation="portrait"] .opp-cards{grid-template-columns:repeat(3,1fr);gap:10px}
+.deck-mode[data-orientation="portrait"] .opp-cards h3{font-size:18px}
+.deck-mode[data-orientation="portrait"] .opp-cards p{font-size:13px}
+.deck-mode[data-orientation="portrait"] .tl-seg b{font-size:13px}
+.deck-mode[data-orientation="portrait"] .roadmap span{font-size:12px}
+.deck-mode[data-orientation="portrait"] .roadmap li{width:96px}
 .deck-mode[data-orientation="portrait"] .cake{width:420px;margin:0 auto}
 .deck-mode[data-orientation="portrait"] .partner-cards{grid-template-columns:1fr;gap:14px}
 .deck-mode[data-orientation="portrait"] .partner-card{min-height:0;padding:22px 26px 18px}
