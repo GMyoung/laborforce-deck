@@ -643,11 +643,12 @@ body.deck-mode .closing-section{padding-top:44px}
 .step-cards li>span{display:inline-flex;width:30px;height:30px;border-radius:50%;background:var(--teal);color:#ffffff;font-size:12px;font-weight:700;align-items:center;justify-content:center;margin-bottom:14px}
 .step-cards h3{font-size:22px;color:#ffffff;margin-bottom:10px}
 .step-cards p{font-size:16px;line-height:1.5;color:#c3d2e3}
-.closing-bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:30px;padding-top:26px}
+.closing-bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:30px;padding-top:26px;padding-bottom:4px}
 .closing-signature{margin:0;letter-spacing:0;font-size:0}
-.closing-logo{display:block;height:96px;width:auto;background:#ffffff;padding:12px 20px;border-radius:6px}
+.closing-logo{display:block;height:58px;width:auto;background:#ffffff;padding:8px 14px;border-radius:5px}
 .closing-tag{font-size:14px;line-height:1.5;color:#c3d2e3;text-align:right;max-width:420px}
 .closing-tag strong{display:block;color:#ffffff;font-size:18px;margin-bottom:4px}
+#next-steps .section-foot{margin-top:16px}
 /* Slide 4 — interactive five-layer waterfall */
 body.deck-mode #solution .section-heading{margin-bottom:14px}
 .layer-demo{display:grid;grid-template-columns:470px minmax(0,1fr);gap:56px;align-items:center;flex:1;min-height:0}
