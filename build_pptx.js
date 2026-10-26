@@ -116,20 +116,13 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 {
   const s = pres.addSlide({ masterName: "COVER" });
   const LW = 7.3;
-  T(s, "You Deliver Care, We Optimize Revenue.", M, 1.45, 6.0, 0.3, { fontSize: 12, color: TEAL, bold: true });
+  // cover body, vertically centred in the left column (no facts row, no logo)
+  T(s, "You Deliver Care, We Optimize Revenue.", M, 1.95, 6.0, 0.3, { fontSize: 12, color: TEAL, bold: true });
   s.addText([
     { text: "Uncovering revenue.", options: { color: NAVY, breakLine: true } },
     { text: "Strengthening hospital performance.", options: { color: TEAL } },
-  ], { x: M, y: 1.8, w: LW, h: 1.95, fontFace: FONT, fontSize: 36, margin: 0, valign: "top", isTextBox: true, charSpacing: -1.5, lineSpacingMultiple: 0.98 });
-  T(s, "A strategic revenue identification and recovery partnership — extending Cook County Health's revenue cycle, not replacing it.", M, 3.85, 5.6, 0.95, { fontSize: 13, color: INK2, lineSpacingMultiple: 1.3 });
-  const fy = 5.3;
-  hline(s, M, fy, LW, NAVY, 1.5);
-  const fcols = [[M, 3.1, "Prepared for", "Cook County Health\nExecutive Leadership — CEO · CFO · COO"], [M + 3.4, 1.9, "Prepared by", null], [M + 5.5, 1.8, "Briefing", "Executive proposal\nOctober 2026"]];
-  fcols.forEach(([x, w, dt, dd]) => {
-    T(s, dt.toUpperCase(), x, fy + 0.22, w, 0.22, { fontSize: 8, bold: true, color: MUTED, charSpacing: 1.5 });
-    if (dd) T(s, dd, x, fy + 0.48, w, 0.65, { fontSize: 10.5, color: NAVY, bold: true, lineSpacingMultiple: 1.2 });
-    else s.addImage({ path: LOGO, x, y: fy + 0.46, w: 0.98, h: 0.645 });
-  });
+  ], { x: M, y: 2.3, w: LW, h: 1.95, fontFace: FONT, fontSize: 36, margin: 0, valign: "top", isTextBox: true, charSpacing: -1.5, lineSpacingMultiple: 0.98 });
+  T(s, "A strategic revenue identification and recovery partnership — extending Cook County Health's revenue cycle, not replacing it.", M, 4.35, 5.6, 0.95, { fontSize: 13, color: INK2, lineSpacingMultiple: 1.3 });
   hline(s, M, FOOT_Y, LW, LINE);
   T(s, "CONFIDENTIAL — FOR DISCUSSION PURPOSES", M, FOOT_Y + 0.08, 5, 0.25, { fontSize: 8, color: MUTED, charSpacing: 1.5 });
   T(s, "01 / 10", M + LW - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: MUTED, align: "right", charSpacing: 1.5 });
