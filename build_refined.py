@@ -66,7 +66,7 @@ replace_section('cover', '''<section class="report-section report-cover is-activ
           <div class="cover-body">
             <p class="cover-pretitle">You deliver care. We recover revenue.</p>
             <h1 id="cover-title">Uncovering revenue.<br><span>Strengthening hospital performance.</span></h1>
-            <p class="cover-deck">A strategic revenue identification and recovery partnership — extending Cook County Health's revenue cycle, not replacing it.</p>
+            <p class="cover-deck">A revenue identification and recovery partnership for Cook County Health's emergency and trauma care.</p>
           </div>
           <div class="section-foot"><span>Confidential — for discussion purposes</span><span>01 / 10</span></div>
         </div>
@@ -94,6 +94,9 @@ html = replace_once('''        <div class="section-foot"><span>LaborForce Medica
           </ol>
         </div>
         <div class="section-foot"><span>LaborForce Medical Management</span><span>02 / 10</span></div>''', 'slide 2 strip')
+
+html = replace_once('<h2 id="summary-title">Extending your revenue cycle<span class="title-muted"> — not replacing it.</span></h2>',
+                    '<h2 id="summary-title">We work inside the revenue cycle<span class="title-muted"> you already run.</span></h2>', 'slide 2 title')
 
 # ---------------------------------------------------------------------------
 # 5. Slide 3: equal-height question cards, matched flow card, consequence at the bottom.
