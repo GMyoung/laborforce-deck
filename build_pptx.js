@@ -193,14 +193,14 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   const s = pres.addSlide({ masterName: "LIGHT" });
   kicker(s, "03", "The challenge", false);
   title(s, [{ text: "Revenue that traditional workflows may overlook." }], 0.85, 0.6, 30, false);
-  T(s, "Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently answer:", M, 1.5, 10.5, 0.6, { fontSize: 12, color: INK2, lineSpacingMultiple: 1.25 });
+  T(s, "Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:", M, 1.5, 10.5, 0.6, { fontSize: 12, color: INK2, lineSpacingMultiple: 1.25 });
   const qs = [
-    "Was the injury work-related?",
-    "Is a motor vehicle or other third party responsible?",
-    "Should another insurer or payer be investigated?",
-    "Does the hospital have the right claim, attorney, and payer information?",
-    "Is a hospital lien available, documented, and followed up?",
-    "Are unresolved cases investigated after discharge?",
+    "Whether the injury occurred while the patient was working",
+    "Whether a motor vehicle or other third party may be responsible",
+    "Whether another insurer or payer should be investigated",
+    "Whether the hospital has the right claim, attorney, or payer information",
+    "Whether a hospital lien is available, documented, and followed up",
+    "Whether unresolved cases need investigation after discharge",
   ];
   const qy = 2.3, flowW = 3.9, leftW = CW - flowW - 0.4, cgap = 0.12, cardW = (leftW - cgap) / 2, cardH = 0.98;
   qs.forEach((q, i) => {
