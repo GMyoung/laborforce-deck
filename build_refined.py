@@ -47,7 +47,7 @@ mark_uri = data_uri('logo_mark.png', 'image/png')
 full_uri = data_uri('logo_full.png', 'image/png')
 nm_uri = data_uri('nm_logo.svg', 'image/svg+xml')
 hph_uri = data_uri('hph_logo.png', 'image/png')
-hospital_uri = data_uri('hospital_cover.jpg', 'image/jpeg')  # Unsplash photo 1764885415480 (UN1qX9JB_l0), Unsplash License; name sign cropped out
+hospital_uri = data_uri('hospital_cover.jpg', 'image/jpeg')  # cropped from the user's reference image (2026-10-26)
 LOGO_FULL = '<img class="%s" src="' + full_uri + '" alt="LaborForce Medical Management" width="640" height="421" decoding="async">'
 ARROW_DOWN = '<div class="flow-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5"/></svg><i></i><i></i></div>'
 
@@ -65,6 +65,7 @@ html = replace_once('    <div class="header-context"><span>Prepared for</span><s
 replace_section('cover', '''<section class="report-section report-cover is-active" id="cover" data-label="Introduction" aria-labelledby="cover-title">
         <div class="cover-left">
           <img class="cover-photo" src="''' + hospital_uri + '''" alt="" aria-hidden="true" decoding="async">
+          ''' + (LOGO_FULL % 'cover-brand') + '''
           <div class="cover-body">
             <h1 id="cover-title">You Deliver Care,<br><span>We Optimize Revenue.</span></h1>
             <p class="cover-deck">Technology identifies opportunities.<br>We bring them to resolution.</p>
@@ -255,9 +256,10 @@ html = replace_once('<span class="scenario-tag"><i></i> Planning assumptions</sp
 html = replace_once('aria-label="Financial model assumptions"', 'aria-label="Financial model inputs"', 'inputs aria')
 html = replace_once('<strong id="annual-result">$36M</strong></div>', '<strong id="annual-result">$36M</strong><span class="result-sub" id="annual-sub">≈ $3M a month · ≈ $99K a day · $108M over three years</span></div>', 'annual sub')
 html = replace_once("    put('annual-result', compactMoney(annual));\n", "    showAnnual(annual);\n", 'annual tween call')
+html = replace_once("    Object.entries(defaults).forEach(([id, value]) => { inputs[id].value = value; });\n    revenue.reset();", "    inputs.collection.max = config.collectionMax;\n    Object.entries(defaults).forEach(([id, value]) => { inputs[id].value = value; });\n    revenue.reset();", 'reset lifts the cap first')
 html = replace_once('''  let noticeTimer;\n''', '''  let noticeTimer;
   const headline = value => value >= 999500 ? '$' + (value / 1e6).toFixed(1).replace(/\\.0$/, '') + 'M' : value >= 1e3 ? '$' + Math.round(value / 1e3) + 'K' : money(Math.round(value));
-  let shownAnnual = null, annualFrame = 0;
+  let shownAnnual = null, annualFrame = 0, annualTimer = 0;
   function showAnnual(target) {
     put('annual-sub', '≈ ' + headline(target / 12) + ' a month · ≈ ' + headline(target / 365) + ' a day · ' + headline(target * 3) + ' over three years');
     const still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -265,12 +267,14 @@ html = replace_once('''  let noticeTimer;\n''', '''  let noticeTimer;
     const from = shownAnnual, began = performance.now();
     cancelAnimationFrame(annualFrame);
     const step = now => {
-      const t = Math.min(1, (now - began) / 450), k = 1 - Math.pow(1 - t, 3);
+      const t = Math.max(0, Math.min(1, (now - began) / 450)), k = 1 - Math.pow(1 - t, 3);
       shownAnnual = from + (target - from) * k;
       put('annual-result', headline(shownAnnual));
       if (t < 1) annualFrame = requestAnimationFrame(step);
     };
     annualFrame = requestAnimationFrame(step);
+    clearTimeout(annualTimer);
+    annualTimer = setTimeout(() => { cancelAnimationFrame(annualFrame); shownAnnual = target; put('annual-result', headline(target)); }, 520);
   }
 ''', 'annual tween fn')
 
@@ -371,7 +375,7 @@ html = replace_once('''  update();
     Object.entries(starts).forEach(([id, value]) => { inputs[id].value = value; });
     update();
     function frame(now) {
-      const t = Math.min(1, (now - started) / duration), k = ease(t);
+      const t = Math.max(0, Math.min(1, (now - started) / duration)), k = ease(t);
       Object.keys(defaults).forEach(id => {
         const value = starts[id] + (defaults[id] - starts[id]) * k;
         inputs[id].value = t >= 1 ? defaults[id] : Math.round(value / steps[id]) * steps[id];
@@ -963,7 +967,7 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{width:62%;height:84%;o
 .deck-mode[data-orientation="portrait"] .result-sub{white-space:normal;font-size:13px}
 /* Round 10 (user, 2026-10-26) */
 /* Cover: headline top-left, photo in the top-right corner, large partner cards along the bottom */
-body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;right:0;width:64%;height:68%;object-position:62% 80%;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 52%),linear-gradient(to top,transparent 0%,#000 48%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0%,#000 52%),linear-gradient(to top,transparent 0%,#000 48%);mask-composite:intersect}
+body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;right:0;width:64%;height:68%;object-position:50% 6%;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 52%),linear-gradient(to top,transparent 0%,#000 48%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0%,#000 52%),linear-gradient(to top,transparent 0%,#000 48%);mask-composite:intersect}
 .cover-body{margin:64px 0 0;padding:0}
 .cover-body h1{font-size:68px;line-height:1.04;max-width:760px}
 .cover-deck{font-size:22px;max-width:620px;margin-top:26px}
@@ -1006,6 +1010,16 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;righ
 #challenge .consequence-bar{margin-top:16px;padding:12px 18px}
 .deck-mode[data-orientation="portrait"] .essential-band{grid-template-columns:1fr;gap:16px}
 .deck-mode[data-orientation="portrait"] .eb-stats{padding:14px 0;border-left:0;border-right:0;border-top:1px solid #ffffff2a;border-bottom:1px solid #ffffff2a}
+/* Round 11 (user, 2026-10-26): LaborForce logo on every slide */
+.slide-logo{position:absolute;top:24px;right:60px;z-index:3;display:block;width:auto;height:50px;pointer-events:none}
+#solution .slide-logo{background:#ffffff;border-radius:8px;padding:5px 7px;height:42px}
+.cover-brand{position:relative;z-index:1;display:block;width:auto;height:104px;align-self:flex-start}
+.cover-body{margin:30px 0 0}
+.controls-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.controls-head .text-button{font-size:13px}
+.deck-mode[data-orientation="portrait"] .slide-logo{top:18px;right:38px;height:40px}
+.deck-mode[data-orientation="portrait"] #solution .slide-logo{height:34px}
+.deck-mode[data-orientation="portrait"] .cover-brand{height:80px}
 '''
 # ---------------------------------------------------------------------------
 # 17. "Print report" opens the prepared PDF (exported from the PPTX by
@@ -1055,6 +1069,19 @@ for sid in ('summary', 'pilot', 'metrics', 'next-steps'):
 toc_re = re.compile(r'\s*<li><a href="#(?:summary|pilot|metrics|next-steps)"[^>]*>.*?</li>')
 assert len(toc_re.findall(html)) == 4, 'toc removals'
 html = toc_re.sub('', html)
+
+# ---------------------------------------------------------------------------
+# 19. LaborForce mark inside every content slide (top-right corner); the
+#     financial slide's Reset link moves next to "Planning inputs".
+# ---------------------------------------------------------------------------
+slide_logo = '<img class="slide-logo" src="' + mark_uri + '" alt="LaborForce Medical Management" width="177" height="160" decoding="async">'
+for sid in ('challenge', 'solution', 'financial'):
+    opener = re.compile(r'(<section class="report-section[^"]*" id="' + sid + r'"[^>]*>)')
+    assert len(opener.findall(html)) == 1, sid
+    html = opener.sub(lambda m: m.group(1) + '\n        ' + slide_logo, html)
+html = replace_once('    <button class="text-button" id="reset-scenario" type="button">Reset ↺</button>\n', '', 'reset out of heading')
+html = replace_once('<div class="financial-controls"><span class="scenario-tag"><i></i> Planning inputs</span>',
+                    '<div class="financial-controls"><div class="controls-head"><span class="scenario-tag"><i></i> Planning inputs</span><button class="text-button" id="reset-scenario" type="button">Reset ↺</button></div>', 'reset into controls')
 
 # Renumber kickers, footers and the contents list from the final slide order.
 section_re = re.compile(r'<section class="report-section[^"]*" id="([^"]+)".*?</section>', re.S)

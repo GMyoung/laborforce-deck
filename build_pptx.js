@@ -105,7 +105,7 @@ function bullets(slide, items, x, y, w, h, o = {}) {
   slide.addText(arr, Object.assign({ x, y, w, h, fontFace: FONT, fontSize: size, color: INK2, margin: 0, valign: "top", isTextBox: true, paraSpaceAfter: 5, lineSpacingMultiple: 1.12 }, o));
 }
 
-// ---- slides (v13: 4-slide index.html, commit 2ed2890, + clickable financial scenarios, 2026-10-26) ----
+// ---- slides (v14: 4-slide index.html, commit 2ed2890, static financial slide, 2026-10-26) ----
 const BRAND = "E:/Claude/laborforce-deck/brand";
 const NM_LOGO = BRAND + "/nm_logo.svg", HPH_LOGO = BRAND + "/hph_logo.png";
 const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = "2A4A72", N_MID = "0677AE", N_BASE_SPAN = "AEBFD6";
@@ -275,12 +275,10 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 }
 
 // =====================================================================
-// SLIDE 4 — Financial opportunity (four clickable levels per input; 255 hidden state pages follow)
+// SLIDE 4 — Financial opportunity (static picture of the default scenario; four levels shown per input)
 // =====================================================================
-// Each input has four levels. In slideshow, clicking a level jumps to the hidden page that shows
-// that scenario, so the whole slide (headline, results, people grid, sensitivity chart, chain)
-// updates. The default scenario is the visible slide 4; the other 255 pages are hidden, so they
-// are skipped when advancing and left out of print and PDF.
+// The generator can draw any combination of the four levels per input (financialSlide(state)),
+// but the deck contains only the default scenario as a static slide (user request, 2026-10-26).
 const LEVELS = [
   ["volume", "Annual ED encounters", [50000, 100000, 150000, 200000], v => v.toLocaleString("en-US")],
   ["coverage", "Additional coverage identified", [2, 4, 6, 8], v => v + "%"],
@@ -310,7 +308,6 @@ function financialSlide(st, hidden) {
   const lx = M, lw = 4.3, ay = 1.55;
   s.addShape(pres.ShapeType.ellipse, { x: lx, y: ay + 0.06, w: 0.1, h: 0.1, fill: { color: TEAL }, line: { color: TEAL, width: 0 } });
   T(s, "PLANNING INPUTS", lx + 0.18, ay, lw - 1.2, 0.22, { fontSize: 8, bold: true, color: MUTED, charSpacing: 1.5 });
-  T(s, "Reset ↺", lx + lw - 1.0, ay - 0.02, 1.0, 0.24, { fontSize: 8.5, bold: true, color: TEAL, align: "right", underline: true, hyperlink: { slide: FIN_SLIDE, tooltip: "Back to the starting scenario" } });
   const arH = 1.0;
   LEVELS.forEach(([key, lab, vals, fmt], i) => {
     const y = ay + 0.38 + i * arH, active = st[i];
@@ -328,15 +325,9 @@ function financialSlide(st, hidden) {
       if (k === 0) T(s, fmt(v), lx, ty + 0.14, 1.2, 0.2, lo);
       else if (k === 3) T(s, fmt(v), lx + lw - 1.2, ty + 0.14, 1.2, 0.2, { ...lo, align: "right" });
       else T(s, fmt(v), cx - 0.6, ty + 0.14, 1.2, 0.2, { ...lo, align: "center" });
-      if (!isActive) {
-        const target = st.slice(); target[i] = k;
-        // transparent click target over the level dot and its label
-        s.addShape(pres.ShapeType.rect, { x: Math.max(lx - 0.1, cx - 0.4), y: ty - 0.16, w: 0.8, h: 0.52, fill: { color: "FFFFFF", transparency: 100 }, line: { color: "FFFFFF", width: 0, transparency: 100 }, hyperlink: { slide: slideOf[stateKey(target)], tooltip: lab + ": " + fmt(v) } });
-      }
     });
   });
   hline(s, lx, ay + 0.38 + 4 * arH, lw, LINE);
-  T(s, "Click a value to change the scenario; every figure on the slide updates.", lx, ay + 0.38 + 4 * arH + 0.08, lw, 0.22, { fontSize: 8, italic: true, color: MUTED });
   vline(s, lx + lw + 0.4, 1.55, 4.5, LINE);
 
   // right: result strip — headline on the left, two supporting results stacked on the right
@@ -403,11 +394,10 @@ function financialSlide(st, hidden) {
     if (i < 3) T(s, syms[i], x + boxW, chy, symW, chh, { fontSize: 16, color: MUTED, align: "center", valign: "middle" });
   });
   pageNo(s, 4, false);
-  if (!hidden) s.addNotes("Planning model with four clickable levels per input. In slideshow, click a value under a slider to switch scenario; Reset returns to the starting scenario (150,000 ED encounters × 6% additional coverage × $4,000 net per encounter = $36M per year; 9,000 identified encounters; $90M associated gross charges at a $10,000 average ED charge). Each figure in the grid = 1,000 ED encounters. Illustrative planning model, not a forecast. The 255 hidden pages after this slide are the other scenarios.");
+  if (!hidden) s.addNotes("Static picture of the planning model at its starting scenario: 150,000 ED encounters × 6% additional coverage × $4,000 net per encounter = $36M per year; 9,000 identified encounters; $90M associated gross charges at a $10,000 average ED charge. Each figure in the grid = 1,000 ED encounters. Illustrative planning model, not a forecast.");
   return s;
 }
-financialSlide(DEFAULT_STATE, false);
-ALL_STATES.forEach(st => { if (stateKey(st) !== stateKey(DEFAULT_STATE)) financialSlide(st, true); });
+financialSlide(DEFAULT_STATE, false);   // static: only the default scenario is built
 
 (async () => {
   await pres.writeFile({ fileName: OUT });
