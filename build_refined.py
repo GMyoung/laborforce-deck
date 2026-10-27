@@ -47,6 +47,7 @@ mark_uri = data_uri('logo_mark.png', 'image/png')
 full_uri = data_uri('logo_full.png', 'image/png')
 nm_uri = data_uri('nm_logo.svg', 'image/svg+xml')
 hph_uri = data_uri('hph_logo.png', 'image/png')
+hospital_uri = data_uri('hospital_cover.jpg', 'image/jpeg')  # Unsplash photo 1586773860418, Unsplash License
 LOGO_FULL = '<img class="%s" src="' + full_uri + '" alt="LaborForce Medical Management" width="640" height="421" decoding="async">'
 ARROW_DOWN = '<div class="flow-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5"/></svg></div>'
 
@@ -63,10 +64,12 @@ html = replace_once('    <div class="header-context"><span>Prepared for</span><s
 # ---------------------------------------------------------------------------
 replace_section('cover', '''<section class="report-section report-cover is-active" id="cover" data-label="Introduction" aria-labelledby="cover-title">
         <div class="cover-left">
+          <img class="cover-photo" src="''' + hospital_uri + '''" alt="" aria-hidden="true" decoding="async">
           <div class="cover-body">
             <p class="cover-pretitle">You deliver care. We recover revenue.</p>
             <h1 id="cover-title">Uncovering revenue.<br><span>Strengthening hospital performance.</span></h1>
             <p class="cover-deck">A revenue identification and recovery partnership for Cook County Health's emergency and trauma care.</p>
+            <div class="cover-partners"><span class="eyebrow">Hospital partners</span><div class="cover-partner-logos"><img src="''' + nm_uri + '''" alt="Northwestern Medicine" width="730" height="137" decoding="async"><img src="''' + hph_uri + '''" alt="Humboldt Park Health" width="782" height="227" decoding="async"></div></div>
           </div>
           <div class="section-foot"><span>Confidential — for discussion purposes</span><span>01 / 10</span></div>
         </div>
@@ -170,12 +173,12 @@ FUNCTIONS = [
     ('Lien Administration &amp; Recovery', 'Support approved lien documentation, follow-up, and reimbursement tracking within the legal and contractual framework.'),
 ]
 rows = ''.join(
-    f'<li class="fn-row" data-i="{i}" tabindex="0"><span class="fn-num">{i:02d}</span><div><strong>{name}</strong><p>{desc}</p></div></li>'
+    f'<li class="fn-row" data-i="{i}" tabindex="0"><span class="fn-num">{i:02d}</span><div><strong>{name}</strong><p>{desc}</p></div><i class="fn-bar" aria-hidden="true"></i></li>'
     for i, (name, desc) in enumerate(FUNCTIONS, start=1))
 
 replace_section('solution', '''<section class="report-section solution-section" id="solution" data-label="Our approach" aria-labelledby="solution-title">
-        <div class="section-kicker"><span>04</span> The LaborForce solution</div>
-        <div class="section-heading"><h2 id="solution-title">A specialized operational layer.<br><span class="title-muted">Five critical functions.</span></h2></div>
+        <div class="section-kicker"><span>04</span> Five critical functions</div>
+        <div class="section-heading"><h2 id="solution-title">The LaborForce solution.<br><span class="title-muted">A specialized operational layer.</span></h2></div>
         <div class="layer-demo" id="layer-demo">
           ''' + build_cake() + '''
           <div class="fn-col">
@@ -187,44 +190,15 @@ replace_section('solution', '''<section class="report-section solution-section" 
       </section>''')
 
 # ---------------------------------------------------------------------------
-# 7. Slide 5: partner logos + the results band; the generic bullet list is gone.
+# 7-8. Slides 5 and 6 removed (user, 2026-10-26). The partner logos moved to the
+#      cover; the cover panel keeps the headline results.
 # ---------------------------------------------------------------------------
-replace_section('experience', '''<section class="report-section" id="experience" data-label="Operating experience" aria-labelledby="experience-title">
-        <div class="section-kicker"><span>05</span> Experience with healthcare partners</div>
-        <div class="section-heading"><h2 id="experience-title">Proven operating experience<br><span class="title-muted">in Chicago-area hospitals.</span></h2></div>
-        <div class="partner-cards" aria-label="Current program partners">
-          <div class="partner-card"><img src="''' + nm_uri + '''" alt="Northwestern Medicine" width="730" height="137" decoding="async"><span>Northwestern Medicine · Current program partner</span></div>
-          <div class="partner-card"><img src="''' + hph_uri + '''" alt="Humboldt Park Health" width="782" height="227" decoding="async"><span>Humboldt Park Health · Current program partner</span></div>
-        </div>
-        <div class="results-band" aria-label="Program results, March to July 2026">
-          <div class="results-head"><span class="eyebrow">Program results · March – July 2026</span><span class="results-note">Program-reported; not independently attributed</span></div>
-          <div class="results-grid">
-            <div><strong>+336%</strong><span>Monthly TPL recoveries<br>$33K → $144K</span></div>
-            <div><strong>90%+</strong><span>Payer identification accuracy<br>up from under 30%</span></div>
-            <div><strong>141 / 178</strong><span>July encounters verified<br>79% of those screened</span></div>
-            <div><strong>$198,940</strong><span>Charges on 32 Workers' Comp<br>cases identified in July</span></div>
-          </div>
-        </div>
-        <div class="section-foot"><span>LaborForce Medical Management</span><span>05 / 10</span></div>
-      </section>''')
-
-# ---------------------------------------------------------------------------
-# 8. Slide 6: title, six outcome cards, one small sizing line at the bottom.
-# ---------------------------------------------------------------------------
-replace_section('opportunity', '''<section class="report-section opportunity-section" id="opportunity" data-label="The CCH opportunity" aria-labelledby="opportunity-title">
-        <div class="section-kicker"><span>06</span> Opportunity at Cook County Health</div>
-        <div class="section-heading"><h2 id="opportunity-title">A focused TPL/WC program for a high-volume safety-net system.</h2></div>
-        <div class="outcome-grid">
-          <article><h3>Find coverage</h3><p>Evaluate whether additional responsible-party coverage exists for selected encounters.</p></article>
-          <article><h3>Document claims</h3><p>Improve identification and documentation of injury-related claims.</p></article>
-          <article><h3>Bill accurately</h3><p>Strengthen billing accuracy and reimbursement follow-up.</p></article>
-          <article><h3>Stop leakage</h3><p>Reduce avoidable revenue leakage.</p></article>
-          <article><h3>Gain visibility</h3><p>Establish clearer visibility into potentially recoverable accounts.</p></article>
-          <article><h3>Protect the mission</h3><p>Support financial sustainability without compromising access to care.</p></article>
-        </div>
-        <p class="sizing-line">Illustrative sizing: 150,000 ED encounters × 6% with additional coverage × $4,000 net per encounter ≈ $36M per year — a planning model, not a forecast.</p>
-        <div class="section-foot"><span>LaborForce Medical Management</span><span>06 / 10</span></div>
-      </section>''')
+for sid in ('experience', 'opportunity'):
+    pattern = re.compile(r'\s*<section class="report-section[^"]*" id="' + sid + r'".*?</section>', re.S)
+    assert len(pattern.findall(html)) == 1, sid
+    html = pattern.sub('', html)
+html = replace_once('          <li><a href="#experience"><span>05</span>Operating experience</a></li>\n', '', 'toc experience')
+html = replace_once('          <li><a href="#opportunity"><span>06</span>The CCH opportunity</a></li>\n', '', 'toc opportunity')
 
 # ---------------------------------------------------------------------------
 # 9. Slide 7: strip the explanatory text, keep sliders, results, charts, formula.
@@ -274,8 +248,35 @@ html = replace_once('  const config = {minimumCollectionRate:0.0625, minimumColl
                     '  const config = {collectionMin:500, collectionMax:5000};', 'js config')
 bounds = re.compile(r'  function collectionBounds\(charge\) \{.*?\n  \}\n', re.S)
 assert len(bounds.findall(html)) == 1, 'collectionBounds'
-html = bounds.sub('  function collectionBounds() {\n    return {min:config.collectionMin, max:config.collectionMax};\n  }\n', html)
+html = bounds.sub('  function collectionBounds(charge) {\n    return {min:config.collectionMin, max:Math.min(config.collectionMax, Math.floor(charge / 500) * 500)};\n  }\n', html)
 html = replace_once('You deliver care. We recover revenue.', 'You Deliver Care, We Optimize Revenue.', 'tagline')
+
+# 9c. Slide 7 (user, 2026-10-26): no "assumption" wording; net collection per
+#     encounter can never exceed the average ED charge; a livelier headline.
+html = replace_once('<h2 id="financial-title">Turn assumptions into a visible opportunity.</h2>', '<h2 id="financial-title">Turn hidden revenue opportunities into visible results.</h2>', 'fin title')
+html = replace_once('<button class="text-button" id="reset-scenario" type="button">Reset assumptions ↺</button>', '<button class="text-button" id="reset-scenario" type="button">Reset ↺</button>', 'reset label')
+html = replace_once('<span class="scenario-tag"><i></i> Planning assumptions</span>', '<span class="scenario-tag"><i></i> Planning inputs</span>', 'inputs tag')
+html = replace_once('aria-label="Financial model assumptions"', 'aria-label="Financial model inputs"', 'inputs aria')
+html = replace_once('<strong id="annual-result">$36M</strong></div>', '<strong id="annual-result">$36M</strong><span class="result-sub" id="annual-sub">≈ $3M a month · ≈ $99K a day · $108M over three years</span></div>', 'annual sub')
+html = replace_once("    put('annual-result', compactMoney(annual));\n", "    showAnnual(annual);\n", 'annual tween call')
+html = replace_once('''  let noticeTimer;\n''', '''  let noticeTimer;
+  const headline = value => value >= 999500 ? '$' + (value / 1e6).toFixed(1).replace(/\\.0$/, '') + 'M' : value >= 1e3 ? '$' + Math.round(value / 1e3) + 'K' : money(Math.round(value));
+  let shownAnnual = null, annualFrame = 0;
+  function showAnnual(target) {
+    put('annual-sub', '≈ ' + headline(target / 12) + ' a month · ≈ ' + headline(target / 365) + ' a day · ' + headline(target * 3) + ' over three years');
+    const still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (shownAnnual === null || still) { shownAnnual = target; put('annual-result', headline(target)); return; }
+    const from = shownAnnual, began = performance.now();
+    cancelAnimationFrame(annualFrame);
+    const step = now => {
+      const t = Math.min(1, (now - began) / 450), k = 1 - Math.pow(1 - t, 3);
+      shownAnnual = from + (target - from) * k;
+      put('annual-result', headline(shownAnnual));
+      if (t < 1) annualFrame = requestAnimationFrame(step);
+    };
+    annualFrame = requestAnimationFrame(step);
+  }
+''', 'annual tween fn')
 
 # ---------------------------------------------------------------------------
 # 10. Slide 8: phase cards + a matching row of three info cards.
@@ -382,11 +383,12 @@ html = replace_once('''  update();
     gaps.forEach((el, i) => el.classList.toggle('on', k > 0 && i + 1 < k));
     fnRows.forEach((el, i) => { const n = i + 1; el.classList.toggle('active', n === k); el.classList.toggle('dim', k > 0 && n > k); });
   }
-  function stopLayerDemo() { clearInterval(demoTimer); demoTimer = null; }
+  function stopLayerDemo() { clearInterval(demoTimer); demoTimer = null; if (demo) demo.classList.remove('autoplay'); }
   function startLayerDemo() {
     if (!demo || reduceMotion || demoHeld || demoTimer) return;
+    demo.classList.add('autoplay');
     setLayer(demoStep = 1);
-    demoTimer = setInterval(() => { demoStep = demoStep % 5 + 1; setLayer(demoStep); }, 2300);
+    demoTimer = setInterval(() => { demoStep = demoStep % 5 + 1; setLayer(demoStep); }, 1600);
   }
   if (demo) {
     const hold = el => { const k = Number(el.dataset.i); demoHeld = true; stopLayerDemo(); setLayer(demoStep = k); };
@@ -713,7 +715,55 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
 .deck-mode[data-orientation="portrait"] .step-cards{grid-template-columns:1fr;gap:12px}
 .deck-mode[data-orientation="portrait"] .closing-bottom{flex-direction:column;align-items:flex-start}
 .deck-mode[data-orientation="portrait"] .closing-tag{text-align:left}
+/* Round 8 (user, 2026-10-26) */
+/* Cover: hospital photo fading in from the lower-right corner; partner logos */
+.cover-left{position:relative;overflow:hidden}
+.cover-photo{position:absolute;right:0;bottom:0;width:68%;height:74%;object-fit:cover;object-position:30% 62%;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 58%),linear-gradient(to bottom,transparent 0%,#000 46%),linear-gradient(to top,transparent 0,#000 110px);-webkit-mask-composite:source-in,source-in;mask-image:linear-gradient(to right,transparent 0%,#000 58%),linear-gradient(to bottom,transparent 0%,#000 46%),linear-gradient(to top,transparent 0,#000 110px);mask-composite:intersect,intersect}
+.cover-body,.cover-left .section-foot{position:relative;z-index:1}
+.cover-partners{margin-top:36px}
+.cover-partners .eyebrow{display:block;font-size:11px;color:var(--muted);margin-bottom:12px}
+.cover-partner-logos{display:flex;align-items:center;gap:28px}
+.cover-partner-logos img{display:block;width:auto;height:30px}
+.cover-partner-logos img+img{height:42px;padding-left:28px;border-left:1px solid var(--line)}
+.deck-mode[data-orientation="portrait"] .cover-photo{display:none}
+.deck-mode[data-orientation="portrait"] .cover-partners{margin-top:24px}
+/* Slide 3: compact cards, natural-height flow card, consequence right below */
+.challenge-grid{align-items:start;flex:none;margin-top:4px}
+.question-cards{grid-template-rows:none;grid-auto-rows:1fr;gap:12px}
+.question-cards li{padding:18px 20px;font-size:17px;line-height:1.4;min-height:82px}
+.flow-card{padding:16px 18px}
+.flow-steps{flex:none}
+.flow-steps li{flex:none;padding:12px 14px}
+.flow-steps li strong{font-size:16px}
+.consequence-bar{margin-top:22px}
+#challenge .section-foot{margin-top:auto}
+/* Slide 4: thin timing bar on the active row; quicker water */
+.fn-row{position:relative;overflow:hidden}
+.fn-bar{position:absolute;left:0;bottom:0;width:100%;height:2px;background:#7fd3e3;transform:scaleX(0);transform-origin:left center;pointer-events:none}
+.layer-demo.autoplay .fn-row.active .fn-bar{animation:fnbar 1.6s linear forwards}
+@keyframes fnbar{to{transform:scaleX(1)}}
+.gap.on .flow-line{animation-duration:.5s}
+.gap.on .drop{animation-duration:.75s}
+.gap.on .drop.d2{animation-delay:.37s}
+/* Slide 7: bigger headline with a monthly / daily / three-year line */
+.deck-mode .main-result strong{font-size:74px;line-height:1;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.result-sub{display:block;margin-top:10px;font-size:14px;line-height:1.3;font-weight:600;color:#7fd3e3;font-variant-numeric:tabular-nums;white-space:nowrap}
+.deck-mode[data-orientation="portrait"] .result-sub{white-space:normal;font-size:13px}
 '''
+# Renumber kickers, footers and the contents list from the final slide order.
+section_re = re.compile(r'<section class="report-section[^"]*" id="([^"]+)".*?</section>', re.S)
+slide_ids = section_re.findall(html)
+total = len(slide_ids)
+def renumber(m):
+    n = slide_ids.index(m.group(1)) + 1
+    s = re.sub(r'(<div class="section-kicker"><span>)\d\d(</span>)', lambda k: k.group(1) + f'{n:02d}' + k.group(2), m.group(0))
+    return re.sub(r'<span>\d\d / \d\d</span>', f'<span>{n:02d} / {total:02d}</span>', s)
+html = section_re.sub(renumber, html)
+html = re.sub(r'(<li><a href="#([^"]+)"[^>]*><span>)\d\d(</span>)',
+              lambda m: m.group(1) + f'{slide_ids.index(m.group(2)) + 1:02d}' + m.group(3) if m.group(2) in slide_ids else m.group(0), html)
+html = replace_once('aria-live="polite">01 / 10</strong>', f'aria-live="polite">01 / {total:02d}</strong>', 'position default')
+html = replace_once("String(current + 1).padStart(2, '0') + ' / ' + sections.length", "String(current + 1).padStart(2, '0') + ' / ' + String(sections.length).padStart(2, '0')", 'position js')
+
 html = replace_once('.deck-mode .model-notes-header h2{margin:0}\n\n</style>', '.deck-mode .model-notes-header h2{margin:0}' + refinement_css + '</style>', 'append css')
 
 # ---------------------------------------------------------------------------
