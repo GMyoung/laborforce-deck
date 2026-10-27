@@ -808,16 +808,21 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;righ
 .cover-body{margin:30px 0 0}
 .controls-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .controls-head .text-button{font-size:13px}
+/* Export view for the print PDF */
+body.export-mode .report-header,body.export-mode .deck-navigation,body.export-mode .report-sidebar{display:none!important}
+body.export-mode .report-layout{inset:0!important}
+body.export-mode{background:#ffffff}
+body.export-mode #reset-scenario,body.export-mode .controls-hint{visibility:hidden}
 .controls-hint{margin:12px 0 0;font-size:15px;line-height:1.45;color:var(--muted)}
 .deck-mode[data-orientation="portrait"] .slide-logo{top:16px;right:38px;height:54px}
 .deck-mode[data-orientation="portrait"] .cover-brand{height:80px}
 '''
 # ---------------------------------------------------------------------------
-# 17. "Print report" opens the prepared PDF (exported from the PPTX by
-#     render_pptx.ps1), embedded so the single HTML file still works offline.
+# 17. "Print report" opens the prepared PDF (rendered from this web deck by
+#     render_web_pdf.py), embedded so the single HTML file still works offline.
 #     Ctrl/Cmd+P does the same; the old on-the-fly print layout is no longer used.
 # ---------------------------------------------------------------------------
-with open(os.path.join(here, 'LaborForce_CookCountyHealth.pdf'), 'rb') as fh:
+with open(os.path.join(here, 'LaborForce_CookCountyHealth_print.pdf'), 'rb') as fh:
     pdf_bytes = fh.read()
 assert pdf_bytes[:5] == b'%PDF-', 'prepared PDF missing or invalid'
 body_end = html.rindex('</body>')
@@ -873,6 +878,13 @@ for sid in ('challenge', 'financial'):
 html = replace_once('    <button class="text-button" id="reset-scenario" type="button">Reset ↺</button>\n', '', 'reset out of heading')
 html = replace_once('<div class="financial-controls"><span class="scenario-tag"><i></i> Planning inputs</span>',
                     '<div class="financial-controls"><div class="controls-head"><span class="scenario-tag"><i></i> Planning inputs</span><button class="text-button" id="reset-scenario" type="button">Reset ↺</button></div><p class="controls-hint">Drag any input to see how the results change.</p>', 'reset into controls')
+
+# ---------------------------------------------------------------------------
+# 20. Export view (index.html?export#slide): no header or navigation, slide at
+#     exactly 1440x850, used by render_web_pdf.py to capture the print PDF.
+# ---------------------------------------------------------------------------
+body_tag = '<body class="report-app deck-mode" data-orientation="landscape">'
+html = replace_once(body_tag, body_tag + '<script>if (/[?&]export\\b/.test(location.search)) document.body.classList.add(\'export-mode\');</script>', 'export flag')
 
 # Renumber kickers, footers and the contents list from the final slide order.
 section_re = re.compile(r'<section class="report-section[^"]*" id="([^"]+)".*?</section>', re.S)
