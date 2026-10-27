@@ -726,7 +726,11 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
 .cover-partner-logos{display:flex;align-items:center;gap:28px}
 .cover-partner-logos img{display:block;width:auto;height:30px}
 .cover-partner-logos img+img{height:42px;padding-left:28px;border-left:1px solid var(--line)}
-.deck-mode[data-orientation="portrait"] .cover-photo{display:none}
+body.deck-mode[data-orientation="portrait"] .cover-photo{display:block;position:relative;order:3;top:auto;bottom:auto;left:auto;right:auto;width:calc(100% + 76px);max-width:none;height:400px;margin:26px -38px 0;object-fit:cover;object-position:50% 40%;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 80%,transparent 100%);-webkit-mask-composite:source-over;mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 80%,transparent 100%);mask-composite:add}
+.deck-mode[data-orientation="portrait"] .cover-brand{order:1}
+.deck-mode[data-orientation="portrait"] .cover-body{order:2}
+body.deck-mode[data-orientation="portrait"] .cover-partners{order:4;margin-top:20px}
+.deck-mode[data-orientation="portrait"] .cover-left .section-foot{order:5;margin-top:auto}
 /* Cover without the "At a glance" panel (user, 2026-10-26): one column, larger photo */
 body.deck-mode .report-cover{grid-template-columns:minmax(0,1fr)}
 body.deck-mode[data-orientation="landscape"] .cover-photo{width:62%;height:84%;object-position:30% 58%}
@@ -755,7 +759,7 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{width:62%;height:84%;o
 .deck-mode[data-orientation="portrait"] .result-sub{white-space:normal;font-size:13px}
 /* Round 10 (user, 2026-10-26) */
 /* Cover: headline top-left, photo in the top-right corner, large partner cards along the bottom */
-body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;right:0;width:auto;height:74%;aspect-ratio:1238/1144;object-position:50% 50%;-webkit-mask-image:linear-gradient(to right,transparent 0%,transparent 4%,#000 36%),linear-gradient(to top,transparent 0%,transparent 3%,#000 30%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0%,transparent 4%,#000 36%),linear-gradient(to top,transparent 0%,transparent 3%,#000 30%);mask-composite:intersect}
+body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;right:0;width:58%;height:72%;object-position:50% 30%;-webkit-mask-image:linear-gradient(to right,transparent 0%,transparent 4%,#000 36%),linear-gradient(to top,transparent 0%,transparent 3%,#000 30%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0%,transparent 4%,#000 36%),linear-gradient(to top,transparent 0%,transparent 3%,#000 30%);mask-composite:intersect}
 .cover-body{margin:64px 0 0;padding:0}
 .cover-body h1{font-size:68px;line-height:1.04;max-width:760px}
 .cover-deck{font-size:22px;max-width:620px;margin-top:26px}
