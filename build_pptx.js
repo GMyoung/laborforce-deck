@@ -105,7 +105,7 @@ function bullets(slide, items, x, y, w, h, o = {}) {
   slide.addText(arr, Object.assign({ x, y, w, h, fontFace: FONT, fontSize: size, color: INK2, margin: 0, valign: "top", isTextBox: true, paraSpaceAfter: 5, lineSpacingMultiple: 1.12 }, o));
 }
 
-// ---- slides (v11: 8-slide index.html, commit ca21850, 2026-10-26) ----
+// ---- slides (v12: 8-slide index.html + clickable financial scenarios, 2026-10-26) ----
 const BRAND = "E:/Claude/laborforce-deck/brand";
 const NM_LOGO = BRAND + "/nm_logo.svg", HPH_LOGO = BRAND + "/hph_logo.png";
 const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = "2A4A72", N_MID = "0677AE", N_BASE_SPAN = "AEBFD6";
@@ -283,37 +283,68 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 }
 
 // =====================================================================
-// SLIDE 5 — Financial opportunity (static model, default scenario)
+// SLIDE 5 — Financial opportunity (four clickable levels per input; 255 hidden state pages follow)
 // =====================================================================
-{
+// Each input has four levels. In slideshow, clicking a level jumps to the hidden page that shows
+// that scenario, so the whole slide (headline, results, people grid, sensitivity chart, chain)
+// updates. The default scenario is the visible slide 5; the other 255 pages are hidden, so they
+// are skipped when advancing and left out of print and PDF.
+const LEVELS = [
+  ["volume", "Annual ED encounters", [50000, 100000, 150000, 200000], v => v.toLocaleString("en-US")],
+  ["coverage", "Additional coverage identified", [2, 4, 6, 8], v => v + "%"],
+  ["collection", "Average incremental net collection", [2000, 3000, 4000, 5000], v => money(v)],
+  ["charge", "Average ED charge", [5000, 7500, 10000, 15000], v => money(v)],
+];
+const DEFAULT_STATE = [2, 2, 2, 2];
+function money(v) { return "$" + Math.round(v).toLocaleString("en-US"); }
+function headline(v) { return v >= 999500 ? "$" + (v / 1e6).toFixed(1).replace(/\.0$/, "") + "M" : v >= 1e3 ? "$" + Math.round(v / 1e3) + "K" : money(v); }
+function compactMoney(v) { return v >= 1e6 ? "$" + (v / 1e6).toLocaleString("en-US", { maximumFractionDigits: 2 }) + "M" : v >= 1e3 ? "$" + (v / 1e3).toLocaleString("en-US", { maximumFractionDigits: 2 }) + "K" : "$" + v.toLocaleString("en-US"); }
+const stateKey = st => st.join("");
+const ALL_STATES = [];
+for (let a = 0; a < 4; a++) for (let b = 0; b < 4; b++) for (let c = 0; c < 4; c++) for (let d = 0; d < 4; d++) ALL_STATES.push([a, b, c, d]);
+const FIN_SLIDE = 5;
+const slideOf = { [stateKey(DEFAULT_STATE)]: FIN_SLIDE };
+{ let n = FIN_SLIDE + 1; ALL_STATES.forEach(st => { if (stateKey(st) !== stateKey(DEFAULT_STATE)) slideOf[stateKey(st)] = n++; }); }
+
+function financialSlide(st, hidden) {
   const s = pres.addSlide({ masterName: "LIGHT" });
+  if (hidden) s.hidden = true;
+  const [vol, cov, coll, charge] = LEVELS.map((L, i) => L[2][st[i]]);
+  const encounters = vol * cov / 100, annual = encounters * coll, charges = encounters * charge;
   kicker(s, "05", "Financial opportunity", false);
   title(s, [{ text: "Turn hidden revenue opportunities into visible results." }], 0.85, 0.55, 28, false);
 
-  // left: assumptions with static slider tracks
+  // left: inputs, each with four clickable levels
   const lx = M, lw = 4.3, ay = 1.55;
   s.addShape(pres.ShapeType.ellipse, { x: lx, y: ay + 0.06, w: 0.1, h: 0.1, fill: { color: TEAL }, line: { color: TEAL, width: 0 } });
-  T(s, "PLANNING INPUTS", lx + 0.18, ay, lw, 0.22, { fontSize: 8, bold: true, color: MUTED, charSpacing: 1.5 });
-  const assumptions = [
-    ["01", "Annual ED encounters", "150,000", "25,000", "200,000", (150000 - 25000) / 175000],
-    ["02", "Additional coverage identified", "6%", "2%", "10%", 0.5],
-    ["03", "Average incremental net collection", "$4,000", "$500", "$5,000", (4000 - 500) / (5000 - 500)],
-    ["04", "Average ED charge", "$10,000", "$3,000", "$15,000", (10000 - 3000) / (15000 - 3000)],
-  ];
+  T(s, "PLANNING INPUTS", lx + 0.18, ay, lw - 1.2, 0.22, { fontSize: 8, bold: true, color: MUTED, charSpacing: 1.5 });
+  T(s, "Reset ↺", lx + lw - 1.0, ay - 0.02, 1.0, 0.24, { fontSize: 8.5, bold: true, color: TEAL, align: "right", underline: true, hyperlink: { slide: FIN_SLIDE, tooltip: "Back to the starting scenario" } });
   const arH = 1.0;
-  assumptions.forEach(([n, lab, val, lo, hi, f], i) => {
-    const y = ay + 0.38 + i * arH;
+  LEVELS.forEach(([key, lab, vals, fmt], i) => {
+    const y = ay + 0.38 + i * arH, active = st[i];
     hline(s, lx, y, lw, LINE);
-    T(s, [{ text: n + "  ", options: { color: TEAL, fontSize: 9 } }, { text: lab, options: { color: NAVY, bold: true } }], lx, y + 0.18, lw - 1.05, 0.3, { fontSize: 11.5 });
-    T(s, val, lx + lw - 1.05, y + 0.1, 1.05, 0.4, { fontSize: 17, bold: true, color: NAVY, align: "right", charSpacing: -0.5 });
-    const ty = y + 0.6;
+    T(s, [{ text: String(i + 1).padStart(2, "0") + "  ", options: { color: TEAL, fontSize: 9 } }, { text: lab, options: { color: NAVY, bold: true } }], lx, y + 0.18, lw - 1.05, 0.3, { fontSize: 11.5 });
+    T(s, fmt(vals[active]), lx + lw - 1.3, y + 0.1, 1.3, 0.4, { fontSize: 17, bold: true, color: NAVY, align: "right", charSpacing: -0.5 });
+    const ty = y + 0.6, f = active / 3;
     rrect(s, lx, ty, lw, 0.06, PANEL, 0.03);
-    rrect(s, lx, ty, lw * f, 0.06, TEAL, 0.03);
-    s.addShape(pres.ShapeType.ellipse, { x: lx + lw * f - 0.08, y: ty - 0.05, w: 0.16, h: 0.16, fill: { color: "FFFFFF" }, line: { color: TEAL, width: 1.5 } });
-    T(s, lo, lx, ty + 0.14, 2, 0.2, { fontSize: 8.5, color: MUTED });
-    T(s, hi, lx + lw - 2, ty + 0.14, 2, 0.2, { fontSize: 8.5, color: MUTED, align: "right" });
+    if (f > 0) rrect(s, lx, ty, lw * f, 0.06, TEAL, 0.03);
+    vals.forEach((v, k) => {
+      const cx = lx + lw * k / 3, isActive = k === active;
+      if (isActive) s.addShape(pres.ShapeType.ellipse, { x: cx - 0.09, y: ty - 0.06, w: 0.18, h: 0.18, fill: { color: "FFFFFF" }, line: { color: TEAL, width: 1.5 } });
+      else s.addShape(pres.ShapeType.ellipse, { x: cx - 0.06, y: ty - 0.03, w: 0.12, h: 0.12, fill: { color: k < active ? TEAL : "FFFFFF" }, line: { color: TEAL, width: 1 } });
+      const lo = { fontSize: 8.5, color: isActive ? NAVY : MUTED, bold: isActive };
+      if (k === 0) T(s, fmt(v), lx, ty + 0.14, 1.2, 0.2, lo);
+      else if (k === 3) T(s, fmt(v), lx + lw - 1.2, ty + 0.14, 1.2, 0.2, { ...lo, align: "right" });
+      else T(s, fmt(v), cx - 0.6, ty + 0.14, 1.2, 0.2, { ...lo, align: "center" });
+      if (!isActive) {
+        const target = st.slice(); target[i] = k;
+        // transparent click target over the level dot and its label
+        s.addShape(pres.ShapeType.rect, { x: Math.max(lx - 0.1, cx - 0.4), y: ty - 0.16, w: 0.8, h: 0.52, fill: { color: "FFFFFF", transparency: 100 }, line: { color: "FFFFFF", width: 0, transparency: 100 }, hyperlink: { slide: slideOf[stateKey(target)], tooltip: lab + ": " + fmt(v) } });
+      }
+    });
   });
   hline(s, lx, ay + 0.38 + 4 * arH, lw, LINE);
+  T(s, "Click a value to change the scenario; every figure on the slide updates.", lx, ay + 0.38 + 4 * arH + 0.08, lw, 0.22, { fontSize: 8, italic: true, color: MUTED });
   vline(s, lx + lw + 0.4, 1.55, 4.5, LINE);
 
   // right: result strip — headline on the left, two supporting results stacked on the right
@@ -322,27 +353,27 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   const c1 = rw * 0.5;
   const labO = { fontSize: 7.5, bold: true, color: N_TEAL, charSpacing: 0.5 };
   T(s, "ANNUAL INCREMENTAL NET COLLECTIONS", rx + 0.28, ry + 0.2, c1 - 0.4, 0.2, labO);
-  T(s, "$36M", rx + 0.26, ry + 0.38, c1 - 0.4, 0.7, { fontSize: 46, color: "FFFFFF", charSpacing: -2.5 });
-  T(s, "≈ $3M a month · ≈ $99K a day · $108M over three years", rx + 0.28, ry + 1.06, c1 - 0.35, 0.24, { fontSize: 8, bold: true, color: N_TEAL });
+  T(s, headline(annual), rx + 0.26, ry + 0.38, c1 - 0.4, 0.7, { fontSize: 46, color: "FFFFFF", charSpacing: -2.5 });
+  T(s, "≈ " + headline(annual / 12) + " a month · ≈ " + headline(annual / 365) + " a day · " + headline(annual * 3) + " over three years", rx + 0.28, ry + 1.06, c1 - 0.35, 0.24, { fontSize: 8, bold: true, color: N_TEAL });
   vline(s, rx + c1, ry + 0.22, rh - 0.44, N_LINE);
   const x2 = rx + c1 + 0.3, w2 = rw - c1 - 0.55;
   T(s, "IDENTIFIED ENCOUNTERS / YEAR", x2, ry + 0.2, w2, 0.2, labO);
-  T(s, "9,000", x2, ry + 0.36, w2, 0.4, { fontSize: 22, color: "FFFFFF", charSpacing: -1 });
+  T(s, encounters.toLocaleString("en-US"), x2, ry + 0.36, w2, 0.4, { fontSize: 22, color: "FFFFFF", charSpacing: -1 });
   hline(s, x2, ry + 0.78, w2, N_LINE);
   T(s, "ASSOCIATED GROSS CHARGES / YEAR", x2, ry + 0.86, w2, 0.2, labO);
-  T(s, "$90M", x2, ry + 1.02, w2, 0.4, { fontSize: 22, color: "FFFFFF", charSpacing: -1 });
+  T(s, compactMoney(charges), x2, ry + 1.02, w2, 0.4, { fontSize: 22, color: "FFFFFF", charSpacing: -1 });
 
   // viz grid: people chart (left) + sensitivity chart (right)
   const vy = ry + rh + 0.25, vgap = 0.4, vw = (rw - vgap) / 2;
   eyebrow(s, "Volume & coverage", rx, vy, vw, false);
   T(s, "A visible share of every visit.", rx, vy + 0.24, vw, 0.3, { fontSize: 13, bold: true, color: NAVY, charSpacing: -0.3 });
-  const cols = 20, rows = 10, total = 150, covered = 9; // 1 figure = 1,000 visits; 9,000 identified
-  const cellW = (vw - (cols - 1) * 0.03) / cols, cellH = 0.15, gy0 = vy + 0.65;
+  const cols = 25, total = vol / 1000, covered = Math.round(total * cov / 100); // 1 figure = 1,000 visits
+  const cellW = (vw - (cols - 1) * 0.03) / cols, cellH = 0.15, pitch = 0.19, gy0 = vy + 0.65;
   for (let k = 0; k < total; k++) {
     const r = Math.floor(k / cols), c = k % cols;
-    s.addShape(pres.ShapeType.roundRect, { x: rx + c * (cellW + 0.03), y: gy0 + r * (cellH + 0.04), w: cellW, h: cellH, fill: { color: k < covered ? TEAL : "CCD6E0" }, line: { color: k < covered ? TEAL : "CCD6E0", width: 0 }, rectRadius: 0.02 });
+    s.addShape(pres.ShapeType.roundRect, { x: rx + c * (cellW + 0.03), y: gy0 + r * pitch, w: cellW, h: cellH, fill: { color: k < covered ? TEAL : "CCD6E0" }, line: { color: k < covered ? TEAL : "CCD6E0", width: 0 }, rectRadius: 0.02 });
   }
-  const ky = gy0 + Math.ceil(total / cols) * (cellH + 0.04) + 0.1;
+  const ky = gy0 + 8 * pitch + 0.1;
   rrect(s, rx, ky + 0.06, 0.1, 0.1, TEAL, 0.01);
   T(s, "Additional coverage identified", rx + 0.16, ky, 2.3, 0.22, { fontSize: 8.5, color: MUTED });
   rrect(s, rx + 2.4, ky + 0.06, 0.1, 0.1, "CCD6E0", 0.01);
@@ -351,15 +382,16 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   const cx = rx + vw + vgap;
   eyebrow(s, "Coverage sensitivity", cx, vy, vw, false);
   T(s, "What changes as coverage improves?", cx, vy + 0.24, vw, 0.3, { fontSize: 13, bold: true, color: NAVY, charSpacing: -0.3 });
-  T(s, [{ text: "$36M", options: { bold: true, color: TEAL, fontSize: 14 } }, { text: "  at 6% identified coverage", options: { color: MUTED } }], cx, vy + 0.6, vw, 0.3, { fontSize: 9 });
+  T(s, [{ text: headline(annual), options: { bold: true, color: TEAL, fontSize: 14 } }, { text: "  at " + cov + "% identified coverage", options: { color: MUTED } }], cx, vy + 0.6, vw, 0.3, { fontSize: 9 });
   const rates = [2, 3, 4, 5, 6, 7, 8, 9, 10];
-  const vals = rates.map(r => 150000 * r / 100 * 4000 / 1e6);
+  const vals = rates.map(r => vol * r / 100 * coll / 1e6);
+  const vmax = Math.ceil(Math.max(...vals) * 1.15 / 10) * 10, unit = vmax > 70 ? 20 : 10;
   s.addChart(pres.ChartType.line, [{ name: "Annual net collections ($M)", labels: rates.map(r => r + "%"), values: vals }], {
     x: cx - 0.1, y: vy + 0.85, w: vw + 0.1, h: 1.95,
     chartColors: [TEAL], lineSize: 2.25, lineDataSymbol: "circle", lineDataSymbolSize: 6, lineDataSymbolLineColor: TEAL,
     showLegend: false, showTitle: false,
     showValue: true, dataLabelPosition: "t", dataLabelFormatCode: '"$"0"M"', dataLabelFontSize: 7.5, dataLabelColor: INK2, dataLabelFontFace: FONT,
-    valAxisMinVal: 0, valAxisMaxVal: 70, valAxisMajorUnit: 10, valAxisLabelFormatCode: '"$"0"M"', valAxisLabelFontSize: 7.5, valAxisLabelColor: MUTED, valAxisLabelFontFace: FONT,
+    valAxisMinVal: 0, valAxisMaxVal: vmax, valAxisMajorUnit: unit, valAxisLabelFormatCode: '"$"0"M"', valAxisLabelFontSize: 7.5, valAxisLabelColor: MUTED, valAxisLabelFontFace: FONT,
     valGridLine: { color: "DDE3EA", size: 0.5 }, catGridLine: { style: "none" },
     catAxisLabelFontSize: 7.5, catAxisLabelColor: MUTED, catAxisLabelFontFace: FONT,
     catAxisTitle: "Additional coverage identified (%)", showCatAxisTitle: true, catAxisTitleFontSize: 7.5, catAxisTitleColor: MUTED, catAxisTitleFontFace: FONT,
@@ -368,7 +400,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 
   // calculation chain
   const chy = 6.15, chh = 0.6;
-  const chain = [["Annual encounters", "150,000"], ["Additional coverage", "6%"], ["Net collection / encounter", "$4,000"], ["Annual net collections", "$36,000,000"]];
+  const chain = [["Annual encounters", vol.toLocaleString("en-US")], ["Additional coverage", cov + "%"], ["Net collection / encounter", money(coll)], ["Annual net collections", money(annual)]];
   const syms = ["×", "×", "="], symW = 0.4, boxW = (CW - 3 * symW) / 4;
   chain.forEach(([lab, val], i) => {
     const x = M + i * (boxW + symW), last = i === 3;
@@ -379,8 +411,11 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     if (i < 3) T(s, syms[i], x + boxW, chy, symW, chh, { fontSize: 16, color: MUTED, align: "center", valign: "middle" });
   });
   pageNo(s, 5, false);
-  s.addNotes("Static version of the interactive planning model at its starting scenario: 150,000 ED encounters × 6% additional coverage × $4,000 net per encounter = $36M per year; 9,000 identified encounters; $90M associated gross charges at a $10,000 average ED charge. Each figure in the grid = 1,000 ED encounters. Illustrative planning model, not a forecast.");
+  if (!hidden) s.addNotes("Planning model with four clickable levels per input. In slideshow, click a value under a slider to switch scenario; Reset returns to the starting scenario (150,000 ED encounters × 6% additional coverage × $4,000 net per encounter = $36M per year; 9,000 identified encounters; $90M associated gross charges at a $10,000 average ED charge). Each figure in the grid = 1,000 ED encounters. Illustrative planning model, not a forecast. The 255 hidden pages after this slide are the other scenarios.");
+  return s;
 }
+financialSlide(DEFAULT_STATE, false);
+ALL_STATES.forEach(st => { if (stateKey(st) !== stateKey(DEFAULT_STATE)) financialSlide(st, true); });
 
 // =====================================================================
 // SLIDE 6 — 90-day pilot

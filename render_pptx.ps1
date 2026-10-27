@@ -11,13 +11,18 @@ $app = New-Object -ComObject PowerPoint.Application
 try {
   $pres = $app.Presentations.Open($Pptx, $true, $false, $false)  # ReadOnly, Untitled, WithWindow
   $n = $pres.Slides.Count
+  $shown = 0
   for ($i = 1; $i -le $n; $i++) {
-    $out = Join-Path $OutDir ("slide-{0:D2}.png" -f $i)
-    $pres.Slides.Item($i).Export($out, "PNG", 1920, 1080)
+    $sl = $pres.Slides.Item($i)
+    if ($sl.SlideShowTransition.Hidden -eq -1) { continue }   # hidden scenario pages are not rendered
+    $shown++
+    $out = Join-Path $OutDir ("slide-{0:D2}.png" -f $shown)
+    $sl.Export($out, "PNG", 1920, 1080)
   }
-  Write-Output "Rendered $n slides to $OutDir"
+  Write-Output "Rendered $shown visible slides (of $n) to $OutDir"
   if ($Pdf) {
     if (Test-Path $Pdf) { Remove-Item $Pdf -Force }
+    $pres.PrintOptions.PrintHiddenSlides = 0   # PDF = visible slides only
     # ExportAsFixedFormat(Path, FixedFormatType=ppFixedFormatTypePDF(2), Intent=ppFixedFormatIntentPrint(2),
     #   FrameSlides=0, HandoutOrder=1, OutputType=ppPrintOutputSlides(1), PrintHiddenSlides=0, PrintRange=[Type]::Missing,
     #   RangeType=ppPrintAll(1), SlideShowName="", IncludeDocProperties, KeepIRMSettings, DocStructureTags,
