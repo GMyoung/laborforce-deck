@@ -389,7 +389,7 @@ html = replace_once('''  update();
     if (!demo || reduceMotion || demoHeld || demoTimer) return;
     demo.classList.add('autoplay');
     setLayer(demoStep = 1);
-    demoTimer = setInterval(() => { demoStep = demoStep % 5 + 1; setLayer(demoStep); }, 1600);
+    demoTimer = setInterval(() => { demoStep = demoStep % 5 + 1; setLayer(demoStep); }, 2000);
   }
   if (demo) {
     const hold = el => { const k = Number(el.dataset.i); demoHeld = true; stopLayerDemo(); setLayer(demoStep = k); };
@@ -744,7 +744,7 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{width:62%;height:84%;o
 /* Slide 4: thin timing bar on the active row; quicker water */
 .fn-row{position:relative;overflow:hidden}
 .fn-bar{position:absolute;left:0;bottom:0;width:100%;height:2px;background:#7fd3e3;transform:scaleX(0);transform-origin:left center;pointer-events:none}
-.layer-demo.autoplay .fn-row.active .fn-bar{animation:fnbar 1.6s linear forwards}
+.layer-demo.autoplay .fn-row.active .fn-bar{animation:fnbar 2s linear forwards}
 @keyframes fnbar{to{transform:scaleX(1)}}
 .gap.on .flow-line{animation-duration:.5s}
 .gap.on .drop{animation-duration:.75s}
@@ -799,14 +799,12 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;righ
 .deck-mode[data-orientation="portrait"] .essential-band{grid-template-columns:1fr;gap:16px}
 .deck-mode[data-orientation="portrait"] .eb-stats{padding:14px 0;border-left:0;border-right:0;border-top:1px solid #ffffff2a;border-bottom:1px solid #ffffff2a}
 /* Round 11 (user, 2026-10-26): LaborForce logo on every slide */
-.slide-logo{position:absolute;top:24px;right:60px;z-index:3;display:block;width:auto;height:50px;pointer-events:none}
-#solution .slide-logo{background:#ffffff;border-radius:8px;padding:5px 7px;height:42px}
+.slide-logo{position:absolute;top:20px;right:60px;z-index:3;display:block;width:auto;height:70px;pointer-events:none}
 .cover-brand{position:relative;z-index:1;display:block;width:auto;height:104px;align-self:flex-start}
 .cover-body{margin:30px 0 0}
 .controls-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .controls-head .text-button{font-size:13px}
-.deck-mode[data-orientation="portrait"] .slide-logo{top:18px;right:38px;height:40px}
-.deck-mode[data-orientation="portrait"] #solution .slide-logo{height:34px}
+.deck-mode[data-orientation="portrait"] .slide-logo{top:16px;right:38px;height:54px}
 .deck-mode[data-orientation="portrait"] .cover-brand{height:80px}
 '''
 # ---------------------------------------------------------------------------
@@ -859,11 +857,11 @@ assert len(toc_re.findall(html)) == 4, 'toc removals'
 html = toc_re.sub('', html)
 
 # ---------------------------------------------------------------------------
-# 19. LaborForce mark inside every content slide (top-right corner); the
+# 19. LaborForce mark in the top-right corner of the challenge and financial slides; the
 #     financial slide's Reset link moves next to "Planning inputs".
 # ---------------------------------------------------------------------------
 slide_logo = '<img class="slide-logo" src="' + mark_uri + '" alt="LaborForce Medical Management" width="177" height="160" decoding="async">'
-for sid in ('challenge', 'solution', 'financial'):
+for sid in ('challenge', 'financial'):
     opener = re.compile(r'(<section class="report-section[^"]*" id="' + sid + r'"[^>]*>)')
     assert len(opener.findall(html)) == 1, sid
     html = opener.sub(lambda m: m.group(1) + '\n        ' + slide_logo, html)
