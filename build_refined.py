@@ -98,7 +98,7 @@ html = replace_once('<h2 id="summary-title">Extending your revenue cycle<span cl
 # ---------------------------------------------------------------------------
 replace_section('challenge', '''<section class="report-section" id="challenge" data-label="The hidden revenue challenge" aria-labelledby="challenge-title">
         <div class="section-kicker"><span>03</span> The hidden revenue challenge</div>
-        <div class="section-heading"><h2 id="challenge-title">Revenue that traditional workflows overlooked.</h2></div>
+        <div class="section-heading"><h2 id="challenge-title">Revenue That Traditional Workflows Overlooked.</h2></div>
         <div class="essential-band" aria-label="The revenue challenge facing essential hospitals">
           <div class="eb-text"><span class="callout-label">The revenue challenge facing essential hospitals</span><p>Essential hospitals face growing financial pressure from uncompensated care, Medicaid underpayments, and limited resources.</p></div>
           <div class="eb-stats"><span class="eb-label">In 2023, essential hospitals reported</span><div class="eb-stat"><strong>$11B</strong><span>in uncompensated care</span></div><div class="eb-stat"><strong>$11.4B</strong><span>in additional under-reimbursed care</span></div></div>
@@ -176,7 +176,7 @@ rows = ''.join(
 
 replace_section('solution', '''<section class="report-section solution-section" id="solution" data-label="Our approach" aria-labelledby="solution-title">
         <div class="section-kicker"><span>04</span> Five critical functions</div>
-        <div class="section-heading"><h2 id="solution-title">The LaborForce solution.<br><span class="title-muted">A specialized operational layer.</span></h2></div>
+        <div class="section-heading"><h2 id="solution-title">The LaborForce Solution.<br><span class="title-muted">A Specialized Operational Layer.</span></h2></div>
         <div class="layer-demo" id="layer-demo">
           ''' + build_cake() + '''
           <div class="fn-col">
@@ -250,7 +250,7 @@ html = bounds.sub('  function collectionBounds(charge) {\n    return {min:config
 
 # 9c. Slide 7 (user, 2026-10-26): no "assumption" wording; net collection per
 #     encounter can never exceed the average ED charge; a livelier headline.
-html = replace_once('<h2 id="financial-title">Turn assumptions into a visible opportunity.</h2>', '<h2 id="financial-title">Turn hidden revenue opportunities into visible results.</h2>', 'fin title')
+html = replace_once('<h2 id="financial-title">Turn assumptions into a visible opportunity.</h2>', '<h2 id="financial-title">Turn Hidden Revenue Opportunities into Visible Results.</h2>', 'fin title')
 html = replace_once('<button class="text-button" id="reset-scenario" type="button">Reset assumptions ↺</button>', '<button class="text-button" id="reset-scenario" type="button">Reset ↺</button>', 'reset label')
 html = replace_once('<span class="scenario-tag"><i></i> Planning assumptions</span>', '<span class="scenario-tag"><i></i> Planning inputs</span>', 'inputs tag')
 html = replace_once('aria-label="Financial model assumptions"', 'aria-label="Financial model inputs"', 'inputs aria')
@@ -822,7 +822,7 @@ body.export-mode #reset-scenario,body.export-mode .controls-hint{visibility:hidd
 #     render_web_pdf.py), embedded so the single HTML file still works offline.
 #     Ctrl/Cmd+P does the same; the old on-the-fly print layout is no longer used.
 # ---------------------------------------------------------------------------
-with open(os.path.join(here, 'LaborForce_CookCountyHealth_print.pdf'), 'rb') as fh:
+with open(os.path.join(here, 'LaborForce_Print.pdf'), 'rb') as fh:
     pdf_bytes = fh.read()
 assert pdf_bytes[:5] == b'%PDF-', 'prepared PDF missing or invalid'
 body_end = html.rindex('</body>')
@@ -891,9 +891,10 @@ html = replace_once(body_tag, body_tag + '<script>if (/[?&]export\\b/.test(locat
 #     PDF download name (user, 2026-10-26).
 # ---------------------------------------------------------------------------
 html = replace_once('content="A strategic revenue identification and recovery partnership prepared for Cook County Health executive leadership."', 'content="A revenue identification and recovery partnership for hospital leadership."', 'meta description')
-html = replace_once('<title>LaborForce Medical Management | Cook County Health</title>', '<title>LaborForce Medical Management</title>', 'page title')
-html = replace_once('<title>LaborForce — Cook County Health</title>', '<title>LaborForce Medical Management</title>', 'print title')
-html = replace_once("link.download = 'LaborForce_CookCountyHealth.pdf';", "link.download = 'LaborForce_Medical_Management.pdf';", 'download name')
+html = replace_once('<title>LaborForce Medical Management | Cook County Health</title>', '<title>LaborForce</title>', 'page title')
+html = replace_once('<title>LaborForce — Cook County Health</title>', '<title>LaborForce</title>', 'print title')
+html = replace_once("link.download = 'LaborForce_CookCountyHealth.pdf';", "link.download = 'LaborForce.pdf';", 'download name')
+html = replace_once('content="A revenue identification and recovery partnership for hospital leadership.">', 'content="A revenue identification and recovery partnership for hospital leadership.">\n  <meta name="robots" content="noindex, nofollow, noarchive">', 'noindex')
 
 # Renumber kickers, footers and the contents list from the final slide order.
 section_re = re.compile(r'<section class="report-section[^"]*" id="([^"]+)".*?</section>', re.S)

@@ -7,6 +7,6 @@ Executive briefing deck proposing a 90-day TPL/Workers' Compensation revenue-rec
 - `build_refined.py` — regenerates `index.html` from the original export (`original_backup.html`, not committed) and the brand assets in `brand/`.
 - `prepare_logo.py` — cuts the LaborForce logo into the transparent mark and lockup used by the deck.
 
-Keyboard: ← / → to move between slides, Home / End for first and last, F for full screen via the button, and "Print report" (or Ctrl+P) opens the prepared PDF `LaborForce_CookCountyHealth_print.pdf`, rendered from the web deck by `render_web_pdf.py` (needs the deck served on port 8765) and embedded in `index.html`. Rebuild `index.html` after re-rendering it.
+Keyboard: ← / → to move between slides, Home / End for first and last, F for full screen via the button, and "Print report" (or Ctrl+P) opens the prepared PDF `LaborForce_Print.pdf`, rendered from the web deck by `render_web_pdf.py` (needs the deck served on port 8765) and embedded in `index.html`. Rebuild `index.html` after re-rendering it.
 
 Cover photo: modern medical centre from Unsplash (photo UN1qX9JB_l0, name sign cropped out), used under the Unsplash License; cropped and colour-graded into `brand/hospital_cover.jpg`.
