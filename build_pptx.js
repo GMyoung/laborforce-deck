@@ -75,7 +75,7 @@ function vline(slide, x, y, h, color = LINE, width = 0.75) {
   slide.addShape(pres.ShapeType.line, { x, y, w: 0, h, line: { color, width } });
 }
 function pageNo(slide, n, dark) {
-  T(slide, `${String(n).padStart(2, "0")} / 08`, W - M - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: dark ? N_MUTED : MUTED, align: "right", charSpacing: 1.5 });
+  T(slide, `${String(n).padStart(2, "0")} / 04`, W - M - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: dark ? N_MUTED : MUTED, align: "right", charSpacing: 1.5 });
 }
 function kicker(slide, n, label, dark) {
   const numColor = dark ? N_MUTED : MUTED, labColor = dark ? N_TEAL : TEAL;
@@ -105,87 +105,78 @@ function bullets(slide, items, x, y, w, h, o = {}) {
   slide.addText(arr, Object.assign({ x, y, w, h, fontFace: FONT, fontSize: size, color: INK2, margin: 0, valign: "top", isTextBox: true, paraSpaceAfter: 5, lineSpacingMultiple: 1.12 }, o));
 }
 
-// ---- slides (v12: 8-slide index.html + clickable financial scenarios, 2026-10-26) ----
+// ---- slides (v13: 4-slide index.html, commit 2ed2890, + clickable financial scenarios, 2026-10-26) ----
 const BRAND = "E:/Claude/laborforce-deck/brand";
 const NM_LOGO = BRAND + "/nm_logo.svg", HPH_LOGO = BRAND + "/hph_logo.png";
 const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = "2A4A72", N_MID = "0677AE", N_BASE_SPAN = "AEBFD6";
 
 // =====================================================================
-// SLIDE 1 — Cover
+// SLIDE 1 — Cover (headline top-left, photo top-right, partner cards along the bottom)
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "COVER" });
   const LW = 7.3;
-  // hospital photo (62% x 84% of the slide, bottom-right), pre-faded toward the left / top / bottom (make_cover_photo.py)
-  s.addImage({ path: BRAND + "/hospital_cover_faded.png", x: W - 8.27, y: H - 6.3, w: 8.27, h: 6.3 });
-  // cover body, vertically centred in the left column (no facts row, no logo)
-  T(s, "You Deliver Care, We Optimize Revenue.", M, 1.8, 6.0, 0.3, { fontSize: 12, color: TEAL, bold: true });
+  // hospital photo: top-right corner, 64% x 68% of the slide, pre-faded toward the left and the bottom (make_cover_photo.py)
+  const phW = W * 0.64, phH = H * 0.68;
+  s.addImage({ path: BRAND + "/hospital_cover_faded.png", x: W - phW, y: 0, w: phW, h: phH });
+  // headline + two-line deck
   s.addText([
-    { text: "Uncovering revenue.", options: { color: NAVY, breakLine: true } },
-    { text: "Strengthening hospital performance.", options: { color: TEAL } },
-  ], { x: M, y: 2.15, w: LW, h: 1.95, fontFace: FONT, fontSize: 36, margin: 0, valign: "top", isTextBox: true, charSpacing: -1.5, lineSpacingMultiple: 0.98 });
-  T(s, "A revenue identification and recovery partnership for Cook County Health's emergency and trauma care.", M, 4.2, 4.9, 0.95, { fontSize: 13, color: INK2, lineSpacingMultiple: 1.3 });
-  // hospital partners: Northwestern Medicine | Humboldt Park Health
-  const py = 5.05;
-  T(s, "HOSPITAL PARTNERS", M, py, 4, 0.22, { fontSize: 8, bold: true, color: MUTED, charSpacing: 1.5 });
-  const nmH = 0.31, nmW = nmH * 730 / 137, hpH = 0.44, hpW = hpH * 782 / 227, lcy = py + 0.3 + hpH / 2;
-  s.addImage({ path: NM_LOGO, x: M, y: lcy - nmH / 2, w: nmW, h: nmH });
-  vline(s, M + nmW + 0.28, lcy - 0.26, 0.52, LINE);
-  s.addImage({ path: HPH_LOGO, x: M + nmW + 0.56, y: lcy - hpH / 2, w: hpW, h: hpH });
+    { text: "You Deliver Care,", options: { color: NAVY, breakLine: true } },
+    { text: "We Optimize Revenue.", options: { color: TEAL } },
+  ], { x: M, y: 1.05, w: 8.0, h: 1.45, fontFace: FONT, fontSize: 45, margin: 0, valign: "top", isTextBox: true, charSpacing: -2, lineSpacingMultiple: 0.98 });
+  s.addText([
+    { text: "Technology identifies opportunities.", options: { breakLine: true } },
+    { text: "We bring them to resolution." },
+  ], { x: M, y: 2.72, w: 6.5, h: 0.75, fontFace: FONT, fontSize: 15, color: INK2, margin: 0, valign: "top", isTextBox: true, lineSpacingMultiple: 1.25 });
+  // hospital partners: two large cards across the content width
+  const cardH = 1.39, cardY = FOOT_Y - 0.2 - cardH, cgap = 0.22, cardW = (CW - cgap) / 2;
+  T(s, "HOSPITAL PARTNERS", M, cardY - 0.36, 4, 0.22, { fontSize: 8, bold: true, color: MUTED, charSpacing: 1.5 });
+  [[NM_LOGO, 0.67, 730 / 137], [HPH_LOGO, 0.96, 782 / 227]].forEach(([logo, lh, ratio], i) => {
+    const x = M + i * (cardW + cgap), lw = lh * ratio;
+    s.addShape(pres.ShapeType.roundRect, { x, y: cardY, w: cardW, h: cardH, fill: { color: "FFFFFF" }, line: { color: LINE, width: 0.75 }, rectRadius: 0.07 });
+    s.addImage({ path: logo, x: x + (cardW - lw) / 2, y: cardY + (cardH - lh) / 2, w: lw, h: lh });
+  });
+  // footer (unchanged)
   hline(s, M, FOOT_Y, LW, LINE);
   T(s, "CONFIDENTIAL — FOR DISCUSSION PURPOSES", M, FOOT_Y + 0.08, 5, 0.25, { fontSize: 8, color: MUTED, charSpacing: 1.5 });
-  T(s, "01 / 08", M + LW - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: MUTED, align: "right", charSpacing: 1.5 });
-
-  s.addNotes("Cover: one column, hospital photo on the right. The right-hand stats panel was removed on 2026-10-26 to match the web deck.");
+  T(s, "01 / 04", M + LW - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: MUTED, align: "right", charSpacing: 1.5 });
+  s.addNotes("Cover: headline top-left, hospital photo top-right, hospital partner cards along the bottom.");
 }
 
 // =====================================================================
-// SLIDE 2 — Executive summary
+// SLIDE 2 — The hidden revenue challenge (essential-hospitals band + "Whether" cards)
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "02", "Executive summary", false);
-  title(s, [{ text: "We work inside the revenue cycle" }, { text: " you already run.", muted: true }], 0.85, 0.7, 30, false);
-  const items = [
-    ["01 / Context", "The pressure", "Hospitals face reimbursement challenges, rising operational costs, complex payer requirements, and growing uncompensated care obligations.", false],
-    ["02 / Opportunity", "The gap", "In ED, trauma and other encounters, Workers' Compensation, Third-Party Liability, auto and other responsible-party coverage can go unidentified or unpursued by traditional workflows.", false],
-    ["03 / Support", "What LaborForce adds", "Specialized payer identification, patient engagement, revenue auditing, payer verification, and lien administration support.", false],
-    ["04 / Outcome", "The goal", "Identify additional reimbursement, improve revenue realization, and reduce avoidable administrative work — without replacing current systems or teams.", true],
-  ];
-  const gy = 1.9, gap = 0.3, cw = (CW - 3 * gap) / 4;
-  items.forEach(([eb, h3, p, goal], i) => {
-    const x = M + i * (cw + gap);
-    hline(s, x, gy, cw, LINE);
-    eyebrow(s, eb, x, gy + 0.2, cw, false);
-    T(s, h3, x, gy + 0.5, cw, 0.4, { fontSize: 17, bold: true, color: goal ? TEAL : NAVY, charSpacing: -0.5 });
-    T(s, p, x, gy + 0.98, cw, 1.7, { fontSize: 12, color: INK2, lineSpacingMultiple: 1.3 });
-  });
-  const sy = 5.2;
-  hline(s, M, sy, CW, LINE);
-  eyebrow(s, "How it works", M, sy + 0.17, 3, false);
-  const steps = [
-    ["01", "Technology screening", "Injury-related encounters are flagged from existing registration and billing data."],
-    ["02", "Specialist review", "Analysts determine the likely responsible payer and what information is missing."],
-    ["03", "Direct patient contact", "Dedicated staff confirm the facts and close gaps, respecting each patient's choices."],
-    ["04", "Follow-through", "Billing corrections, lien support, and payer follow-up until the account resolves."],
-  ];
-  steps.forEach(([n, h, p], i) => {
-    const x = M + i * (cw + gap);
-    T(s, n, x, sy + 0.5, 0.4, 0.22, { fontSize: 9, color: TEAL });
-    T(s, h, x + 0.35, sy + 0.47, cw - 0.35, 0.28, { fontSize: 12, bold: true, color: NAVY });
-    T(s, p, x + 0.35, sy + 0.77, cw - 0.35, 0.9, { fontSize: 10, color: INK2, lineSpacingMultiple: 1.2 });
-  });
-  pageNo(s, 2, false);
-}
+  kicker(s, "02", "The hidden revenue challenge", false);
+  title(s, [{ text: "Revenue that traditional workflows overlooked." }], 0.85, 0.6, 30, false);
 
-// =====================================================================
-// SLIDE 3 — The challenge
-// =====================================================================
-{
-  const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "03", "Where revenue slips", false);
-  title(s, [{ text: "Revenue that traditional workflows may overlook." }], 0.85, 0.6, 30, false);
-  T(s, "Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:", M, 1.5, 10.5, 0.6, { fontSize: 12, color: INK2, lineSpacingMultiple: 1.25 });
+  // navy band: three columns
+  const by = 1.5, bh = 1.18, pad = 0.26, bgap = 0.28;
+  rrect(s, M, by, CW, bh, NAVY, 0.06);
+  const inner = CW - 2 * pad - 2 * bgap, fr = inner / 3.4, c1 = 1.15 * fr, c2 = 1.25 * fr, c3 = 1.0 * fr;
+  const x1 = M + pad, x2 = x1 + c1 + bgap, x3 = x2 + c2 + bgap;
+  T(s, "THE REVENUE CHALLENGE FACING ESSENTIAL HOSPITALS", x1, by + 0.2, c1, 0.2, { fontSize: 7.5, bold: true, color: N_TEAL, charSpacing: 1 });
+  T(s, "Essential hospitals face growing financial pressure from uncompensated care, Medicaid underpayments, and limited resources.", x1, by + 0.44, c1, 0.6, { fontSize: 10, color: "DBE6F2", lineSpacingMultiple: 1.2 });
+  vline(s, x2 - bgap / 2, by + 0.18, bh - 0.36, N_LINE);
+  vline(s, x3 - bgap / 2, by + 0.18, bh - 0.36, N_LINE);
+  T(s, "IN 2023, ESSENTIAL HOSPITALS REPORTED", x2, by + 0.16, c2, 0.2, { fontSize: 7.5, bold: true, color: N_TITLE_MUTED, charSpacing: 1 });
+  const sw = (c2 - 0.26) / 2;
+  [["$11B", "in uncompensated care"], ["$11.4B", "in additional under-reimbursed care"]].forEach(([v, l], i) => {
+    const x = x2 + i * (sw + 0.26);
+    T(s, v, x, by + 0.36, sw, 0.46, { fontSize: 27, bold: true, color: "FFFFFF", charSpacing: -1.5 });
+    T(s, l, x, by + 0.8, sw, 0.3, { fontSize: 9, color: N_SPAN, lineSpacingMultiple: 1.1 });
+  });
+  s.addText([
+    { text: "H.R. 1", options: { bold: true, color: N_TEAL } },
+    { text: " adds further financial pressure, making revenue optimization increasingly critical.", options: { color: "FFFFFF" } },
+  ], { x: x3, y: by + 0.2, w: c3, h: 0.6, fontFace: FONT, fontSize: 10, margin: 0, valign: "top", isTextBox: true, lineSpacingMultiple: 1.2 });
+  T(s, "Source: America's Essential Hospitals, Essential Data (2025)", x3, by + 0.84, c3, 0.2, { fontSize: 7, color: N_NOTE });
+
+  // intro
+  T(s, "Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:", M, by + bh + 0.14, 11.2, 0.5, { fontSize: 11.5, color: INK2, lineSpacingMultiple: 1.2 });
+
+  // six question cards + flow card
   const qs = [
     "Whether the injury occurred while the patient was working",
     "Whether a motor vehicle or other third party may be responsible",
@@ -194,46 +185,47 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     "Whether a hospital lien is available, documented, and followed up",
     "Whether unresolved cases need investigation after discharge",
   ];
-  const qy = 2.25, flowW = 3.9, leftW = CW - flowW - 0.4, cgap = 0.12, cardW = (leftW - cgap) / 2, cardH = 0.92;
+  const qy = by + bh + 0.78, flowW = 3.9, leftW = CW - flowW - 0.4, cgap = 0.1, cardW = (leftW - cgap) / 2, cardH = 0.66;
   qs.forEach((q, i) => {
     const col = i % 2, row = Math.floor(i / 2);
     const x = M + col * (cardW + cgap), y = qy + row * (cardH + cgap);
     rrect(s, x, y, cardW, cardH, PANEL, 0.04);
-    s.addShape(pres.ShapeType.ellipse, { x: x + 0.22, y: y + (cardH - 0.28) / 2, w: 0.28, h: 0.28, fill: { color: NAVY }, line: { color: NAVY, width: 0 } });
-    T(s, String(i + 1).padStart(2, "0"), x + 0.22, y + (cardH - 0.28) / 2, 0.28, 0.28, { fontSize: 7.5, bold: true, color: "FFFFFF", align: "center", valign: "middle" });
-    T(s, q, x + 0.65, y, cardW - 0.85, cardH, { fontSize: 12.5, color: NAVY, lineSpacingMultiple: 1.2, valign: "middle" });
+    s.addShape(pres.ShapeType.ellipse, { x: x + 0.18, y: y + (cardH - 0.26) / 2, w: 0.26, h: 0.26, fill: { color: NAVY }, line: { color: NAVY, width: 0 } });
+    T(s, String(i + 1).padStart(2, "0"), x + 0.18, y + (cardH - 0.26) / 2, 0.26, 0.26, { fontSize: 7, bold: true, color: "FFFFFF", align: "center", valign: "middle" });
+    T(s, q, x + 0.58, y, cardW - 0.75, cardH, { fontSize: 10.5, color: NAVY, lineSpacingMultiple: 1.15, valign: "middle" });
   });
   const gridH = 3 * cardH + 2 * cgap;
   const fx = M + leftW + 0.4;
-  s.addShape(pres.ShapeType.roundRect, { x: fx, y: qy, w: flowW, h: gridH, fill: { color: SURFACE }, line: { color: LINE, width: 0.75 }, rectRadius: 0.05 });
-  eyebrow(s, "Where the revenue goes", fx + 0.22, qy + 0.22, flowW - 0.4, false);
+  const farrow = 0.2, fb0 = qy + 0.42, fbw = flowW - 0.32, fbH = 0.52;
+  const flowH = 0.42 + 3 * fbH + 2 * farrow + 0.12;
+  s.addShape(pres.ShapeType.roundRect, { x: fx, y: qy, w: flowW, h: flowH, fill: { color: SURFACE }, line: { color: LINE, width: 0.75 }, rectRadius: 0.05 });
+  eyebrow(s, "Where the revenue goes", fx + 0.16, qy + 0.14, flowW - 0.3, false);
   const flow = [
     ["Injury-related encounter", "Workplace injury, motor vehicle accident, or incident involving a third party", PANEL, NAVY, INK2],
     ["Responsible payer missed", "Not identified at registration, or identified but not followed through", PANEL, NAVY, INK2],
     ["Absorbed by the hospital", "Written off as bad debt or uncompensated care", NAVY, "FFFFFF", N_SPAN],
   ];
-  const farrow = 0.22, fb0 = qy + 0.5, fbw = flowW - 0.44, fbH = (gridH - 0.5 - 0.16 - 2 * farrow) / 3;
   flow.forEach(([h, p, fill, hc, pc], i) => {
     const y = fb0 + i * (fbH + farrow);
-    rrect(s, fx + 0.22, y, fbw, fbH, fill, 0.03);
-    T(s, h, fx + 0.37, y + 0.07, fbw - 0.3, 0.24, { fontSize: 11.5, bold: true, color: hc, charSpacing: -0.2 });
-    T(s, p, fx + 0.37, y + 0.3, fbw - 0.3, fbH - 0.32, { fontSize: 8.5, color: pc, lineSpacingMultiple: 1.05 });
-    if (i < 2) s.addShape(pres.ShapeType.line, { x: fx + flowW / 2, y: y + fbH + 0.05, w: 0, h: farrow - 0.1, line: { color: TEAL, width: 1.25, endArrowType: "triangle" } });
+    rrect(s, fx + 0.16, y, fbw, fbH, fill, 0.03);
+    T(s, h, fx + 0.28, y + 0.05, fbw - 0.24, 0.22, { fontSize: 10, bold: true, color: hc, charSpacing: -0.2 });
+    T(s, p, fx + 0.28, y + 0.24, fbw - 0.24, fbH - 0.26, { fontSize: 8, color: pc, lineSpacingMultiple: 1.05 });
+    if (i < 2) s.addShape(pres.ShapeType.line, { x: fx + flowW / 2, y: y + fbH + 0.04, w: 0, h: farrow - 0.08, line: { color: TEAL, width: 1.25, endArrowType: "triangle" } });
   });
-  const cy = qy + gridH + 0.24, chh = 0.66;
+  const cy = qy + Math.max(gridH, flowH) + 0.15, chh = 0.56;
   rect(s, M, cy, CW, chh, TEALL);
   rect(s, M, cy, 0.05, chh, TEAL);
-  eyebrow(s, "The consequence", M + 0.3, cy + 0.26, 1.8, false);
-  T(s, "Valid reimbursement opportunities may remain unidentified, incorrectly routed, delayed, or insufficiently pursued.", M + 2.2, cy, CW - 2.5, chh, { fontSize: 13, color: NAVY, valign: "middle" });
-  pageNo(s, 3, false);
+  eyebrow(s, "The consequence", M + 0.28, cy + 0.19, 1.8, false);
+  T(s, "Valid reimbursement opportunities may remain unidentified, incorrectly routed, delayed, or insufficiently pursued.", M + 2.1, cy, CW - 2.4, chh, { fontSize: 11.5, color: NAVY, valign: "middle" });
+  pageNo(s, 2, false);
 }
 
 // =====================================================================
-// SLIDE 4 — The LaborForce solution (navy, isometric five-layer waterfall)
+// SLIDE 3 — The LaborForce solution (navy, isometric five-layer waterfall)
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "NAVY" });
-  kicker(s, "04", "Five critical functions", true);
+  kicker(s, "03", "Five critical functions", true);
   title(s, [{ text: "The LaborForce solution.", breakLine: true }, { text: "A specialized operational layer.", muted: true }], 0.85, 1.1, 28, true);
 
   // --- left: slabs, geometry taken from the HTML's SVG (viewBox 520 x 610) ---
@@ -278,16 +270,16 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     T(s, p, rx + 0.72, y + 0.42, rw - 0.9, 0.38, { fontSize: 9.5, color: N_SPAN, lineSpacingMultiple: 1.15, objectName: `fn-${n}-desc` });
   });
   T(s, "LaborForce works alongside your billing and collections teams.", rx, ry0 + 5 * rh + 4 * rgap + 0.12, rw, 0.25, { fontSize: 9.5, color: N_BODY, italic: true });
-  pageNo(s, 4, true);
+  pageNo(s, 3, true);
   s.addNotes("Five-layer waterfall: findings flow from identification (01) down to lien administration and recovery (05). LaborForce works alongside the hospital's billing and collections teams.");
 }
 
 // =====================================================================
-// SLIDE 5 — Financial opportunity (four clickable levels per input; 255 hidden state pages follow)
+// SLIDE 4 — Financial opportunity (four clickable levels per input; 255 hidden state pages follow)
 // =====================================================================
 // Each input has four levels. In slideshow, clicking a level jumps to the hidden page that shows
 // that scenario, so the whole slide (headline, results, people grid, sensitivity chart, chain)
-// updates. The default scenario is the visible slide 5; the other 255 pages are hidden, so they
+// updates. The default scenario is the visible slide 4; the other 255 pages are hidden, so they
 // are skipped when advancing and left out of print and PDF.
 const LEVELS = [
   ["volume", "Annual ED encounters", [50000, 100000, 150000, 200000], v => v.toLocaleString("en-US")],
@@ -302,7 +294,7 @@ function compactMoney(v) { return v >= 1e6 ? "$" + (v / 1e6).toLocaleString("en-
 const stateKey = st => st.join("");
 const ALL_STATES = [];
 for (let a = 0; a < 4; a++) for (let b = 0; b < 4; b++) for (let c = 0; c < 4; c++) for (let d = 0; d < 4; d++) ALL_STATES.push([a, b, c, d]);
-const FIN_SLIDE = 5;
+const FIN_SLIDE = 4;
 const slideOf = { [stateKey(DEFAULT_STATE)]: FIN_SLIDE };
 { let n = FIN_SLIDE + 1; ALL_STATES.forEach(st => { if (stateKey(st) !== stateKey(DEFAULT_STATE)) slideOf[stateKey(st)] = n++; }); }
 
@@ -311,7 +303,7 @@ function financialSlide(st, hidden) {
   if (hidden) s.hidden = true;
   const [vol, cov, coll, charge] = LEVELS.map((L, i) => L[2][st[i]]);
   const encounters = vol * cov / 100, annual = encounters * coll, charges = encounters * charge;
-  kicker(s, "05", "Financial opportunity", false);
+  kicker(s, "04", "Financial opportunity", false);
   title(s, [{ text: "Turn hidden revenue opportunities into visible results." }], 0.85, 0.55, 28, false);
 
   // left: inputs, each with four clickable levels
@@ -410,123 +402,12 @@ function financialSlide(st, hidden) {
     T(s, val, x + 0.2, chy + 0.29, boxW - 0.4, 0.3, { fontSize: 15, bold: true, color: last ? TEAL : NAVY, charSpacing: -0.5 });
     if (i < 3) T(s, syms[i], x + boxW, chy, symW, chh, { fontSize: 16, color: MUTED, align: "center", valign: "middle" });
   });
-  pageNo(s, 5, false);
+  pageNo(s, 4, false);
   if (!hidden) s.addNotes("Planning model with four clickable levels per input. In slideshow, click a value under a slider to switch scenario; Reset returns to the starting scenario (150,000 ED encounters × 6% additional coverage × $4,000 net per encounter = $36M per year; 9,000 identified encounters; $90M associated gross charges at a $10,000 average ED charge). Each figure in the grid = 1,000 ED encounters. Illustrative planning model, not a forecast. The 255 hidden pages after this slide are the other scenarios.");
   return s;
 }
 financialSlide(DEFAULT_STATE, false);
 ALL_STATES.forEach(st => { if (stateKey(st) !== stateKey(DEFAULT_STATE)) financialSlide(st, true); });
-
-// =====================================================================
-// SLIDE 6 — 90-day pilot
-// =====================================================================
-{
-  const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "06", "Proposed partnership", false);
-  title(s, [{ text: "90-day pilot.", breakLine: true }, { text: "John H. Stroger, Jr. Hospital.", muted: true }], 0.85, 1.2, 30, false);
-  const phases = [
-    ["Phase 01", "Days 1 – 15", 15, "Discovery & Baseline", "Review current injury-related registration, payer identification, billing, and follow-up. Agree on pilot scope, eligibility criteria, compliance requirements, and baseline measures.", "DBE8F7", NAVY, "5B8FD6"],
-    ["Phase 02", "Days 16 – 60", 45, "Identification & Investigation", "Evaluate designated encounters, conduct authorized patient outreach, identify alternative payer sources, and coordinate verified findings with existing hospital teams.", TEAL, "FFFFFF", TEAL],
-    ["Phase 03", "Days 61 – 90", 30, "Validation & Review", "Reconcile outcomes, review billing corrections and collections, assess operational impact, and recommend continued monitoring and potential expansion.", NAVY, "FFFFFF", NAVY],
-  ];
-  const py = 2.15, gap = 0.3, cw = (CW - 2 * gap) / 3, ch = 2.45, hh = 0.4;
-  phases.forEach(([ph, days, d, h, p, hfill, hcol, mfill], i) => {
-    const x = M + i * (cw + gap);
-    s.addShape(pres.ShapeType.roundRect, { x, y: py, w: cw, h: ch, fill: { color: SURFACE }, line: { color: LINE, width: 0.75 }, rectRadius: 0.05 });
-    rect(s, x + 0.01, py + 0.01, cw - 0.02, hh, hfill);
-    T(s, ph.toUpperCase(), x + 0.25, py, cw / 2, hh, { fontSize: 9, bold: true, color: hcol, charSpacing: 1, valign: "middle" });
-    T(s, days.toUpperCase(), x + cw / 2, py, cw / 2 - 0.25, hh, { fontSize: 9, bold: true, color: hcol, charSpacing: 1, valign: "middle", align: "right" });
-    const my = py + hh + 0.22, mw = cw - 0.5 - 1.1;
-    rrect(s, x + 0.25, my, mw, 0.08, PANEL, 0.03);
-    rrect(s, x + 0.25, my, mw * d / 90, 0.08, mfill, 0.03);
-    T(s, `${d} of 90 days`, x + 0.25 + mw + 0.12, my - 0.08, 1.0, 0.24, { fontSize: 8.5, color: MUTED });
-    T(s, h, x + 0.25, py + hh + 0.45, cw - 0.5, 0.35, { fontSize: 15, bold: true, color: NAVY, charSpacing: -0.3 });
-    T(s, p, x + 0.25, py + hh + 0.85, cw - 0.5, 1.15, { fontSize: 10.5, color: INK2, lineSpacingMultiple: 1.25 });
-  });
-  const iy = py + ch + 0.3, ih = 6.78 - iy;
-  const info = [
-    ["How to read the pilot", [{ text: "Many claims take longer than 90 days to resolve. The pilot measures " }, { text: "leading indicators", options: { bold: true, color: NAVY } }, { text: " and any collections realized; final financial performance is reviewed as the identified account cohort matures." }], null],
-    ["Cook County Health provides", null, ["Executive sponsor and agreed pilot scope", "ED volume, payer mix, and current TPL/WC workflow data", "Compliance requirements and data-access terms"]],
-    ["LaborForce provides", null, ["Screening, specialist review, and case investigation", "Dedicated patient outreach and lien administration support", "Joint reporting at days 30, 60, and 90"]],
-  ];
-  info.forEach(([eb, runs, items], i) => {
-    const x = M + i * (cw + gap);
-    rrect(s, x, iy, cw, ih, PANEL, 0.04);
-    rect(s, x, iy, cw, 0.05, TEAL);
-    eyebrow(s, eb, x + 0.25, iy + 0.25, cw - 0.5, false);
-    if (runs) T(s, runs, x + 0.25, iy + 0.55, cw - 0.5, ih - 0.65, { fontSize: 10.5, color: INK2, lineSpacingMultiple: 1.25 });
-    else bullets(s, items, x + 0.25, iy + 0.55, cw - 0.5, ih - 0.65, { fontSize: 10.5, paraSpaceAfter: 3 });
-  });
-  pageNo(s, 6, false);
-}
-
-// =====================================================================
-// SLIDE 7 — Success metrics
-// =====================================================================
-{
-  const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "07", "Proposed success metrics", false);
-  title(s, [{ text: "Transparent. Measurable.", breakLine: true }, { text: "Jointly reviewed.", muted: true }], 0.85, 1.2, 30, false);
-  const groups = [
-    ["Leading", "0A8FA6", "Early signals that cases are being found and verified", ["Encounters screened and flagged", "Number and % with verified additional responsible-party coverage", "Accounts accepted for billing correction or recovery action"]],
-    ["Financial", "0C3C75", "What the program returns, net of adjustments", ["Additional collections attributable to the program, net of reversals and adjustments", "Incremental net revenue after program costs"]],
-    ["Operational", "2F6FB5", "Effect on hospital teams and account flow", ["Staff workload", "Turnaround time", "Unresolved account aging"]],
-    ["Quality", "7A95AD", "Safeguards that stay in place throughout", ["Compliance", "Patient experience", "Documentation quality"]],
-  ];
-  const gy = 2.2, gap = 0.25, w = (CW - 3 * gap) / 4, gh = 2.45;
-  groups.forEach(([h, accent, desc, items], i) => {
-    const x = M + i * (w + gap);
-    rrect(s, x, gy, w, gh, PANEL, 0.04);
-    rect(s, x, gy, w, 0.06, accent);
-    s.addShape(pres.ShapeType.ellipse, { x: x + 0.25, y: gy + 0.33, w: 0.14, h: 0.14, fill: { color: accent }, line: { color: accent, width: 0 } });
-    T(s, h, x + 0.5, gy + 0.22, w - 0.7, 0.35, { fontSize: 15, bold: true, color: NAVY });
-    T(s, desc, x + 0.25, gy + 0.62, w - 0.5, 0.45, { fontSize: 9.5, color: MUTED, lineSpacingMultiple: 1.2 });
-    bullets(s, items, x + 0.25, gy + 1.1, w - 0.5, 1.3, { fontSize: 10.5, paraSpaceAfter: 4 });
-  });
-  const cy = gy + gh + 0.3;
-  hline(s, M, cy, CW, LINE);
-  eyebrow(s, "Joint review cadence", M, cy + 0.2, 4, false);
-  const cad = [["Launch", "Scope, eligibility criteria, and baseline agreed", true], ["Day 30", "Baseline confirmed; screening volumes and first flagged cohort", false], ["Day 60", "Verification rate, accounts accepted for correction, staff workload impact", false], ["Day 90", "Collections to date, cohort maturity, and a joint decision on continuation", false]];
-  const ty = cy + 0.62, cw4 = CW / 4, dot = 0.2;
-  hline(s, M + 0.1, ty + dot / 2, CW - 0.2, LINE, 1.5);
-  cad.forEach(([d, p, filled], i) => {
-    const x = M + i * cw4;
-    s.addShape(pres.ShapeType.ellipse, { x, y: ty, w: dot, h: dot, fill: { color: filled ? TEAL : SURFACE }, line: { color: TEAL, width: 2 } });
-    T(s, d.toUpperCase(), x, ty + 0.35, cw4 - 0.3, 0.22, { fontSize: 9, bold: true, color: NAVY, charSpacing: 1 });
-    T(s, p, x, ty + 0.6, cw4 - 0.4, 0.6, { fontSize: 10.5, color: INK2, lineSpacingMultiple: 1.2 });
-  });
-  pageNo(s, 7, false);
-}
-
-// =====================================================================
-// SLIDE 8 — Our ask (navy)
-// =====================================================================
-{
-  const s = pres.addSlide({ masterName: "CLOSING" });
-  kicker(s, "08", "Our ask", true);
-  s.addText([
-    { text: "Our ask: a 90-day pilot at ", options: { color: "FFFFFF" } },
-    { text: "John H. Stroger, Jr. Hospital.", options: { color: N_TEAL } },
-  ], { x: M, y: 0.85, w: CW, h: 0.75, fontFace: FONT, fontSize: 30, margin: 0, valign: "top", isTextBox: true, charSpacing: -1, lineSpacingMultiple: 1.05 });
-  T(s, "Strengthen Cook County Health's fiscal resilience while supporting accessible, high-quality care for the community — through a focused, transparent, and measurable pilot, reviewed jointly at days 30, 60, and 90.", M, 1.7, 10.4, 0.75, { fontSize: 12.5, color: N_BODY, lineSpacingMultiple: 1.3 });
-  const steps = [["Confirm sponsor & scope", "Executive sponsor and pilot scope at Stroger Hospital"], ["Share baseline data", "ED volume, payer mix, and the current TPL/WC workflow"], ["Agree & launch", "Compliance requirements and success metrics; launch Phase 1"]];
-  const sy = 2.85, sgap = 0.3, sw = (CW - 2 * sgap) / 3, sh = 1.9;
-  steps.forEach(([h, p], i) => {
-    const x = M + i * (sw + sgap);
-    s.addShape(pres.ShapeType.roundRect, { x, y: sy, w: sw, h: sh, fill: { color: N_CARD }, line: { color: N_CARD_LINE, width: 0.75 }, rectRadius: 0.05 });
-    s.addShape(pres.ShapeType.ellipse, { x: x + 0.3, y: sy + 0.3, w: 0.32, h: 0.32, fill: { color: TEAL }, line: { color: TEAL, width: 0 } });
-    T(s, String(i + 1).padStart(2, "0"), x + 0.3, sy + 0.3, 0.32, 0.32, { fontSize: 8.5, bold: true, color: "FFFFFF", align: "center", valign: "middle" });
-    T(s, h, x + 0.3, sy + 0.76, sw - 0.6, 0.35, { fontSize: 16, bold: true, color: "FFFFFF", charSpacing: -0.3 });
-    T(s, p, x + 0.3, sy + 1.14, sw - 0.6, 0.6, { fontSize: 11, color: N_BODY, lineSpacingMultiple: 1.25 });
-  });
-  // small logo tile bottom-left (HTML: 58 px tall tile, 8x14 px padding, on a 1440 px canvas), thank-you bottom-right
-  const lh = 0.54, lw = 0.85, ly = FOOT_Y - 0.12 - lh, imgH = lh - 0.15, imgW = imgH * 1150 / 757;
-  rrect(s, M, ly, lw, lh, "FFFFFF", 0.04);
-  s.addImage({ path: LOGO, x: M + (lw - imgW) / 2, y: ly + 0.075, w: imgW, h: imgH });
-  T(s, "Thank you", W - M - 4.4, ly - 0.05, 4.4, 0.28, { fontSize: 14, bold: true, color: "FFFFFF", align: "right" });
-  T(s, "We look forward to discussing the pilot with your leadership team.", W - M - 4.4, ly + 0.25, 4.4, 0.3, { fontSize: 10.5, color: N_BODY, align: "right" });
-  pageNo(s, 8, true);
-}
 
 (async () => {
   await pres.writeFile({ fileName: OUT });
