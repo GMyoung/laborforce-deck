@@ -96,8 +96,8 @@ html = replace_once('<h2 id="summary-title">Extending your revenue cycle<span cl
 # ---------------------------------------------------------------------------
 # 5. Slide 3: equal-height question cards, matched flow card, consequence at the bottom.
 # ---------------------------------------------------------------------------
-replace_section('challenge', '''<section class="report-section" id="challenge" data-label="The challenge" aria-labelledby="challenge-title">
-        <div class="section-kicker"><span>03</span> The challenge</div>
+replace_section('challenge', '''<section class="report-section" id="challenge" data-label="Where revenue slips" aria-labelledby="challenge-title">
+        <div class="section-kicker"><span>03</span> Where revenue slips</div>
         <div class="section-heading"><h2 id="challenge-title">Revenue that traditional workflows may overlook.</h2><p class="section-intro">Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:</p></div>
         <div class="challenge-grid">
           <ol class="question-cards">
@@ -331,6 +331,7 @@ replace_section('next-steps', '''<section class="report-section closing-section"
         </div>
         <div class="section-foot"><span>Confidential — for discussion purposes</span><span>10 / 10</span></div>
       </section>''')
+html = replace_once('<li><a href="#challenge"><span>03</span>The challenge</a></li>', '<li><a href="#challenge"><span>03</span>Where revenue slips</a></li>', 'toc challenge')
 html = replace_once('<li><a href="#next-steps"><span>10</span>Next steps</a></li>', '<li><a href="#next-steps"><span>10</span>Our ask</a></li>', 'toc label')
 
 # ---------------------------------------------------------------------------
