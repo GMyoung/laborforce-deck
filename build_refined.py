@@ -886,6 +886,15 @@ html = replace_once('<div class="financial-controls"><span class="scenario-tag">
 body_tag = '<body class="report-app deck-mode" data-orientation="landscape">'
 html = replace_once(body_tag, body_tag + '<script>if (/[?&]export\\b/.test(location.search)) document.body.classList.add(\'export-mode\');</script>', 'export flag')
 
+# ---------------------------------------------------------------------------
+# 21. No "Cook County Health" in the page title, link preview, print title or
+#     PDF download name (user, 2026-10-26).
+# ---------------------------------------------------------------------------
+html = replace_once('content="A strategic revenue identification and recovery partnership prepared for Cook County Health executive leadership."', 'content="A revenue identification and recovery partnership for hospital leadership."', 'meta description')
+html = replace_once('<title>LaborForce Medical Management | Cook County Health</title>', '<title>LaborForce Medical Management</title>', 'page title')
+html = replace_once('<title>LaborForce — Cook County Health</title>', '<title>LaborForce Medical Management</title>', 'print title')
+html = replace_once("link.download = 'LaborForce_CookCountyHealth.pdf';", "link.download = 'LaborForce_Medical_Management.pdf';", 'download name')
+
 # Renumber kickers, footers and the contents list from the final slide order.
 section_re = re.compile(r'<section class="report-section[^"]*" id="([^"]+)".*?</section>', re.S)
 slide_ids = section_re.findall(html)
