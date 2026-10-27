@@ -26,7 +26,7 @@ pres.layout = "LAYOUT_WIDE"; // 13.333 x 7.5
 pres.theme = { headFontFace: THEME.headFontFace, bodyFontFace: THEME.bodyFontFace };
 pres.author = "LaborForce Medical Management";
 pres.company = "LaborForce Medical Management";
-pres.title = "LaborForce Medical Management — Cook County Health Executive Briefing";
+pres.title = "LaborForce Medical Management";
 pres.subject = "90-day TPL/Workers' Comp revenue-recovery pilot";
 
 const W = 13.333, H = 7.5, M = 0.6, CW = W - 2 * M; // 12.133
