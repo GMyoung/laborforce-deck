@@ -2,7 +2,7 @@
 """Render the web deck's slides into the PDF that "Print report" opens.
 
 Usage (with the deck served on http://localhost:8765):
-    python -I render_web_pdf.py http://localhost:8765/index.html LaborForce_CookCountyHealth_print.pdf
+    python -I render_web_pdf.py http://localhost:8765/index.html LaborForce_Print.pdf
 
 Each slide is opened in headless Edge at index.html?export#<slide-id> (no header
 or navigation, slide at 1440x850, reduced motion so animations sit at rest),
@@ -41,7 +41,7 @@ with tempfile.TemporaryDirectory() as tmp:
         print(sid, pages[-1].size)
 
 pages[0].save(out_pdf, save_all=True, append_images=pages[1:], resolution=162, quality=82,
-              title='LaborForce Medical Management', author='LaborForce Medical Management')
+              title='LaborForce', author='LaborForce')
 if len(sys.argv) > 3:  # optional: folder for a contact sheet of the pages
     w, h = pages[0].size
     sheet = Image.new('RGB', (w * 2, h * ((len(pages) + 1) // 2)), 'white')
