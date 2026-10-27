@@ -105,7 +105,7 @@ function bullets(slide, items, x, y, w, h, o = {}) {
   slide.addText(arr, Object.assign({ x, y, w, h, fontFace: FONT, fontSize: size, color: INK2, margin: 0, valign: "top", isTextBox: true, paraSpaceAfter: 5, lineSpacingMultiple: 1.12 }, o));
 }
 
-// ---- slides (v10: 8-slide index.html, commit cc5834c, 2026-10-26) ----
+// ---- slides (v11: 8-slide index.html, commit ca21850, 2026-10-26) ----
 const BRAND = "E:/Claude/laborforce-deck/brand";
 const NM_LOGO = BRAND + "/nm_logo.svg", HPH_LOGO = BRAND + "/hph_logo.png";
 const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = "2A4A72", N_MID = "0677AE", N_BASE_SPAN = "AEBFD6";
@@ -116,8 +116,8 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 {
   const s = pres.addSlide({ masterName: "COVER" });
   const LW = 7.3;
-  // hospital photo, pre-faded to transparent toward the left / top / bottom (make_cover_photo.py)
-  s.addImage({ path: BRAND + "/hospital_cover_faded.png", x: 2.7, y: 1.95, w: 5.75, h: 5.55 });
+  // hospital photo (62% x 84% of the slide, bottom-right), pre-faded toward the left / top / bottom (make_cover_photo.py)
+  s.addImage({ path: BRAND + "/hospital_cover_faded.png", x: W - 8.27, y: H - 6.3, w: 8.27, h: 6.3 });
   // cover body, vertically centred in the left column (no facts row, no logo)
   T(s, "You Deliver Care, We Optimize Revenue.", M, 1.8, 6.0, 0.3, { fontSize: 12, color: TEAL, bold: true });
   s.addText([
@@ -136,24 +136,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   T(s, "CONFIDENTIAL — FOR DISCUSSION PURPOSES", M, FOOT_Y + 0.08, 5, 0.25, { fontSize: 8, color: MUTED, charSpacing: 1.5 });
   T(s, "01 / 08", M + LW - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: MUTED, align: "right", charSpacing: 1.5 });
 
-  const px = 8.45, pw = W - px;
-  rect(s, px, 0, pw, H, NAVY);
-  rect(s, px, 0, 0.06, H, TEAL);
-  const ix = px + 0.5, iw = pw - 0.95;
-  eyebrow(s, "At a glance", ix, 0.6, iw, true, { fontSize: 9 });
-  const glance = [["+336%", "Monthly TPL recoveries at Chicago-area partner hospitals, March – July 2026 ($33K → $144K)"], ["90%+", "Payer identification accuracy, up from under 30%"], ["79%", "Of screened July encounters verified (141 of 178)"]];
-  glance.forEach(([v, l], i) => {
-    const y = 1.0 + i * 1.3;
-    if (i > 0) hline(s, ix, y - 0.12, iw, N_LINE);
-    T(s, v, ix, y, iw, 0.62, { fontSize: 38, color: "FFFFFF", charSpacing: -2 });
-    T(s, l, ix, y + 0.66, iw, 0.5, { fontSize: 10.5, color: N_SPAN, lineSpacingMultiple: 1.2 });
-  });
-  const ay = 5.2, ah = 1.0;
-  rrect(s, ix - 0.1, ay, iw + 0.2, ah, N_ASK, 0.04);
-  eyebrow(s, "The ask", ix + 0.1, ay + 0.2, iw, true);
-  T(s, "A 90-day pilot at John H. Stroger, Jr. Hospital", ix + 0.1, ay + 0.46, iw - 0.2, 0.4, { fontSize: 12.5, bold: true, color: "FFFFFF" });
-  T(s, "Program-reported figures; not independently attributed.", ix, 6.65, iw, 0.25, { fontSize: 9, color: N_NOTE });
-  s.addNotes("Cover. Program results are program-reported figures from Chicago-area partner hospitals, March–July 2026; not independently attributed.");
+  s.addNotes("Cover: one column, hospital photo on the right. The right-hand stats panel was removed on 2026-10-26 to match the web deck.");
 }
 
 // =====================================================================
