@@ -601,6 +601,7 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;righ
 .cover-body{margin:30px 0 0}
 .controls-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .controls-head .text-button{font-size:13px}
+.controls-hint{margin:12px 0 0;font-size:15px;line-height:1.45;color:var(--muted)}
 .deck-mode[data-orientation="portrait"] .slide-logo{top:16px;right:38px;height:54px}
 .deck-mode[data-orientation="portrait"] .cover-brand{height:80px}
 </style>
@@ -651,7 +652,7 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;righ
         <div class="essential-band" aria-label="The revenue challenge facing essential hospitals">
           <div class="eb-text"><span class="callout-label">The revenue challenge facing essential hospitals</span><p>Essential hospitals face growing financial pressure from uncompensated care, Medicaid underpayments, and limited resources.</p></div>
           <div class="eb-stats"><span class="eb-label">In 2023, essential hospitals reported</span><div class="eb-stat"><strong>$11B</strong><span>in uncompensated care</span></div><div class="eb-stat"><strong>$11.4B</strong><span>in additional under-reimbursed care</span></div></div>
-          <div class="eb-note"><p><b>H.R. 1</b> adds further financial pressure, making revenue optimization increasingly critical.</p><small>Source: America's Essential Hospitals, Essential Data (2025)</small></div>
+          <div class="eb-note"><p><b>H.R. 1</b> adds further financial pressure, making revenue optimization increasingly critical.</p><small>Source: America's Essential Hospitals, Essential Data report (2023 data, published November 2025)</small></div>
         </div>
         <div class="challenge-intro"><p class="section-intro">Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:</p></div>
         <div class="challenge-grid">
@@ -697,7 +698,7 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;righ
     <div><div class="section-kicker"><span>04</span> Financial opportunity</div><h2 id="financial-title">Turn hidden revenue opportunities into visible results.</h2></div>
   </div>
   <div class="financial-workspace">
-    <div class="financial-controls"><div class="controls-head"><span class="scenario-tag"><i></i> Planning inputs</span><button class="text-button" id="reset-scenario" type="button">Reset ↺</button></div>
+    <div class="financial-controls"><div class="controls-head"><span class="scenario-tag"><i></i> Planning inputs</span><button class="text-button" id="reset-scenario" type="button">Reset ↺</button></div><p class="controls-hint">Drag any input to see how the results change.</p>
   <div class="assumption-grid" aria-label="Financial model inputs">
     <div class="assumption"><div class="assumption-top"><label for="volume"><span class="control-number">01</span> Annual ED encounters</label><output for="volume" id="volume-output">150,000</output></div><input id="volume" type="range" min="25000" max="200000" step="5000" value="150000"><div class="range-ends"><span>25,000</span><span>200,000</span></div></div>
     <div class="assumption"><div class="assumption-top"><label for="coverage"><span class="control-number">02</span> Additional coverage identified</label><output for="coverage" id="coverage-output">6%</output></div><input id="coverage" type="range" min="2" max="10" step="0.5" value="6"><div class="range-ends"><span>2%</span><span>10%</span></div></div>
@@ -918,7 +919,7 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;righ
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const starts = {volume:25000, coverage:2, collection:500, charge:3000};
     const steps = {volume:5000, coverage:0.5, collection:500, charge:250};
-    const duration = 1800, started = performance.now();
+    const duration = 2400, started = performance.now();
     const ease = t => 1 - Math.pow(1 - t, 3);
     Object.entries(starts).forEach(([id, value]) => { inputs[id].value = value; });
     update();

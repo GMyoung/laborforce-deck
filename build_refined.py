@@ -102,7 +102,7 @@ replace_section('challenge', '''<section class="report-section" id="challenge" d
         <div class="essential-band" aria-label="The revenue challenge facing essential hospitals">
           <div class="eb-text"><span class="callout-label">The revenue challenge facing essential hospitals</span><p>Essential hospitals face growing financial pressure from uncompensated care, Medicaid underpayments, and limited resources.</p></div>
           <div class="eb-stats"><span class="eb-label">In 2023, essential hospitals reported</span><div class="eb-stat"><strong>$11B</strong><span>in uncompensated care</span></div><div class="eb-stat"><strong>$11.4B</strong><span>in additional under-reimbursed care</span></div></div>
-          <div class="eb-note"><p><b>H.R. 1</b> adds further financial pressure, making revenue optimization increasingly critical.</p><small>Source: America's Essential Hospitals, Essential Data (2025)</small></div>
+          <div class="eb-note"><p><b>H.R. 1</b> adds further financial pressure, making revenue optimization increasingly critical.</p><small>Source: America's Essential Hospitals, Essential Data report (2023 data, published November 2025)</small></div>
         </div>
         <div class="challenge-intro"><p class="section-intro">Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:</p></div>
         <div class="challenge-grid">
@@ -370,7 +370,7 @@ html = replace_once('''  update();
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const starts = {volume:25000, coverage:2, collection:500, charge:3000};
     const steps = {volume:5000, coverage:0.5, collection:500, charge:250};
-    const duration = 1800, started = performance.now();
+    const duration = 2400, started = performance.now();
     const ease = t => 1 - Math.pow(1 - t, 3);
     Object.entries(starts).forEach(([id, value]) => { inputs[id].value = value; });
     update();
@@ -1016,6 +1016,7 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;righ
 .cover-body{margin:30px 0 0}
 .controls-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .controls-head .text-button{font-size:13px}
+.controls-hint{margin:12px 0 0;font-size:15px;line-height:1.45;color:var(--muted)}
 .deck-mode[data-orientation="portrait"] .slide-logo{top:16px;right:38px;height:54px}
 .deck-mode[data-orientation="portrait"] .cover-brand{height:80px}
 '''
@@ -1079,7 +1080,7 @@ for sid in ('challenge', 'financial'):
     html = opener.sub(lambda m: m.group(1) + '\n        ' + slide_logo, html)
 html = replace_once('    <button class="text-button" id="reset-scenario" type="button">Reset ↺</button>\n', '', 'reset out of heading')
 html = replace_once('<div class="financial-controls"><span class="scenario-tag"><i></i> Planning inputs</span>',
-                    '<div class="financial-controls"><div class="controls-head"><span class="scenario-tag"><i></i> Planning inputs</span><button class="text-button" id="reset-scenario" type="button">Reset ↺</button></div>', 'reset into controls')
+                    '<div class="financial-controls"><div class="controls-head"><span class="scenario-tag"><i></i> Planning inputs</span><button class="text-button" id="reset-scenario" type="button">Reset ↺</button></div><p class="controls-hint">Drag any input to see how the results change.</p>', 'reset into controls')
 
 # Renumber kickers, footers and the contents list from the final slide order.
 section_re = re.compile(r'<section class="report-section[^"]*" id="([^"]+)".*?</section>', re.S)
