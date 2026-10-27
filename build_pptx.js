@@ -75,7 +75,7 @@ function vline(slide, x, y, h, color = LINE, width = 0.75) {
   slide.addShape(pres.ShapeType.line, { x, y, w: 0, h, line: { color, width } });
 }
 function pageNo(slide, n, dark) {
-  T(slide, `${String(n).padStart(2, "0")} / 10`, W - M - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: dark ? N_MUTED : MUTED, align: "right", charSpacing: 1.5 });
+  T(slide, `${String(n).padStart(2, "0")} / 08`, W - M - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: dark ? N_MUTED : MUTED, align: "right", charSpacing: 1.5 });
 }
 function kicker(slide, n, label, dark) {
   const numColor = dark ? N_MUTED : MUTED, labColor = dark ? N_TEAL : TEAL;
@@ -105,7 +105,7 @@ function bullets(slide, items, x, y, w, h, o = {}) {
   slide.addText(arr, Object.assign({ x, y, w, h, fontFace: FONT, fontSize: size, color: INK2, margin: 0, valign: "top", isTextBox: true, paraSpaceAfter: 5, lineSpacingMultiple: 1.12 }, o));
 }
 
-// ---- slides (v3: index.html as of 2026-10-26 16:14) ----
+// ---- slides (v10: 8-slide index.html, commit cc5834c, 2026-10-26) ----
 const BRAND = "E:/Claude/laborforce-deck/brand";
 const NM_LOGO = BRAND + "/nm_logo.svg", HPH_LOGO = BRAND + "/hph_logo.png";
 const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = "2A4A72", N_MID = "0677AE", N_BASE_SPAN = "AEBFD6";
@@ -116,16 +116,25 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 {
   const s = pres.addSlide({ masterName: "COVER" });
   const LW = 7.3;
+  // hospital photo, pre-faded to transparent toward the left / top / bottom (make_cover_photo.py)
+  s.addImage({ path: BRAND + "/hospital_cover_faded.png", x: 2.7, y: 1.95, w: 5.75, h: 5.55 });
   // cover body, vertically centred in the left column (no facts row, no logo)
-  T(s, "You Deliver Care, We Optimize Revenue.", M, 1.95, 6.0, 0.3, { fontSize: 12, color: TEAL, bold: true });
+  T(s, "You Deliver Care, We Optimize Revenue.", M, 1.8, 6.0, 0.3, { fontSize: 12, color: TEAL, bold: true });
   s.addText([
     { text: "Uncovering revenue.", options: { color: NAVY, breakLine: true } },
     { text: "Strengthening hospital performance.", options: { color: TEAL } },
-  ], { x: M, y: 2.3, w: LW, h: 1.95, fontFace: FONT, fontSize: 36, margin: 0, valign: "top", isTextBox: true, charSpacing: -1.5, lineSpacingMultiple: 0.98 });
-  T(s, "A revenue identification and recovery partnership for Cook County Health's emergency and trauma care.", M, 4.35, 5.6, 0.95, { fontSize: 13, color: INK2, lineSpacingMultiple: 1.3 });
+  ], { x: M, y: 2.15, w: LW, h: 1.95, fontFace: FONT, fontSize: 36, margin: 0, valign: "top", isTextBox: true, charSpacing: -1.5, lineSpacingMultiple: 0.98 });
+  T(s, "A revenue identification and recovery partnership for Cook County Health's emergency and trauma care.", M, 4.2, 4.9, 0.95, { fontSize: 13, color: INK2, lineSpacingMultiple: 1.3 });
+  // hospital partners: Northwestern Medicine | Humboldt Park Health
+  const py = 5.05;
+  T(s, "HOSPITAL PARTNERS", M, py, 4, 0.22, { fontSize: 8, bold: true, color: MUTED, charSpacing: 1.5 });
+  const nmH = 0.31, nmW = nmH * 730 / 137, hpH = 0.44, hpW = hpH * 782 / 227, lcy = py + 0.3 + hpH / 2;
+  s.addImage({ path: NM_LOGO, x: M, y: lcy - nmH / 2, w: nmW, h: nmH });
+  vline(s, M + nmW + 0.28, lcy - 0.26, 0.52, LINE);
+  s.addImage({ path: HPH_LOGO, x: M + nmW + 0.56, y: lcy - hpH / 2, w: hpW, h: hpH });
   hline(s, M, FOOT_Y, LW, LINE);
   T(s, "CONFIDENTIAL — FOR DISCUSSION PURPOSES", M, FOOT_Y + 0.08, 5, 0.25, { fontSize: 8, color: MUTED, charSpacing: 1.5 });
-  T(s, "01 / 10", M + LW - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: MUTED, align: "right", charSpacing: 1.5 });
+  T(s, "01 / 08", M + LW - 2, FOOT_Y + 0.08, 2, 0.25, { fontSize: 8, color: MUTED, align: "right", charSpacing: 1.5 });
 
   const px = 8.45, pw = W - px;
   rect(s, px, 0, pw, H, NAVY);
@@ -202,7 +211,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     "Whether a hospital lien is available, documented, and followed up",
     "Whether unresolved cases need investigation after discharge",
   ];
-  const qy = 2.3, flowW = 3.9, leftW = CW - flowW - 0.4, cgap = 0.12, cardW = (leftW - cgap) / 2, cardH = 0.98;
+  const qy = 2.25, flowW = 3.9, leftW = CW - flowW - 0.4, cgap = 0.12, cardW = (leftW - cgap) / 2, cardH = 0.92;
   qs.forEach((q, i) => {
     const col = i % 2, row = Math.floor(i / 2);
     const x = M + col * (cardW + cgap), y = qy + row * (cardH + cgap);
@@ -220,15 +229,15 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     ["Responsible payer missed", "Not identified at registration, or identified but not followed through", PANEL, NAVY, INK2],
     ["Absorbed by the hospital", "Written off as bad debt or uncompensated care", NAVY, "FFFFFF", N_SPAN],
   ];
-  const farrow = 0.26, fb0 = qy + 0.56, fbw = flowW - 0.44, fbH = (gridH - 0.56 - 0.22 - 2 * farrow) / 3;
+  const farrow = 0.22, fb0 = qy + 0.5, fbw = flowW - 0.44, fbH = (gridH - 0.5 - 0.16 - 2 * farrow) / 3;
   flow.forEach(([h, p, fill, hc, pc], i) => {
     const y = fb0 + i * (fbH + farrow);
     rrect(s, fx + 0.22, y, fbw, fbH, fill, 0.03);
-    T(s, h, fx + 0.37, y + 0.09, fbw - 0.3, 0.25, { fontSize: 12, bold: true, color: hc, charSpacing: -0.2 });
-    T(s, p, fx + 0.37, y + 0.33, fbw - 0.3, fbH - 0.36, { fontSize: 9, color: pc, lineSpacingMultiple: 1.1 });
+    T(s, h, fx + 0.37, y + 0.07, fbw - 0.3, 0.24, { fontSize: 11.5, bold: true, color: hc, charSpacing: -0.2 });
+    T(s, p, fx + 0.37, y + 0.3, fbw - 0.3, fbH - 0.32, { fontSize: 8.5, color: pc, lineSpacingMultiple: 1.05 });
     if (i < 2) s.addShape(pres.ShapeType.line, { x: fx + flowW / 2, y: y + fbH + 0.05, w: 0, h: farrow - 0.1, line: { color: TEAL, width: 1.25, endArrowType: "triangle" } });
   });
-  const cy = 6.05, chh = 0.72;
+  const cy = qy + gridH + 0.24, chh = 0.66;
   rect(s, M, cy, CW, chh, TEALL);
   rect(s, M, cy, 0.05, chh, TEAL);
   eyebrow(s, "The consequence", M + 0.3, cy + 0.26, 1.8, false);
@@ -241,8 +250,8 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "NAVY" });
-  kicker(s, "04", "The LaborForce solution", true);
-  title(s, [{ text: "A specialized operational layer.", breakLine: true }, { text: "Five critical functions.", muted: true }], 0.85, 1.1, 28, true);
+  kicker(s, "04", "Five critical functions", true);
+  title(s, [{ text: "The LaborForce solution.", breakLine: true }, { text: "A specialized operational layer.", muted: true }], 0.85, 1.1, 28, true);
 
   // --- left: slabs, geometry taken from the HTML's SVG (viewBox 520 x 610) ---
   const SX = M, SY = 1.98, K = 4.82 / 610; // scale: px -> inches
@@ -291,75 +300,17 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 }
 
 // =====================================================================
-// SLIDE 5 — Operating experience (partner cards + results band)
+// SLIDE 5 — Financial opportunity (static model, default scenario)
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "05", "Experience with healthcare partners", false);
-  title(s, [{ text: "Proven operating experience", breakLine: true }, { text: "in Chicago-area hospitals.", muted: true }], 0.85, 1.2, 30, false);
-  const py = 2.2, ph = 2.05, pw = (CW - 0.3) / 2;
-  const partners = [[NM_LOGO, 730 / 137, 0.72, "Northwestern Medicine · Current program partner"], [HPH_LOGO, 782 / 227, 1.0, "Humboldt Park Health · Current program partner"]];
-  partners.forEach(([img, ratio, h, cap], i) => {
-    const x = M + i * (pw + 0.3);
-    s.addShape(pres.ShapeType.roundRect, { x, y: py, w: pw, h: ph, fill: { color: SURFACE }, line: { color: LINE, width: 0.75 }, rectRadius: 0.05 });
-    const iy = py + 0.42 + (1.0 - h) / 2;
-    s.addImage({ path: img, x: x + 0.45, y: iy, w: h * ratio, h });
-    T(s, cap.toUpperCase(), x + 0.45, py + ph - 0.5, pw - 0.9, 0.22, { fontSize: 8.5, bold: true, color: MUTED, charSpacing: 1 });
-  });
-  const by = 4.55, bh = 2.2;
-  rrect(s, M, by, CW, bh, NAVY, 0.05);
-  T(s, "PROGRAM RESULTS · MARCH – JULY 2026", M + 0.35, by + 0.28, 5, 0.22, { fontSize: 8, bold: true, color: N_TEAL, charSpacing: 1.5 });
-  T(s, "Program-reported; not independently attributed", M + CW - 5.35, by + 0.28, 5, 0.22, { fontSize: 9, color: N_SPAN, align: "right", italic: true });
-  const stats = [["+336%", "Monthly TPL recoveries\n$33K → $144K"], ["90%+", "Payer identification accuracy\nup from under 30%"], ["141 / 178", "July encounters verified\n79% of those screened"], ["$198,940", "Charges on 32 Workers' Comp\ncases identified in July"]];
-  const sw = (CW - 0.7) / 4;
-  stats.forEach(([v, l], i) => {
-    const x = M + 0.35 + i * sw;
-    if (i > 0) vline(s, x - 0.18, by + 0.8, 1.1, N_LINE);
-    T(s, v, x, by + 0.72, sw - 0.3, 0.6, { fontSize: 32, color: "FFFFFF", charSpacing: -1.5 });
-    T(s, l, x, by + 1.38, sw - 0.3, 0.6, { fontSize: 10.5, color: N_SPAN, lineSpacingMultiple: 1.2 });
-  });
-  pageNo(s, 5, false);
-}
-
-// =====================================================================
-// SLIDE 6 — Opportunity at CCH
-// =====================================================================
-{
-  const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "06", "Opportunity at Cook County Health", false);
-  title(s, [{ text: "A focused TPL/WC program for a high-volume safety-net system." }], 0.85, 0.6, 28, false);
-  const outs = [
-    ["Find coverage", "Evaluate whether additional responsible-party coverage exists for selected encounters."],
-    ["Document claims", "Improve identification and documentation of injury-related claims."],
-    ["Bill accurately", "Strengthen billing accuracy and reimbursement follow-up."],
-    ["Stop leakage", "Reduce avoidable revenue leakage."],
-    ["Gain visibility", "Establish clearer visibility into potentially recoverable accounts."],
-    ["Protect the mission", "Support financial sustainability without compromising access to care."],
-  ];
-  const gy = 2.0, gap = 0.4, cw = (CW - 2 * gap) / 3, rh = 1.8;
-  outs.forEach(([h, p], i) => {
-    const col = i % 3, row = Math.floor(i / 3);
-    const x = M + col * (cw + gap), y = gy + row * rh;
-    hline(s, x, y, cw, "C6D2DE");
-    T(s, h, x, y + 0.25, cw, 0.35, { fontSize: 16, bold: true, color: NAVY, charSpacing: -0.3 });
-    T(s, p, x, y + 0.68, cw, 0.9, { fontSize: 12, color: INK2, lineSpacingMultiple: 1.3 });
-  });
-  T(s, "Illustrative sizing: 150,000 ED encounters × 6% with additional coverage × $4,000 net per encounter ≈ $36M per year — a planning model, not a forecast.", M, 6.4, CW, 0.3, { fontSize: 10, color: MUTED });
-  pageNo(s, 6, false);
-}
-
-// =====================================================================
-// SLIDE 7 — Financial opportunity (static model, default scenario)
-// =====================================================================
-{
-  const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "07", "Financial opportunity", false);
-  title(s, [{ text: "Turn assumptions into a visible opportunity." }], 0.85, 0.55, 28, false);
+  kicker(s, "05", "Financial opportunity", false);
+  title(s, [{ text: "Turn hidden revenue opportunities into visible results." }], 0.85, 0.55, 28, false);
 
   // left: assumptions with static slider tracks
-  const lx = M, lw = 4.3, ay = 1.7;
+  const lx = M, lw = 4.3, ay = 1.55;
   s.addShape(pres.ShapeType.ellipse, { x: lx, y: ay + 0.06, w: 0.1, h: 0.1, fill: { color: TEAL }, line: { color: TEAL, width: 0 } });
-  T(s, "PLANNING ASSUMPTIONS", lx + 0.18, ay, lw, 0.22, { fontSize: 8, bold: true, color: MUTED, charSpacing: 1.5 });
+  T(s, "PLANNING INPUTS", lx + 0.18, ay, lw, 0.22, { fontSize: 8, bold: true, color: MUTED, charSpacing: 1.5 });
   const assumptions = [
     ["01", "Annual ED encounters", "150,000", "25,000", "200,000", (150000 - 25000) / 175000],
     ["02", "Additional coverage identified", "6%", "2%", "10%", 0.5],
@@ -380,28 +331,30 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     T(s, hi, lx + lw - 2, ty + 0.14, 2, 0.2, { fontSize: 8.5, color: MUTED, align: "right" });
   });
   hline(s, lx, ay + 0.38 + 4 * arH, lw, LINE);
-  vline(s, lx + lw + 0.4, 1.7, 4.3, LINE);
+  vline(s, lx + lw + 0.4, 1.55, 4.5, LINE);
 
-  // right: result strip (three big results only)
-  const rx = M + 5.1, rw = CW - 5.1, ry = 1.7, rh = 1.2;
+  // right: result strip — headline on the left, two supporting results stacked on the right
+  const rx = M + 5.1, rw = CW - 5.1, ry = 1.55, rh = 1.45;
   rrect(s, rx, ry, rw, rh, NAVY, 0.04);
-  const c1 = rw * 0.38, c2 = rw * 0.31, c3 = rw - c1 - c2;
+  const c1 = rw * 0.5;
   const labO = { fontSize: 7.5, bold: true, color: N_TEAL, charSpacing: 0.5 };
-  T(s, "ANNUAL INCREMENTAL NET COLLECTIONS", rx + 0.28, ry + 0.22, c1 - 0.4, 0.2, labO);
-  T(s, "$36M", rx + 0.28, ry + 0.45, c1 - 0.4, 0.65, { fontSize: 38, color: "FFFFFF", charSpacing: -2 });
-  vline(s, rx + c1, ry + 0.25, rh - 0.5, N_LINE);
-  T(s, "IDENTIFIED ENCOUNTERS / YEAR", rx + c1 + 0.25, ry + 0.22, c2 - 0.4, 0.2, labO);
-  T(s, "9,000", rx + c1 + 0.25, ry + 0.52, c2 - 0.4, 0.55, { fontSize: 28, color: "FFFFFF", charSpacing: -1 });
-  vline(s, rx + c1 + c2, ry + 0.25, rh - 0.5, N_LINE);
-  T(s, "ASSOCIATED GROSS CHARGES / YEAR", rx + c1 + c2 + 0.25, ry + 0.22, c3 - 0.4, 0.2, labO);
-  T(s, "$90M", rx + c1 + c2 + 0.25, ry + 0.52, c3 - 0.4, 0.55, { fontSize: 28, color: "FFFFFF", charSpacing: -1 });
+  T(s, "ANNUAL INCREMENTAL NET COLLECTIONS", rx + 0.28, ry + 0.2, c1 - 0.4, 0.2, labO);
+  T(s, "$36M", rx + 0.26, ry + 0.38, c1 - 0.4, 0.7, { fontSize: 46, color: "FFFFFF", charSpacing: -2.5 });
+  T(s, "≈ $3M a month · ≈ $99K a day · $108M over three years", rx + 0.28, ry + 1.06, c1 - 0.35, 0.24, { fontSize: 8, bold: true, color: N_TEAL });
+  vline(s, rx + c1, ry + 0.22, rh - 0.44, N_LINE);
+  const x2 = rx + c1 + 0.3, w2 = rw - c1 - 0.55;
+  T(s, "IDENTIFIED ENCOUNTERS / YEAR", x2, ry + 0.2, w2, 0.2, labO);
+  T(s, "9,000", x2, ry + 0.36, w2, 0.4, { fontSize: 22, color: "FFFFFF", charSpacing: -1 });
+  hline(s, x2, ry + 0.78, w2, N_LINE);
+  T(s, "ASSOCIATED GROSS CHARGES / YEAR", x2, ry + 0.86, w2, 0.2, labO);
+  T(s, "$90M", x2, ry + 1.02, w2, 0.4, { fontSize: 22, color: "FFFFFF", charSpacing: -1 });
 
   // viz grid: people chart (left) + sensitivity chart (right)
   const vy = ry + rh + 0.25, vgap = 0.4, vw = (rw - vgap) / 2;
   eyebrow(s, "Volume & coverage", rx, vy, vw, false);
   T(s, "A visible share of every visit.", rx, vy + 0.24, vw, 0.3, { fontSize: 13, bold: true, color: NAVY, charSpacing: -0.3 });
   const cols = 20, rows = 10, total = 150, covered = 9; // 1 figure = 1,000 visits; 9,000 identified
-  const cellW = (vw - (cols - 1) * 0.03) / cols, cellH = 0.17, gy0 = vy + 0.65;
+  const cellW = (vw - (cols - 1) * 0.03) / cols, cellH = 0.15, gy0 = vy + 0.65;
   for (let k = 0; k < total; k++) {
     const r = Math.floor(k / cols), c = k % cols;
     s.addShape(pres.ShapeType.roundRect, { x: rx + c * (cellW + 0.03), y: gy0 + r * (cellH + 0.04), w: cellW, h: cellH, fill: { color: k < covered ? TEAL : "CCD6E0" }, line: { color: k < covered ? TEAL : "CCD6E0", width: 0 }, rectRadius: 0.02 });
@@ -419,7 +372,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   const rates = [2, 3, 4, 5, 6, 7, 8, 9, 10];
   const vals = rates.map(r => 150000 * r / 100 * 4000 / 1e6);
   s.addChart(pres.ChartType.line, [{ name: "Annual net collections ($M)", labels: rates.map(r => r + "%"), values: vals }], {
-    x: cx - 0.1, y: vy + 0.9, w: vw + 0.1, h: 1.85,
+    x: cx - 0.1, y: vy + 0.85, w: vw + 0.1, h: 1.95,
     chartColors: [TEAL], lineSize: 2.25, lineDataSymbol: "circle", lineDataSymbolSize: 6, lineDataSymbolLineColor: TEAL,
     showLegend: false, showTitle: false,
     showValue: true, dataLabelPosition: "t", dataLabelFormatCode: '"$"0"M"', dataLabelFontSize: 7.5, dataLabelColor: INK2, dataLabelFontFace: FONT,
@@ -431,7 +384,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   });
 
   // calculation chain
-  const chy = 6.05, chh = 0.62;
+  const chy = 6.15, chh = 0.6;
   const chain = [["Annual encounters", "150,000"], ["Additional coverage", "6%"], ["Net collection / encounter", "$4,000"], ["Annual net collections", "$36,000,000"]];
   const syms = ["×", "×", "="], symW = 0.4, boxW = (CW - 3 * symW) / 4;
   chain.forEach(([lab, val], i) => {
@@ -442,16 +395,16 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     T(s, val, x + 0.2, chy + 0.29, boxW - 0.4, 0.3, { fontSize: 15, bold: true, color: last ? TEAL : NAVY, charSpacing: -0.5 });
     if (i < 3) T(s, syms[i], x + boxW, chy, symW, chh, { fontSize: 16, color: MUTED, align: "center", valign: "middle" });
   });
-  pageNo(s, 7, false);
+  pageNo(s, 5, false);
   s.addNotes("Static version of the interactive planning model at its starting scenario: 150,000 ED encounters × 6% additional coverage × $4,000 net per encounter = $36M per year; 9,000 identified encounters; $90M associated gross charges at a $10,000 average ED charge. Each figure in the grid = 1,000 ED encounters. Illustrative planning model, not a forecast.");
 }
 
 // =====================================================================
-// SLIDE 8 — 90-day pilot
+// SLIDE 6 — 90-day pilot
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "08", "Proposed partnership", false);
+  kicker(s, "06", "Proposed partnership", false);
   title(s, [{ text: "90-day pilot.", breakLine: true }, { text: "John H. Stroger, Jr. Hospital.", muted: true }], 0.85, 1.2, 30, false);
   const phases = [
     ["Phase 01", "Days 1 – 15", 15, "Discovery & Baseline", "Review current injury-related registration, payer identification, billing, and follow-up. Agree on pilot scope, eligibility criteria, compliance requirements, and baseline measures.", "DBE8F7", NAVY, "5B8FD6"],
@@ -486,15 +439,15 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     if (runs) T(s, runs, x + 0.25, iy + 0.55, cw - 0.5, ih - 0.65, { fontSize: 10.5, color: INK2, lineSpacingMultiple: 1.25 });
     else bullets(s, items, x + 0.25, iy + 0.55, cw - 0.5, ih - 0.65, { fontSize: 10.5, paraSpaceAfter: 3 });
   });
-  pageNo(s, 8, false);
+  pageNo(s, 6, false);
 }
 
 // =====================================================================
-// SLIDE 9 — Success metrics
+// SLIDE 7 — Success metrics
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "09", "Proposed success metrics", false);
+  kicker(s, "07", "Proposed success metrics", false);
   title(s, [{ text: "Transparent. Measurable.", breakLine: true }, { text: "Jointly reviewed.", muted: true }], 0.85, 1.2, 30, false);
   const groups = [
     ["Leading", "0A8FA6", "Early signals that cases are being found and verified", ["Encounters screened and flagged", "Number and % with verified additional responsible-party coverage", "Accounts accepted for billing correction or recovery action"]],
@@ -524,15 +477,15 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
     T(s, d.toUpperCase(), x, ty + 0.35, cw4 - 0.3, 0.22, { fontSize: 9, bold: true, color: NAVY, charSpacing: 1 });
     T(s, p, x, ty + 0.6, cw4 - 0.4, 0.6, { fontSize: 10.5, color: INK2, lineSpacingMultiple: 1.2 });
   });
-  pageNo(s, 9, false);
+  pageNo(s, 7, false);
 }
 
 // =====================================================================
-// SLIDE 10 — Our ask (navy)
+// SLIDE 8 — Our ask (navy)
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "CLOSING" });
-  kicker(s, "10", "Our ask", true);
+  kicker(s, "08", "Our ask", true);
   s.addText([
     { text: "Our ask: a 90-day pilot at ", options: { color: "FFFFFF" } },
     { text: "John H. Stroger, Jr. Hospital.", options: { color: N_TEAL } },
@@ -554,7 +507,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
   s.addImage({ path: LOGO, x: M + (lw - imgW) / 2, y: ly + 0.075, w: imgW, h: imgH });
   T(s, "Thank you", W - M - 4.4, ly - 0.05, 4.4, 0.28, { fontSize: 14, bold: true, color: "FFFFFF", align: "right" });
   T(s, "We look forward to discussing the pilot with your leadership team.", W - M - 4.4, ly + 0.25, 4.4, 0.3, { fontSize: 10.5, color: N_BODY, align: "right" });
-  pageNo(s, 10, true);
+  pageNo(s, 8, true);
 }
 
 (async () => {

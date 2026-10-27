@@ -73,14 +73,6 @@ replace_section('cover', '''<section class="report-section report-cover is-activ
           </div>
           <div class="section-foot"><span>Confidential — for discussion purposes</span><span>01 / 10</span></div>
         </div>
-        <aside class="cover-panel" aria-label="At a glance">
-          <span class="eyebrow">At a glance</span>
-          <div class="glance-stat"><strong>+336%</strong><span>Monthly TPL recoveries at Chicago-area partner hospitals, March – July 2026 ($33K → $144K)</span></div>
-          <div class="glance-stat"><strong>90%+</strong><span>Payer identification accuracy, up from under 30%</span></div>
-          <div class="glance-stat"><strong>79%</strong><span>Of screened July encounters verified (141 of 178)</span></div>
-          <p class="glance-ask"><span class="eyebrow">The ask</span>A 90-day pilot at John H. Stroger, Jr. Hospital</p>
-          <p class="glance-note">Program-reported figures; not independently attributed.</p>
-        </aside>
       </section>''')
 
 # ---------------------------------------------------------------------------
@@ -191,7 +183,7 @@ replace_section('solution', '''<section class="report-section solution-section" 
 
 # ---------------------------------------------------------------------------
 # 7-8. Slides 5 and 6 removed (user, 2026-10-26). The partner logos moved to the
-#      cover; the cover panel keeps the headline results.
+#      cover.
 # ---------------------------------------------------------------------------
 for sid in ('experience', 'opportunity'):
     pattern = re.compile(r'\s*<section class="report-section[^"]*" id="' + sid + r'".*?</section>', re.S)
@@ -938,6 +930,9 @@ body.deck-mode[data-orientation="portrait"] .report-cover{grid-template-columns:
 .cover-partner-logos img{display:block;width:auto;height:30px}
 .cover-partner-logos img+img{height:42px;padding-left:28px;border-left:1px solid var(--line)}
 .deck-mode[data-orientation="portrait"] .cover-photo{display:none}
+/* Cover without the "At a glance" panel (user, 2026-10-26): one column, larger photo */
+body.deck-mode .report-cover{grid-template-columns:minmax(0,1fr)}
+body.deck-mode[data-orientation="landscape"] .cover-photo{width:62%;height:84%;object-position:30% 58%}
 .deck-mode[data-orientation="portrait"] .cover-partners{margin-top:24px}
 /* Slide 3: compact cards, natural-height flow card, consequence right below */
 .challenge-grid{align-items:start;flex:none;margin-top:4px}
