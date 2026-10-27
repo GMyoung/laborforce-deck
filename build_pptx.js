@@ -183,7 +183,7 @@ const N_TOP = "1F4C80", N_TOP_LINE = "2F5A8D", N_BASE = "061F45", N_BASE_LINE = 
 // =====================================================================
 {
   const s = pres.addSlide({ masterName: "LIGHT" });
-  kicker(s, "03", "The challenge", false);
+  kicker(s, "03", "Where revenue slips", false);
   title(s, [{ text: "Revenue that traditional workflows may overlook." }], 0.85, 0.6, 30, false);
   T(s, "Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:", M, 1.5, 10.5, 0.6, { fontSize: 12, color: INK2, lineSpacingMultiple: 1.25 });
   const qs = [
