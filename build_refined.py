@@ -957,6 +957,42 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{width:62%;height:84%;o
 .result-sub{display:block;margin-top:10px;font-size:14px;line-height:1.3;font-weight:600;color:#7fd3e3;font-variant-numeric:tabular-nums;white-space:nowrap}
 .deck-mode[data-orientation="portrait"] .result-sub{white-space:normal;font-size:13px}
 '''
+# ---------------------------------------------------------------------------
+# 17. "Print report" opens the prepared PDF (exported from the PPTX by
+#     render_pptx.ps1), embedded so the single HTML file still works offline.
+#     Ctrl/Cmd+P does the same; the old on-the-fly print layout is no longer used.
+# ---------------------------------------------------------------------------
+with open(os.path.join(here, 'LaborForce_CookCountyHealth.pdf'), 'rb') as fh:
+    pdf_bytes = fh.read()
+assert pdf_bytes[:5] == b'%PDF-', 'prepared PDF missing or invalid'
+body_end = html.rindex('</body>')
+html = html[:body_end] + '<script type="application/octet-stream" id="prepared-report">' + base64.b64encode(pdf_bytes).decode('ascii') + '</script>\n' + html[body_end:]
+html = replace_once("  document.getElementById('print-report').addEventListener('click', printReport);", """  let preparedUrl = null;
+  function openPreparedReport() {
+    if (!preparedUrl) {
+      const data = atob(document.getElementById('prepared-report').textContent.trim());
+      const bytes = new Uint8Array(data.length);
+      for (let i = 0; i < data.length; i++) bytes[i] = data.charCodeAt(i);
+      preparedUrl = URL.createObjectURL(new Blob([bytes], {type:'application/pdf'}));
+    }
+    const tab = window.open(preparedUrl, '_blank');
+    if (!tab) {
+      const link = document.createElement('a');
+      link.href = preparedUrl;
+      link.download = 'LaborForce_CookCountyHealth.pdf';
+      document.body.append(link);
+      link.click();
+      link.remove();
+    }
+  }
+  document.getElementById('print-report').addEventListener('click', openPreparedReport);
+  document.addEventListener('keydown', event => {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey && event.key.toLowerCase() === 'p') {
+      event.preventDefault();
+      openPreparedReport();
+    }
+  });""", 'print button')
+
 # Renumber kickers, footers and the contents list from the final slide order.
 section_re = re.compile(r'<section class="report-section[^"]*" id="([^"]+)".*?</section>', re.S)
 slide_ids = section_re.findall(html)
