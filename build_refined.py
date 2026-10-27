@@ -47,7 +47,7 @@ mark_uri = data_uri('logo_mark.png', 'image/png')
 full_uri = data_uri('logo_full.png', 'image/png')
 nm_uri = data_uri('nm_logo.svg', 'image/svg+xml')
 hph_uri = data_uri('hph_logo.png', 'image/png')
-hospital_uri = data_uri('hospital_cover.jpg', 'image/jpeg')  # Unsplash photo 1586773860418, Unsplash License
+hospital_uri = data_uri('hospital_cover.jpg', 'image/jpeg')  # Unsplash photo 1764885415480 (UN1qX9JB_l0), Unsplash License; name sign cropped out
 LOGO_FULL = '<img class="%s" src="' + full_uri + '" alt="LaborForce Medical Management" width="640" height="421" decoding="async">'
 ARROW_DOWN = '<div class="flow-arrow" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5"/></svg></div>'
 
@@ -66,11 +66,10 @@ replace_section('cover', '''<section class="report-section report-cover is-activ
         <div class="cover-left">
           <img class="cover-photo" src="''' + hospital_uri + '''" alt="" aria-hidden="true" decoding="async">
           <div class="cover-body">
-            <p class="cover-pretitle">You deliver care. We recover revenue.</p>
-            <h1 id="cover-title">Uncovering revenue.<br><span>Strengthening hospital performance.</span></h1>
-            <p class="cover-deck">A revenue identification and recovery partnership for Cook County Health's emergency and trauma care.</p>
-            <div class="cover-partners"><span class="eyebrow">Hospital partners</span><div class="cover-partner-logos"><img src="''' + nm_uri + '''" alt="Northwestern Medicine" width="730" height="137" decoding="async"><img src="''' + hph_uri + '''" alt="Humboldt Park Health" width="782" height="227" decoding="async"></div></div>
+            <h1 id="cover-title">You Deliver Care,<br><span>We Optimize Revenue.</span></h1>
+            <p class="cover-deck">Technology identifies opportunities.<br>We bring them to resolution.</p>
           </div>
+          <div class="cover-partners"><span class="eyebrow">Hospital partners</span><div class="cover-partner-logos"><div class="cover-partner"><img src="''' + nm_uri + '''" alt="Northwestern Medicine" width="730" height="137" decoding="async"></div><div class="cover-partner"><img src="''' + hph_uri + '''" alt="Humboldt Park Health" width="782" height="227" decoding="async"></div></div></div>
           <div class="section-foot"><span>Confidential — for discussion purposes</span><span>01 / 10</span></div>
         </div>
       </section>''')
@@ -96,9 +95,15 @@ html = replace_once('<h2 id="summary-title">Extending your revenue cycle<span cl
 # ---------------------------------------------------------------------------
 # 5. Slide 3: equal-height question cards, matched flow card, consequence at the bottom.
 # ---------------------------------------------------------------------------
-replace_section('challenge', '''<section class="report-section" id="challenge" data-label="Where revenue slips" aria-labelledby="challenge-title">
-        <div class="section-kicker"><span>03</span> Where revenue slips</div>
-        <div class="section-heading"><h2 id="challenge-title">Revenue that traditional workflows may overlook.</h2><p class="section-intro">Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:</p></div>
+replace_section('challenge', '''<section class="report-section" id="challenge" data-label="The hidden revenue challenge" aria-labelledby="challenge-title">
+        <div class="section-kicker"><span>03</span> The hidden revenue challenge</div>
+        <div class="section-heading"><h2 id="challenge-title">Revenue that traditional workflows overlooked.</h2></div>
+        <div class="essential-band" aria-label="The revenue challenge facing essential hospitals">
+          <div class="eb-text"><span class="callout-label">The revenue challenge facing essential hospitals</span><p>Essential hospitals face growing financial pressure from uncompensated care, Medicaid underpayments, and limited resources.</p></div>
+          <div class="eb-stats"><span class="eb-label">In 2023, essential hospitals reported</span><div class="eb-stat"><strong>$11B</strong><span>in uncompensated care</span></div><div class="eb-stat"><strong>$11.4B</strong><span>in additional under-reimbursed care</span></div></div>
+          <div class="eb-note"><p><b>H.R. 1</b> adds further financial pressure, making revenue optimization increasingly critical.</p><small>Source: America's Essential Hospitals, Essential Data (2025)</small></div>
+        </div>
+        <div class="challenge-intro"><p class="section-intro">Patients often arrive after workplace incidents, motor vehicle accidents, or injuries involving another liable party. Registration and billing workflows may not consistently capture or resolve:</p></div>
         <div class="challenge-grid">
           <ol class="question-cards">
             <li><span>01</span><p>Whether the injury occurred while the patient was working</p></li>
@@ -241,7 +246,6 @@ html = replace_once('  const config = {minimumCollectionRate:0.0625, minimumColl
 bounds = re.compile(r'  function collectionBounds\(charge\) \{.*?\n  \}\n', re.S)
 assert len(bounds.findall(html)) == 1, 'collectionBounds'
 html = bounds.sub('  function collectionBounds(charge) {\n    return {min:config.collectionMin, max:Math.min(config.collectionMax, Math.floor(charge / 500) * 500)};\n  }\n', html)
-html = replace_once('You deliver care. We recover revenue.', 'You Deliver Care, We Optimize Revenue.', 'tagline')
 
 # 9c. Slide 7 (user, 2026-10-26): no "assumption" wording; net collection per
 #     encounter can never exceed the average ED charge; a livelier headline.
@@ -331,7 +335,7 @@ replace_section('next-steps', '''<section class="report-section closing-section"
         </div>
         <div class="section-foot"><span>Confidential — for discussion purposes</span><span>10 / 10</span></div>
       </section>''')
-html = replace_once('<li><a href="#challenge"><span>03</span>The challenge</a></li>', '<li><a href="#challenge"><span>03</span>Where revenue slips</a></li>', 'toc challenge')
+html = replace_once('<li><a href="#challenge"><span>03</span>The challenge</a></li>', '<li><a href="#challenge"><span>03</span>The hidden revenue challenge</a></li>', 'toc challenge')
 html = replace_once('<li><a href="#next-steps"><span>10</span>Next steps</a></li>', '<li><a href="#next-steps"><span>10</span>Our ask</a></li>', 'toc label')
 
 # ---------------------------------------------------------------------------
@@ -745,6 +749,51 @@ body.deck-mode[data-orientation="landscape"] .cover-photo{width:62%;height:84%;o
 .deck-mode .main-result strong{font-size:74px;line-height:1;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
 .result-sub{display:block;margin-top:10px;font-size:14px;line-height:1.3;font-weight:600;color:#7fd3e3;font-variant-numeric:tabular-nums;white-space:nowrap}
 .deck-mode[data-orientation="portrait"] .result-sub{white-space:normal;font-size:13px}
+/* Round 10 (user, 2026-10-26) */
+/* Cover: headline top-left, photo in the top-right corner, large partner cards along the bottom */
+body.deck-mode[data-orientation="landscape"] .cover-photo{top:0;bottom:auto;right:0;width:64%;height:68%;object-position:62% 80%;-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 52%),linear-gradient(to top,transparent 0%,#000 48%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to right,transparent 0%,#000 52%),linear-gradient(to top,transparent 0%,#000 48%);mask-composite:intersect}
+.cover-body{margin:64px 0 0;padding:0}
+.cover-body h1{font-size:68px;line-height:1.04;max-width:760px}
+.cover-deck{font-size:22px;max-width:620px;margin-top:26px}
+.cover-partners{position:relative;z-index:1;margin-top:auto;padding-top:24px}
+.cover-partners .eyebrow{display:block;font-size:12px;color:var(--muted);margin-bottom:14px}
+.cover-partner-logos{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.cover-partner{display:flex;align-items:center;justify-content:center;height:150px;border:1px solid var(--line);border-radius:8px;background:#ffffff}
+.cover-partner img{display:block;width:auto;max-width:78%;height:auto}
+.cover-partner:first-child img{height:72px}
+.cover-partner:last-child img{height:104px}
+.cover-partner-logos img+img{padding-left:0;border-left:0}
+.cover-left .section-foot{margin-top:18px}
+.deck-mode[data-orientation="portrait"] .cover-body{margin:24px 0 0}
+.deck-mode[data-orientation="portrait"] .cover-body h1{font-size:50px}
+.deck-mode[data-orientation="portrait"] .cover-partners{margin-top:40px}
+.deck-mode[data-orientation="portrait"] .cover-partner{height:120px}
+.deck-mode[data-orientation="portrait"] .cover-partner:first-child img{height:52px}
+.deck-mode[data-orientation="portrait"] .cover-partner:last-child img{height:78px}
+/* Slide 3: essential-hospitals band above the "Whether" cards */
+#challenge .section-heading{margin-bottom:16px}
+.essential-band{display:grid;grid-template-columns:1.15fr 1.25fr 1fr;gap:30px;align-items:center;background:var(--navy);color:#ffffff;border-radius:6px;padding:18px 26px}
+.essential-band .callout-label{color:#7fd3e3;margin-bottom:6px;display:block}
+.eb-text p{font-size:15px;line-height:1.45;color:#dbe6f2;margin:0}
+.eb-stats{display:grid;grid-template-columns:auto auto;gap:4px 28px;padding:0 28px;border-left:1px solid #ffffff2a;border-right:1px solid #ffffff2a}
+.eb-label{grid-column:1/-1;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9fc0dc;font-weight:650}
+.eb-stat strong{display:block;font-size:40px;line-height:1.05;letter-spacing:-.04em;font-weight:600;color:#ffffff;font-variant-numeric:tabular-nums}
+.eb-stat span{display:block;font-size:13px;line-height:1.35;color:#c5d6e8;margin-top:2px}
+.eb-note p{font-size:15px;line-height:1.45;color:#ffffff;margin:0}
+.eb-note b{color:#7fd3e3}
+.eb-note small{display:block;margin-top:8px;font-size:10px;color:#8ea4bb}
+.challenge-intro{margin-top:16px}
+.challenge-intro .section-intro{margin:0;font-size:16px;line-height:1.5;max-width:1100px}
+#challenge .challenge-grid{margin-top:12px}
+#challenge .question-cards li{min-height:66px;padding:12px 18px;font-size:16px}
+#challenge .flow-card{padding:12px 16px}
+#challenge .flow-card .callout-label{margin-bottom:8px}
+#challenge .flow-steps li{padding:8px 12px}
+#challenge .flow-steps li strong{font-size:15px}
+#challenge .flow-steps li span{font-size:12px}
+#challenge .consequence-bar{margin-top:16px;padding:12px 18px}
+.deck-mode[data-orientation="portrait"] .essential-band{grid-template-columns:1fr;gap:16px}
+.deck-mode[data-orientation="portrait"] .eb-stats{padding:14px 0;border-left:0;border-right:0;border-top:1px solid #ffffff2a;border-bottom:1px solid #ffffff2a}
 '''
 # ---------------------------------------------------------------------------
 # 17. "Print report" opens the prepared PDF (exported from the PPTX by
@@ -781,6 +830,19 @@ html = replace_once("  document.getElementById('print-report').addEventListener(
       openPreparedReport();
     }
   });""", 'print button')
+
+# ---------------------------------------------------------------------------
+# 18. Four-slide version (user, 2026-10-26): drop the executive summary and the
+#     pilot, metrics and closing slides. The 8-slide deck lives on branch
+#     deck-8-slides.
+# ---------------------------------------------------------------------------
+for sid in ('summary', 'pilot', 'metrics', 'next-steps'):
+    pattern = re.compile(r'\s*<section class="report-section[^"]*" id="' + sid + r'".*?</section>', re.S)
+    assert len(pattern.findall(html)) == 1, sid
+    html = pattern.sub('', html)
+toc_re = re.compile(r'\s*<li><a href="#(?:summary|pilot|metrics|next-steps)"[^>]*>.*?</li>')
+assert len(toc_re.findall(html)) == 4, 'toc removals'
+html = toc_re.sub('', html)
 
 # Renumber kickers, footers and the contents list from the final slide order.
 section_re = re.compile(r'<section class="report-section[^"]*" id="([^"]+)".*?</section>', re.S)
