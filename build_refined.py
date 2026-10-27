@@ -67,7 +67,7 @@ replace_section('cover', '''<section class="report-section report-cover is-activ
           <img class="cover-photo" src="''' + hospital_uri + '''" alt="" aria-hidden="true" decoding="async">
           ''' + (LOGO_FULL % 'cover-brand') + '''
           <div class="cover-body">
-            <h1 id="cover-title">You Deliver Care,<br><span>We Optimize Revenue.</span></h1>
+            <h1 id="cover-title">You deliver care.<br><span>We optimize revenue.</span></h1>
             <p class="cover-deck">Technology identifies opportunities.<br>We bring them to resolution.</p>
           </div>
           <div class="cover-partners"><span class="eyebrow">Hospital partners</span><div class="cover-partner-logos"><div class="cover-partner"><img src="''' + nm_uri + '''" alt="Northwestern Medicine" width="730" height="137" decoding="async"></div><div class="cover-partner"><img src="''' + hph_uri + '''" alt="Humboldt Park Health" width="782" height="227" decoding="async"></div></div></div>
@@ -891,9 +891,9 @@ html = replace_once(body_tag, body_tag + '<script>if (/[?&]export\\b/.test(locat
 #     PDF download name (user, 2026-10-26).
 # ---------------------------------------------------------------------------
 html = replace_once('content="A strategic revenue identification and recovery partnership prepared for Cook County Health executive leadership."', 'content="A revenue identification and recovery partnership for hospital leadership."', 'meta description')
-html = replace_once('<title>LaborForce Medical Management | Cook County Health</title>', '<title>LaborForce</title>', 'page title')
-html = replace_once('<title>LaborForce — Cook County Health</title>', '<title>LaborForce</title>', 'print title')
-html = replace_once("link.download = 'LaborForce_CookCountyHealth.pdf';", "link.download = 'LaborForce.pdf';", 'download name')
+html = replace_once('<title>LaborForce Medical Management | Cook County Health</title>', '<title>LaborForce Medical Management</title>', 'page title')
+html = replace_once('<title>LaborForce — Cook County Health</title>', '<title>LaborForce Medical Management</title>', 'print title')
+html = replace_once("link.download = 'LaborForce_CookCountyHealth.pdf';", "link.download = 'LaborForce_Medical_Management.pdf';", 'download name')
 html = replace_once('content="A revenue identification and recovery partnership for hospital leadership.">', 'content="A revenue identification and recovery partnership for hospital leadership.">\n  <meta name="robots" content="noindex, nofollow, noarchive">', 'noindex')
 
 # Renumber kickers, footers and the contents list from the final slide order.

@@ -41,7 +41,7 @@ with tempfile.TemporaryDirectory() as tmp:
         print(sid, pages[-1].size)
 
 pages[0].save(out_pdf, save_all=True, append_images=pages[1:], resolution=162, quality=82,
-              title='LaborForce', author='LaborForce')
+              title='LaborForce Medical Management', author='LaborForce Medical Management')
 if len(sys.argv) > 3:  # optional: folder for a contact sheet of the pages
     w, h = pages[0].size
     sheet = Image.new('RGB', (w * 2, h * ((len(pages) + 1) // 2)), 'white')
